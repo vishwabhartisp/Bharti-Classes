@@ -805,6 +805,234 @@
         document.getElementById('navMentor').textContent = 'About Vishwa Sir';
       }
     }
+  <!-- Invisible reCAPTCHA container for SMS delivery -->
+  <div id="recaptcha-container"></div>
+
+  <!-- Firebase Compatibility Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <!-- Complete Application & Auth Logic -->
+  <script>
+    let isUserLoggedIn = false;
+    let activeLang = 'en';
+
+    // Firebase Configuration - Replace with your 3 keys from Firebase Console
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7ITxaiU2Ot_b6ucuyJ3Zb3uB5uv-wZw8",
+      authDomain: "bharti-classes-a54fb.firebaseapp.com",
+      projectId: "bharti-classes-a54fb",
+      storageBucket: "bharti-classes-a54fb.appspot.com",
+      messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
+      appId: "PASTE_YOUR_APP_ID_HERE"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Initialize invisible bot check
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible'
+    });
+
+    let confirmationResultPayload = null;
+
+    // Real Mobile SMS OTP Sender
+    function sendOtp() {
+      const rawNumber = document.getElementById('txtMobile').value.trim();
+      if (rawNumber.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+      const fullPhoneNumber = "+91" + rawNumber;
+
+      firebase.auth().signInWithPhoneNumber(fullPhoneNumber, window.recaptchaVerifier)
+        .then((confirmationResult) => {
+          confirmationResultPayload = confirmationResult;
+          document.getElementById('stepPhone').style.display = 'none';
+          document.getElementById('stepOtp').style.display = 'block';
+          alert('Real SMS OTP has been sent to ' + fullPhoneNumber);
+        }).catch((error) => {
+          alert('SMS Error: ' + error.message);
+          window.recaptchaVerifier.render().then(widgetId => {
+            if (typeof grecaptcha !== 'undefined') grecaptcha.reset(widgetId);
+          });
+        });
+    }
+
+    // Real OTP Verification
+    function verifyOtp() {
+      const enteredCode = document.getElementById('txtOtp').value.trim();
+      if (enteredCode.length !== 6) {
+        alert('Please enter the 6-digit OTP received via SMS.');
+        return;
+      }
+
+      if (!confirmationResultPayload) {
+        alert('Please request an OTP first.');
+        return;
+      }
+
+      confirmationResultPayload.confirm(enteredCode)
+        .then((result) => {
+          isUserLoggedIn = true;
+          document.getElementById('lblUserStatus').textContent = result.user.phoneNumber;
+          alert('Mobile verified successfully!');
+          closeAuthModal();
+        }).catch((error) => {
+          alert('Incorrect OTP: ' + error.message);
+        });
+    }
+
+    // Sidebar & View Navigation
+    function switchView(viewKey, navElement) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      const targetView = document.getElementById('view-' + viewKey);
+      if (targetView) targetView.classList.add('active');
+      if (navElement) navElement.classList.add('active');
+
+      const titles = {
+        courses: 'Course Store & Admissions',
+        scholarship: 'Bharti Talent Scholarship Test',
+        pyq: 'Previous Year Question Vault',
+        practice: 'Adaptive Practice Sets',
+        doubt: 'Doubt Submission Desk',
+        assistant: 'May I Help You? - AI Assistant',
+        mentor: 'Instructor Profile & History'
+      };
+      document.getElementById('pageHeadingTitle').textContent = titles[viewKey] || 'Bharti Classes';
+
+      if (window.innerWidth <= 860) {
+        document.getElementById('appSidebar').classList.remove('open');
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('appSidebar').classList.toggle('open');
+    }
+
+    // Omni Search Router
+    function executeOmniSearch() {
+      const engine = document.getElementById('engineType').value;
+      const q = document.getElementById('omniQueryInput').value.trim();
+      if (!q) return alert('Please enter a query.');
+
+      if (engine === 'app') {
+        alert('Filtering Bharti Classes database for: "' + q + '"');
+      } else if (engine === 'gemini') {
+        window.open('https://gemini.google.com/app?q=' + encodeURIComponent(q), '_blank');
+      } else if (engine === 'chatgpt') {
+        window.open('https://chatgpt.com/?q=' + encodeURIComponent(q), '_blank');
+      } else if (engine === 'google') {
+        window.open('https://www.google.com/search?q=' + encodeURIComponent('Bharti Classes ' + q), '_blank');
+      }
+    }
+
+    // Modal Handlers
+    function openAuthModal() {
+      if (isUserLoggedIn) return alert('You are already logged in with your verified mobile number.');
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+    function closeAuthModal() {
+      document.getElementById('authBackdrop').style.display = 'none';
+      document.getElementById('stepPhone').style.display = 'block';
+      document.getElementById('stepOtp').style.display = 'none';
+    }
+
+    // Course Purchase
+    function triggerCheckout(courseName, fee) {
+      if (!isUserLoggedIn) {
+        alert('Please login with OTP verification to purchase courses.');
+        openAuthModal();
+        return;
+      }
+      document.getElementById('payCourseTitle').textContent = courseName;
+      document.getElementById('payAmountVal').textContent = '₹' + fee;
+      document.getElementById('paymentBackdrop').style.display = 'flex';
+    }
+    function simulateSuccess(method) {
+      document.getElementById('paymentBackdrop').style.display = 'none';
+      alert('Payment successful via ' + method + '! Course access added to your profile.');
+    }
+
+    // Scholarship Screening Test
+    function runScholarshipExam() {
+      if (!isUserLoggedIn) {
+        alert('Please login with OTP before attempting the Scholarship Exam.');
+        return openAuthModal();
+      }
+      const score = prompt('Simulated Test Score (Enter your score out of 100):', '85');
+      if (score !== null) {
+        const numericScore = parseInt(score, 10);
+        if (numericScore >= 80) {
+          alert('Congratulations! You scored ' + numericScore + '%. You passed the Bharti Classes Screening Test!\nAll courses are 100% FREE OF COST for you.');
+        } else {
+          alert('You scored ' + numericScore + '%. Qualifying mark is 80%. You can re-attempt or enroll with regular combo discounts.');
+        }
+      }
+    }
+
+    // Doubt Desk
+    function handleDoubtSubmit(e) {
+      e.preventDefault();
+      if (!isUserLoggedIn) {
+        alert('You must be verified via OTP to raise a question.');
+        return openAuthModal();
+      }
+      alert('Your doubt and media files have been submitted to Vishwa Bharti Sir for review!');
+      e.target.reset();
+    }
+
+    // Practice Drills
+    function loadDrills(tier) {
+      const box = document.getElementById('drillBox');
+      box.innerHTML = '<div style="font-weight:bold; margin-bottom:8px; text-transform:uppercase; color:var(--secondary);">' + tier + ' Level Drill Active</div>' +
+        '<ol style="padding-left:20px; line-height:1.8;">' +
+        '<li>Advance Maths Drill: If x + 1/x = 3, find x^4 + 1/x^4.</li>' +
+        '<li>Reasoning: Statement & Assumptions / Syllogisms drill question set loaded.</li>' +
+        '<li>Speed Test: 23 additional questions loaded for ' + tier + ' difficulty.</li>' +
+        '</ol>';
+    }
+
+    // AI Support Dialogue
+    function dispatchBotMessage() {
+      const input = document.getElementById('botInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const box = document.getElementById('chatDialogue');
+      box.innerHTML += '<p style="margin-top:6px;"><strong>You:</strong> ' + val + '</p>';
+      input.value = '';
+      setTimeout(() => {
+        box.innerHTML += '<p style="margin-top:6px; color:var(--primary);"><strong>Bharti Desk:</strong> For immediate batch admission, call or WhatsApp Vishwa Bharti Sir directly on <strong>8271750420</strong>.</p>';
+        box.scrollTop = box.scrollHeight;
+      }, 500);
+    }
+
+    // Bilingual Support
+    function toggleBilingual() {
+      if (activeLang === 'en') {
+        activeLang = 'hi';
+        document.getElementById('btnLangToggle').textContent = 'English';
+        document.getElementById('navCourses').textContent = 'कोर्स एवं शुल्क';
+        document.getElementById('navScholarship').textContent = 'मुफ़्त छात्रवृत्ति परीक्षा';
+        document.getElementById('navPyq').textContent = 'पुराने प्रश्न (PYQ) व हल';
+        document.getElementById('navPractice').textContent = 'अभ्यास सेट्स (ड्रिल)';
+        document.getElementById('navDoubt').textContent = 'प्रश्न पूछें (Doubt)';
+        document.getElementById('navAssistant').textContent = 'सहायता डेस्क (AI)';
+        document.getElementById('navMentor').textContent = 'भारती सर का परिचय';
+      } else {
+        activeLang = 'en';
+        document.getElementById('btnLangToggle').textContent = 'हिन्दी';
+        document.getElementById('navCourses').textContent = 'Courses & Fees';
+        document.getElementById('navScholarship').textContent = 'Free Scholarship Test';
+        document.getElementById('navPyq').textContent = 'PYQ Vault & Solutions';
+        document.getElementById('navPractice').textContent = 'Practice Drills (Sets)';
+        document.getElementById('navDoubt').textContent = 'Raise a Doubt';
+        document.getElementById('navAssistant').textContent = 'May I Help You? (AI)';
+        document.getElementById('navMentor').textContent = 'About Vishwa Sir';
+      }
+    }
   </script>
 </body>
 </html>
