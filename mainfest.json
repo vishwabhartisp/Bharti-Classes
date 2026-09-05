@@ -1,14 +1,27 @@
 {
   "name": "Bharti Classes",
   "short_name": "Bharti Classes",
+  "description": "Premier Coaching App for SSC, Banking, Railway, and State Exams by Vishwa Bharti Sir.",
   "start_url": "./index.html",
+  "id": "/?source=pwa",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0d233a",
   "theme_color": "#0d233a",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education"],
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     }
