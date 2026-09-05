@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bharti Classes - Online Learning App & Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #0d233a;
+      --primary-dark: #071524;
+      --secondary: #e63946;
+      --accent: #ffb703;
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --success: #10b981;
+      --sidebar-width: 280px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; }
+
+    /* --- SIDEBAR STYLING --- */
+    aside {
+      width: var(--sidebar-width);
+      background-color: var(--primary);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-brand {
+      padding: 20px;
+      background: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--secondary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: #fff;
+    }
+    .brand-info h2 { font-size: 1.15rem; color: #fff; font-weight: 700; line-height: 1.2; }
+    .brand-info span { font-size: 0.72rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px 10px;
+      list-style: none;
+    }
+    .menu-header {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      padding: 12px 14px 6px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 6px;
+      color: #cbd5e1;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      margin-bottom: 3px;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .nav-item.active { background: var(--secondary); color: #fff; font-weight: 600; }
+    .nav-item i { width: 20px; text-align: center; font-size: 1.05rem; }
+
+    .sidebar-footer {
+      padding: 15px;
+      background: var(--primary-dark);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.85rem;
+    }
+    .quick-contact-pills {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .contact-pill {
+      flex: 1;
+      text-align: center;
+      padding: 6px 0;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .pill-call { background: #2563eb; color: #fff; }
+    .pill-wa { background: #22c55e; color: #fff; }
+
+    /* --- MAIN APP WORKSPACE --- */
+    .app-workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    header.topbar {
+      height: 64px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 15px; }
+    .btn-toggle-sidebar { display: none; background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text); }
+    .page-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+
+    /* Unified Multi-Engine Search */
+    .omni-search {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 6px;
+      width: 480px;
+      max-width: 100%;
+    }
+    .omni-search select {
+      border: none;
+      background: transparent;
+      padding: 6px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--primary);
+      outline: none;
+      border-right: 1px solid var(--border);
+      margin-right: 6px;
+      cursor: pointer;
+    }
+    .omni-search input {
+      border: none;
+      background: transparent;
+      padding: 6px 8px;
+      width: 100%;
+      outline: none;
+      font-size: 0.88rem;
+    }
+    .omni-search button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .btn-lang {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .user-pill {
+      background: #eef2ff;
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Content Canvas */
+    .canvas-viewport {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: block; animation: fadeIn 0.25s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cards & Grids */
+    .card {
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-block { width: 100%; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-secondary { background: var(--secondary); color: #fff; }
+    .btn-accent { background: var(--accent); color: #000; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--bg); }
+
+    /* Course Cards */
+    .course-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .course-card.highlight { border-color: var(--secondary); box-shadow: 0 3px 12px rgba(230,57,70,0.1); }
+    .badge-discount {
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      background: var(--secondary);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .pricing-table-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.9rem;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-box {
+      background: #fff;
+      width: 440px;
+      max-width: 90%;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 860px) {
+      aside { position: absolute; height: 100vh; left: -280px; }
+      aside.open { left: 0; }
+      .btn-toggle-sidebar { display: block; }
+      .omni-search { width: 220px; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside id="appSidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><i class="fas fa-square-root-variable"></i></div>
+      <div class="brand-info">
+        <h2>Bharti Classes</h2>
+        <span id="txtTagline">Direct by Vishwa Bharti</span>
+      </div>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li class="menu-header" id="txtMenuAcademics">Academic Portals</li>
+      <li>
+        <a class="nav-item active" onclick="switchView('courses', this)">
+          <i class="fas fa-layer-group"></i> <span id="navCourses">Courses & Fees</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" onclick="switchView('scholarship', this)">
+          <i class="fas fa-award"></i> <span id="navScholarship">Free Scholarship Test</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" onclick="switchView('pyq', this)">
+          <i class="fas fa-file-invoice"></i> <span id="navPyq">PYQ Vault & Solutions</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" onclick="switchView('practice', this)">
+          <i class="fas fa-dumbbell"></i> <span id="navPractice">Practice Drills (Sets)</span>
+        </a>
+      </li>
+
+      <li class="menu-header" id="txtMenuSupport">Student Desk</li>
+      <li>
+        <a class="nav-item" onclick="switchView('doubt', this)">
+          <i class="fas fa-camera-retro"></i> <span id="navDoubt">Raise a Doubt</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" onclick="switchView('assistant', this)">
+          <i class="fas fa-robot"></i> <span id="navAssistant">May I Help You? (AI)</span>
+        </a>
+      </li>
+      <li>
+        <a class="nav-item" onclick="switchView('mentor', this)">
+          <i class="fas fa-user-tie"></i> <span id="navMentor">About Vishwa Sir</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div style="font-size: 0.76rem; color:#94a3b8; font-weight: 600;">DIRECT HELPLINE: 8271750420</div>
+      <div class="quick-contact-pills">
+        <a href="tel:8271750420" class="contact-pill pill-call"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="https://wa.me/918271750420" target="_blank" class="contact-pill pill-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-workspace">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="btn-toggle-sidebar" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <span class="page-title" id="pageHeadingTitle">Course Store & Admissions</span>
+      </div>
+
+      <div class="omni-search">
+        <select id="engineType">
+          <option value="app">App Search</option>
+          <option value="gemini">Google Gemini</option>
+          <option value="chatgpt">OpenAI ChatGPT</option>
+          <option value="google">Google Web</option>
+        </select>
+        <input type="text" id="omniQueryInput" placeholder="Search syllabus, advance maths formulas, PYQs..." onkeydown="if(event.key==='Enter') executeOmniSearch()" />
+        <button onclick="executeOmniSearch()"><i class="fas fa-arrow-right"></i></button>
+      </div>
+
+      <div class="topbar-right">
+        <button class="btn-lang" onclick="toggleBilingual()" id="btnLangToggle">हिन्दी</button>
+        <div class="user-pill" onclick="openAuthModal()">
+          <i class="fas fa-user-circle"></i> <span id="lblUserStatus">Login / Register</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="canvas-viewport">
+
+      <div id="view-courses" class="view-panel active">
+        <div class="card" style="background: linear-gradient(120deg, #0d233a, #1a365d); color: #fff;">
+          <h2 style="color: var(--accent); margin-bottom: 6px;">Enrollment Open: 2026 Competitive Batches</h2>
+          <p style="font-size: 0.92rem; color: #cbd5e1;">Master Advance Mathematics and High-Speed Reasoning directly under Bharti Sir. Pick individual courses or select combo packs with an automatic <strong>flat ₹800 discount</strong>.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card course-card highlight">
+            <span class="badge-discount">SAVE ₹800 (COMBO)</span>
+            <div>
+              <h3>SSC Comprehensive (CGL, CHSL, MTS)</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete Arithmetic, Advance Maths Mastery & Analytical Reasoning.</p>
+              <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹3,000</strong></div>
+              <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
+              <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹5,000</del> ₹4,200</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+              <button class="btn btn-outline" onclick="triggerCheckout('SSC Maths Only', 3000)">Buy Maths (₹3,000)</button>
+              <button class="btn btn-outline" onclick="triggerCheckout('SSC Reasoning Only', 2000)">Buy Reasoning (₹2,000)</button>
+              <button class="btn btn-secondary" onclick="triggerCheckout('SSC Complete Combo (Maths + Reasoning)', 4200)">Enroll in Combo (₹4,200)</button>
+            </div>
+          </div>
+
+          <div class="card course-card highlight">
+            <span class="badge-discount">SAVE ₹800 (COMBO)</span>
+            <div>
+              <h3>Railway (Graduation & Inter Level)</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Specialized for RRB NTPC, Group D, and ALP calculation techniques.</p>
+              <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹3,000</strong></div>
+              <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
+              <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹5,000</del> ₹4,200</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+              <button class="btn btn-outline" onclick="triggerCheckout('Railway Maths Only', 3000)">Buy Maths (₹3,000)</button>
+              <button class="btn btn-outline" onclick="triggerCheckout('Railway Reasoning Only', 2000)">Buy Reasoning (₹2,000)</button>
+              <button class="btn btn-secondary" onclick="triggerCheckout('Railway Complete Combo', 4200)">Enroll in Combo (₹4,200)</button>
+            </div>
+          </div>
+
+          <div class="card course-card highlight">
+            <span class="badge-discount">SAVE ₹800 (COMBO)</span>
+            <div>
+              <h3>Banking (IBPS PO/Clerk, SBI, Gramin Bank)</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">High-speed Data Interpretation & Critical Logical Reasoning.</p>
+              <div class="pricing-table-row"><span>Quantitative Aptitude Only:</span> <strong>₹2,500</strong></div>
+              <div class="pricing-table-row"><span>Reasoning Ability Only:</span> <strong>₹2,000</strong></div>
+              <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹4,500</del> ₹3,700</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+              <button class="btn btn-outline" onclick="triggerCheckout('Bank Maths Only', 2500)">Buy Quant (₹2,500)</button>
+              <button class="btn btn-outline" onclick="triggerCheckout('Bank Reasoning Only', 2000)">Buy Reasoning (₹2,000)</button>
+              <button class="btn btn-secondary" onclick="triggerCheckout('Banking Complete Combo', 3700)">Enroll in Combo (₹3,700)</button>
+            </div>
+          </div>
+
+          <div class="card course-card highlight">
+            <span class="badge-discount">SAVE ₹800 (COMBO)</span>
+            <div>
+              <h3>Bihar SSC Exam & CDS (Defence)</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Targeted syllabus coverage including state-specific mathematical patterns.</p>
+              <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹2,500</strong></div>
+              <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
+              <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹4,500</del> ₹3,700</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+              <button class="btn btn-outline" onclick="triggerCheckout('BSSC/CDS Maths Only', 2500)">Buy Maths (₹2,500)</button>
+              <button class="btn btn-outline" onclick="triggerCheckout('BSSC/CDS Reasoning Only', 2000)">Buy Reasoning (₹2,000)</button>
+              <button class="btn btn-secondary" onclick="triggerCheckout('BSSC/CDS Complete Combo', 3700)">Enroll in Combo (₹3,700)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-scholarship" class="view-panel">
+        <div class="card">
+          <h2>Bharti Classes 100% Scholarship Exam</h2>
+          <p style="color: var(--text-muted); margin: 8px 0 16px;">Pass this entrance test with an 80% score and access any course **Free of Cost**.</p>
+          <div style="background: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            <i class="fas fa-check-circle" style="color: #059669;"></i> <strong>Zero Cost Guarantee:</strong> Deserving candidates get unrestricted access to Vishwa Bharti Sir's live classes, notes, and test series.
+          </div>
+          <button class="btn btn-secondary" onclick="runScholarshipExam()"><i class="fas fa-pen-alt"></i> Start Scholarship CBT Test Now</button>
+        </div>
+      </div>
+
+      <div id="view-pyq" class="view-panel">
+        <div class="card">
+          <h2>Exam-Wise Previous Year Questions & Solutions</h2>
+          <p style="color: var(--text-muted); margin-bottom: 16px;">Solved with Bharti Sir's signature Advance Mathematics step-skipping and visualization shortcuts.</p>
+          <div class="grid-3">
+            <div class="card" style="margin:0; border: 1px solid var(--border);">
+              <h4>SSC CGL (Tier 1 & 2)</h4>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">2018 - 2024 Solved Papers</p>
+              <button class="btn btn-outline btn-block" onclick="alert('Downloading SSC PYQ Archive & Video Playlist...')"><i class="fas fa-download"></i> Papers + Solutions</button>
+            </div>
+            <div class="card" style="margin:0; border: 1px solid var(--border);">
+              <h4>IBPS & SBI Bank PO/Clerk</h4>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">Arithmetic & DI Memory Papers</p>
+              <button class="btn btn-outline btn-block" onclick="alert('Downloading Banking PYQ Archive & Video Playlist...')"><i class="fas fa-download"></i> Papers + Solutions</button>
+            </div>
+            <div class="card" style="margin:0; border: 1px solid var(--border);">
+              <h4>Bihar SSC (Inter & Graduate)</h4>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">Complete BSSC Solved Sets</p>
+              <button class="btn btn-outline btn-block" onclick="alert('Downloading BSSC PYQ Archive & Video Playlist...')"><i class="fas fa-download"></i> Papers + Solutions</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-practice" class="view-panel">
+        <div class="card">
+          <h2>Adaptive Practice Sets</h2>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">Pick your difficulty level to test speed and accuracy.</p>
+          <div style="display:flex; gap:10px; margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="loadDrills('easy')">Level 1: Easy (Foundation)</button>
+            <button class="btn btn-accent" onclick="loadDrills('moderate')">Level 2: Moderate (Exam Standard)</button>
+            <button class="btn btn-secondary" onclick="loadDrills('hard')">Level 3: Hard (Bharti Sir Special)</button>
+          </div>
+          <div id="drillBox" style="padding: 16px; border: 1px dashed var(--border); border-radius: 6px; background: #fff;">
+            Click a difficulty tier above to generate 25 practice questions.
+          </div>
+        </div>
+      </div>
+
+      <div id="view-doubt" class="view-panel">
+        <div class="card">
+          <h2>Student Doubt Resolution Portal</h2>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">Submit challenging problems directly to Vishwa Bharti Sir by entering text or uploading images/video clips.</p>
+
+          <form onsubmit="handleDoubtSubmit(event)">
+            <div style="margin-bottom: 15px;">
+              <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:5px;">Exam Category & Subject</label>
+              <select style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;" required>
+                <option>SSC - Advance Mathematics (Algebra/Trigo/Geometry)</option>
+                <option>SSC - General Intelligence & Reasoning</option>
+                <option>Banking - Quantitative Aptitude & DI</option>
+                <option>Railway - Arithmetic & Advance Maths</option>
+                <option>Bihar SSC - General Mathematics & Logic</option>
+                <option>CDS Exam - Elementary Mathematics</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:5px;">Write Your Question / Problem Statement</label>
+              <textarea rows="4" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;" placeholder="Type mathematical equations or specify question number/book name..."></textarea>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:5px;">Attach Photo or Video of Question (.jpg, .png, .mp4)</label>
+              <input type="file" accept="image/*,video/*" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; background:#fff;" />
+            </div>
+
+            <button type="submit" class="btn btn-secondary"><i class="fas fa-cloud-upload-alt"></i> Submit Question to Bharti Sir</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="view-assistant" class="view-panel">
+        <div class="card">
+          <h2>Bharti AI Helpdesk & Exam Counselor</h2>
+          <p style="color: var(--text-muted); margin-bottom: 15px;">Ask questions regarding batch timings, shortcut methods, or exam syllabus.</p>
+          <div id="chatDialogue" style="height:260px; overflow-y:auto; border:1px solid var(--border); padding:12px; border-radius:6px; background:#fafafa; margin-bottom:12px;">
+            <p><strong>Bharti Desk:</strong> Namaste! How can I assist your competitive exam preparation today?</p>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="botInput" style="flex:1; padding:10px; border:1px solid var(--border); border-radius:6px;" placeholder="Type question here..." onkeydown="if(event.key==='Enter') dispatchBotMessage()" />
+            <button class="btn btn-primary" onclick="dispatchBotMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-mentor" class="view-panel">
+        <div class="card" style="display:flex; gap:20px; flex-wrap:wrap; align-items:center;">
+          <div style="width:90px; height:90px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:2.5rem;">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div>
+            <h2>Vishwa Bharti (Bharti Sir)</h2>
+            <h4 style="color:var(--secondary);">Director, Academic Mentor & Senior Faculty</h4>
+            <p style="color:var(--text-muted); font-size:0.88rem;">14+ Years of Dedicated Teaching Experience | Specialist in Advance Mathematics</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:12px; color:var(--primary);"><i class="fas fa-trophy" style="color:var(--accent);"></i> Verified Selections & Credentials</h3>
+          <ul style="padding-left:20px; line-height:1.9;">
+            <li><strong>Selected in SSC CGL Examination 3 Times:</strong> 2012, 2013, and 2014.</li>
+            <li><strong>Selected in Banking:</strong> IBPS Examination (2012).</li>
+            <li><strong>Selected in Insurance:</strong> LIC Examination (2012).</li>
+            <li>Cleared numerous other central and state level competitive recruitment tests.</li>
+          </ul>
+
+          <h3 style="margin:20px 0 10px; color:var(--primary);"><i class="fas fa-history" style="color:var(--secondary);"></i> Institutional Heritage</h3>
+          <p style="line-height: 1.7; color: #374151;">
+            From <strong>2012 to 2016</strong>, Bharti Sir established and headed <strong>Bharti Competitive Classes in Muzaffarpur</strong>. He quickly earned renown as "Bharti Sir" across North Bihar for his rigorous pedagogy, conceptual derivations, and specialized methods in Advance Mathematics that simplified complex geometry, algebra, trigonometry, and coordinate geometry for thousands of aspirants.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="authBackdrop">
+    <div class="modal-box">
+      <h3 style="margin-bottom:6px;">Mobile Login & OTP Verification</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Login with your phone number to access enrolled courses and submit questions.</p>
+
+      <div id="stepPhone">
+        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Mobile Number</label>
+        <input type="tel" id="txtMobile" placeholder="e.g., 8271750420" maxlength="10" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; margin-bottom:12px;" />
+        <button class="btn btn-primary btn-block" onclick="sendOtp()">Send OTP</button>
+      </div>
+
+      <div id="stepOtp" style="display:none;">
+        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Enter 6-Digit OTP</label>
+        <input type="text" id="txtOtp" placeholder="123456" maxlength="6" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; margin-bottom:12px;" />
+        <button class="btn btn-secondary btn-block" onclick="verifyOtp()">Confirm & Log In</button>
+      </div>
+
+      <button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="closeAuthModal()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="paymentBackdrop">
+    <div class="modal-box">
+      <h3 id="payCourseTitle">Course Checkout</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin:4px 0 15px;">Secure 256-Bit Encrypted Payment</p>
+
+      <div style="background:#f8fafc; padding:12px; border-radius:6px; margin-bottom:15px;">
+        <div style="display:flex; justify-content:space-between;"><span>Payable Amount:</span> <strong id="payAmountVal" style="color:var(--secondary); font-size:1.2rem;">₹0</strong></div>
+      </div>
+
+      <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:6px;">Select Payment Mode:</label>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn btn-outline" style="justify-content:flex-start;" onclick="simulateSuccess('UPI App (PhonePe / GPay / Paytm / BHIM)')"><i class="fas fa-mobile-alt"></i> UPI (PhonePe / Google Pay / BHIM)</button>
+        <button class="btn btn-outline" style="justify-content:flex-start;" onclick="simulateSuccess('Debit / Credit Card')"><i class="fas fa-credit-card"></i> Credit / Debit Card (Visa, RuPay, MasterCard)</button>
+        <button class="btn btn-outline" style="justify-content:flex-start;" onclick="simulateSuccess('Internet Banking')"><i class="fas fa-university"></i> Net Banking (All Indian Banks)</button>
+      </div>
+
+      <button class="btn btn-outline btn-block" style="margin-top:14px;" onclick="document.getElementById('paymentBackdrop').style.display='none'">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    let isUserLoggedIn = false;
+    let activeLang = 'en';
+
+    // View Switching Controller
+    function switchView(viewKey, navElement) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      const targetView = document.getElementById('view-' + viewKey);
+      if (targetView) targetView.classList.add('active');
+      if (navElement) navElement.classList.add('active');
+
+      const titles = {
+        courses: 'Course Store & Admissions',
+        scholarship: 'Bharti Talent Scholarship Test',
+        pyq: 'Previous Year Question Vault',
+        practice: 'Adaptive Practice Sets',
+        doubt: 'Doubt Submission Desk',
+        assistant: 'May I Help You? - AI Assistant',
+        mentor: 'Instructor Profile & History'
+      };
+      document.getElementById('pageHeadingTitle').textContent = titles[viewKey] || 'Bharti Classes';
+
+      if (window.innerWidth <= 860) {
+        document.getElementById('appSidebar').classList.remove('open');
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('appSidebar').classList.toggle('open');
+    }
+
+    // Unified Omni-Search Router
+    function executeOmniSearch() {
+      const engine = document.getElementById('engineType').value;
+      const q = document.getElementById('omniQueryInput').value.trim();
+      if (!q) return alert('Please enter a query.');
+
+      if (engine === 'app') {
+        alert('Filtering Bharti Classes database for: "' + q + '"');
+      } else if (engine === 'gemini') {
+        window.open('https://gemini.google.com/app?q=' + encodeURIComponent(q), '_blank');
+      } else if (engine === 'chatgpt') {
+        window.open('https://chatgpt.com/?q=' + encodeURIComponent(q), '_blank');
+      } else if (engine === 'google') {
+        window.open('https://www.google.com/search?q=' + encodeURIComponent('Bharti Classes ' + q), '_blank');
+      }
+    }
+
+    // Authentication Handlers
+    function openAuthModal() {
+      if (isUserLoggedIn) return alert('You are already logged in with your verified mobile number.');
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+    function closeAuthModal() {
+      document.getElementById('authBackdrop').style.display = 'none';
+      document.getElementById('stepPhone').style.display = 'block';
+      document.getElementById('stepOtp').style.display = 'none';
+    }
+    function sendOtp() {
+      const num = document.getElementById('txtMobile').value.trim();
+      if (num.length !== 10) return alert('Please enter a valid 10-digit Indian mobile number.');
+      document.getElementById('stepPhone').style.display = 'none';
+      document.getElementById('stepOtp').style.display = 'block';
+    }
+    function verifyOtp() {
+      const code = document.getElementById('txtOtp').value.trim();
+      if (code.length === 6) {
+        isUserLoggedIn = true;
+        document.getElementById('lblUserStatus').textContent = 'OTP Verified';
+        alert('Login successful! You can now raise doubts and enroll in courses.');
+        closeAuthModal();
+      } else {
+        alert('Invalid code. Please enter 6 digits.');
+      }
+    }
+
+    // Checkout Modal
+    function triggerCheckout(courseName, fee) {
+      if (!isUserLoggedIn) {
+        alert('Please login with OTP verification to purchase courses.');
+        openAuthModal();
+        return;
+      }
+      document.getElementById('payCourseTitle').textContent = courseName;
+      document.getElementById('payAmountVal').textContent = '₹' + fee;
+      document.getElementById('paymentBackdrop').style.display = 'flex';
+    }
+    function simulateSuccess(method) {
+      document.getElementById('paymentBackdrop').style.display = 'none';
+      alert('Payment successful via ' + method + '! Course access added to your profile.');
+    }
+
+    // Scholarship Entrance
+    function runScholarshipExam() {
+      if (!isUserLoggedIn) {
+        alert('Please login with OTP before attempting the Scholarship Exam.');
+        return openAuthModal();
+      }
+      const score = prompt('Simulated Test Score (Enter your score out of 100):', '85');
+      if (score !== null) {
+        const numericScore = parseInt(score, 10);
+        if (numericScore >= 80) {
+          alert('Congratulations! You scored ' + numericScore + '%. You passed the Bharti Classes Screening Test!\nAll courses are 100% FREE OF COST for you.');
+        } else {
+          alert('You scored ' + numericScore + '%. Qualifying mark is 80%. You can re-attempt or enroll with regular combo discounts.');
+        }
+      }
+    }
+
+    // Doubt Submission
+    function handleDoubtSubmit(e) {
+      e.preventDefault();
+      if (!isUserLoggedIn) {
+        alert('You must be verified via OTP to raise a question.');
+        return openAuthModal();
+      }
+      alert('Your doubt and media files have been submitted to Vishwa Bharti Sir for review!');
+      e.target.reset();
+    }
+
+    // Practice Sets Generator
+    function loadDrills(tier) {
+      const box = document.getElementById('drillBox');
+      box.innerHTML = '<div style="font-weight:bold; margin-bottom:8px; text-transform:uppercase; color:var(--secondary);">' + tier + ' Level Drill Active</div>' +
+        '<ol style="padding-left:20px; line-height:1.8;">' +
+        '<li>Advance Maths Drill: If $x + \\frac{1}{x} = 3$, find the value of $x^4 + \\frac{1}{x^4}$.</li>' +
+        '<li>Reasoning: Statement & Assumptions / Syllogisms drill question set loaded.</li>' +
+        '<li>Speed Test: 23 additional questions loaded for ' + tier + ' difficulty.</li>' +
+        '</ol>';
+    }
+
+    // Assistant Bot
+    function dispatchBotMessage() {
+      const input = document.getElementById('botInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const box = document.getElementById('chatDialogue');
+      box.innerHTML += '<p style="margin-top:6px;"><strong>You:</strong> ' + val + '</p>';
+      input.value = '';
+      setTimeout(() => {
+        box.innerHTML += '<p style="margin-top:6px; color:var(--primary);"><strong>Bharti Desk:</strong> For quick admission inquiries or batch timings, you can also speak directly with Vishwa Bharti Sir on <strong>8271750420</strong>.</p>';
+        box.scrollTop = box.scrollHeight;
+      }, 500);
+    }
+
+    // Bilingual Toggle
+    function toggleBilingual() {
+      if (activeLang === 'en') {
+        activeLang = 'hi';
+        document.getElementById('btnLangToggle').textContent = 'English';
+        document.getElementById('navCourses').textContent = 'कोर्स एवं शुल्क';
+        document.getElementById('navScholarship').textContent = 'मुफ़्त छात्रवृत्ति परीक्षा';
+        document.getElementById('navPyq').textContent = 'पुराने प्रश्न (PYQ) व हल';
+        document.getElementById('navPractice').textContent = 'अभ्यास सेट्स (ड्रिल)';
+        document.getElementById('navDoubt').textContent = 'प्रश्न पूछें (Doubt)';
+        document.getElementById('navAssistant').textContent = 'सहायता डेस्क (AI)';
+        document.getElementById('navMentor').textContent = 'भारती सर का परिचय';
+      } else {
+        activeLang = 'en';
+        document.getElementById('btnLangToggle').textContent = 'हिन्दी';
+        document.getElementById('navCourses').textContent = 'Courses & Fees';
+        document.getElementById('navScholarship').textContent = 'Free Scholarship Test';
+        document.getElementById('navPyq').textContent = 'PYQ Vault & Solutions';
+        document.getElementById('navPractice').textContent = 'Practice Drills (Sets)';
+        document.getElementById('navDoubt').textContent = 'Raise a Doubt';
+        document.getElementById('navAssistant').textContent = 'May I Help You? (AI)';
+        document.getElementById('navMentor').textContent = 'About Vishwa Sir';
+      }
+    }
+  </script>
+</body>
+</html>
