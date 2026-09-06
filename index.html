@@ -1426,6 +1426,8 @@
           <button type="submit" class="btn btn-secondary btn-block" style="padding: 11px; margin-top: 10px;">
             <i class="fas fa-shield-alt"></i> Verify via Real OTP & Generate Registration ID
           </button>
+          <div id="recaptcha-container" class="recaptcha-box" style="margin-top:12px; display:flex; justify-content:center;"></div>
+          <div id="registrationOtpStatus" style="font-size:.78rem;color:var(--text-muted);margin-top:8px;text-align:center;"></div>
         </form>
 
         <div class="auth-toggle-footer">
@@ -1644,7 +1646,6 @@
         <input type="text" id="txtEnteredOtp" maxlength="6" placeholder="• • • • • •" style="font-size: 1.6rem; letter-spacing: 8px; text-align: center; font-weight: 700; width: 220px; margin: 0 auto;" />
       </div>
 
-      <div id="recaptcha-container" class="recaptcha-box"></div>
       <div style="font-size: 0.82rem; color: var(--text-muted); margin: 12px 0;">
         Didn't receive code? <a href="javascript:void(0)" onclick="resendOtpCode()" style="color:var(--primary); font-weight:700;">Resend OTP</a>
       </div>
@@ -2261,6 +2262,8 @@
       } catch (e) {}
       const box = document.getElementById('recaptcha-container');
       if (box) box.innerHTML = '';
+      const status = document.getElementById('registrationOtpStatus');
+      if (status) status.textContent = '';
     }
 
     function createRegistrationRecaptcha() {
@@ -2311,9 +2314,12 @@
       activeOtpTarget = '+91' + mob;
 
       try {
+        const status = document.getElementById('registrationOtpStatus');
+        if (status) status.textContent = 'Please complete the reCAPTCHA below. SMS will be sent after verification.';
         await createRegistrationRecaptcha();
         const appVerifier = registrationRecaptchaVerifier;
         registrationConfirmationResult = await firebase.auth().signInWithPhoneNumber(activeOtpTarget, appVerifier);
+        if (status) status.textContent = `SMS OTP sent to ${activeOtpTarget}. Enter the code in the next window.`;
         document.getElementById('authBackdrop').style.display = 'none';
         document.getElementById('otpModalTitle').innerHTML = '<i class="fas fa-mobile-alt"></i> Real SMS OTP Verification';
         document.getElementById('otpModalSubtitle').innerHTML = `A real Firebase verification code has been sent by SMS to <strong>${activeOtpTarget}</strong>. Enter it below to complete registration.`;
@@ -2322,7 +2328,8 @@
       } catch (error) {
         console.error(error);
         resetRegistrationRecaptcha();
-        alert('Unable to send SMS OTP. ' + (error.message || 'Please check Firebase Phone Authentication, authorized domains, reCAPTCHA and SMS settings.'));
+        const code = error && error.code ? ` [${error.code}]` : '';
+        alert('Unable to send SMS OTP.' + code + '\n\n' + (error.message || 'Please check Firebase Phone Authentication, authorized domains, reCAPTCHA and SMS quota/settings.'));
       }
     }
 
