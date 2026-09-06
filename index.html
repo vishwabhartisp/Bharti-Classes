@@ -1357,7 +1357,7 @@
         </p>
 
         <button class="btn btn-outline btn-block" style="margin-bottom: 14px; background: #fff;" onclick="loginWithGoogle()">
-          <i class="fab fa-google" style="color:#4285f4;"></i> Autofill with Google Profile
+          <i class="fab fa-google" style="color:#4285f4;"></i> Continue with Google & Autofill Profile
         </button>
 
         <form onsubmit="handleRegistrationSubmit(event)">
@@ -1401,11 +1401,9 @@
           </div>
 
           <div class="form-group">
-            <label>Preferred Verification Channel for OTP *</label>
-            <select id="regOtpChannel" required>
-              <option value="mobile">Verify via Mobile Number (SMS OTP)</option>
-              <option value="email">Verify via Email Address (Email OTP)</option>
-            </select>
+            <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 12px; font-size:.82rem; color:#1e3a8a;">
+              <i class="fab fa-google" style="color:#4285f4;"></i> <strong>Account verification:</strong> Sign in with Google (free). Your <strong>mobile number is mandatory</strong> for your student profile and registration record. SMS verification is not used on the no-cost Firebase plan.
+            </div>
           </div>
 
           <div class="form-group">
@@ -1424,10 +1422,9 @@
           <div id="dynamicSubCategoriesArea"></div>
 
           <button type="submit" class="btn btn-secondary btn-block" style="padding: 11px; margin-top: 10px;">
-            <i class="fas fa-shield-alt"></i> Verify via Real OTP & Generate Registration ID
+            <i class="fas fa-user-check"></i> Complete Registration & Generate Registration ID
           </button>
-          <div id="recaptcha-container" class="recaptcha-box" style="margin-top:12px; display:flex; justify-content:center;"></div>
-          <div id="registrationOtpStatus" style="font-size:.78rem;color:var(--text-muted);margin-top:8px;text-align:center;"></div>
+          <div id="registrationGoogleStatus" style="font-size:.78rem;color:var(--text-muted);margin-top:8px;text-align:center;">First click <strong>Continue with Google & Autofill Profile</strong> above, then complete all required details.</div>
         </form>
 
         <div class="auth-toggle-footer">
@@ -1633,30 +1630,6 @@
     </div>
   </div>
 
-  <!-- REAL REGISTRATION OTP VERIFICATION DIALOG -->
-  <div class="modal-backdrop" id="otpVerifyBackdrop">
-    <div class="modal-box" style="text-align: center; width: 440px;">
-      <div style="font-size: 2.2rem; color: var(--secondary); margin-bottom: 8px;"><i class="fas fa-shield-alt"></i></div>
-      <h3 style="margin-bottom: 6px;" id="otpModalTitle">Security OTP Verification</h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;" id="otpModalSubtitle">
-        Enter the 6-digit real verification code dispatched to your account.
-      </p>
-
-      <div class="form-group" style="text-align:center;">
-        <input type="text" id="txtEnteredOtp" maxlength="6" placeholder="• • • • • •" style="font-size: 1.6rem; letter-spacing: 8px; text-align: center; font-weight: 700; width: 220px; margin: 0 auto;" />
-      </div>
-
-      <div style="font-size: 0.82rem; color: var(--text-muted); margin: 12px 0;">
-        Didn't receive code? <a href="javascript:void(0)" onclick="resendOtpCode()" style="color:var(--primary); font-weight:700;">Resend OTP</a>
-      </div>
-
-      <button class="btn btn-secondary btn-block" style="padding: 11px;" onclick="confirmAndValidateOtp()">
-        <i class="fas fa-check-circle"></i> Confirm OTP & Complete Registration
-      </button>
-      <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="closeOtpModal()">Cancel</button>
-    </div>
-  </div>
-
   <!-- REGISTRATION CERTIFICATE MODAL -->
   <div class="modal-backdrop" id="regSuccessBackdrop">
     <div class="modal-box" style="text-align: center;">
@@ -1667,7 +1640,7 @@
       <div class="reg-certificate">
         <span style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #166534; letter-spacing: 1px;">Official Registration Number</span>
         <div class="reg-number-display" id="displayRegNumber">20260906420/1</div>
-        <span style="font-size: 0.78rem; color: #15803d;" id="displayRegMeta">Candidate Verified | Active Student Status</span>
+        <span style="font-size: 0.78rem; color: #15803d;" id="displayRegMeta">Google Account Verified | Mobile Number Recorded</span>
       </div>
 
       <button class="btn btn-primary btn-block" onclick="dismissRegSuccessModal()">Enter My Dashboard</button>
@@ -1690,10 +1663,8 @@
     let activeScheduleMode = 'daily';
     let selectedWeeklyDays = new Set([0, 1, 2, 3, 4, 5, 6]);
 
-    let activeOtpChannel = 'mobile';
-    let activeOtpTarget = '';
-    let serverGeneratedOtp = '';
     let pendingProfileData = null;
+    let googleRegistrationUser = null;
 
     let resetPassUserObj = null;
     let resetPassOtp = '';
@@ -1706,8 +1677,6 @@
     };
 
     let activeCourseCategory = 'SSC';
-    let registrationConfirmationResult = null;
-    let registrationRecaptchaVerifier = null;
     let firebaseDb = null;
     let firebaseFunctions = null;
 
@@ -2253,107 +2222,78 @@
       return String(100000 + (arr[0] % 900000));
     }
 
-    function resetRegistrationRecaptcha() {
-      try {
-        if (registrationRecaptchaVerifier) {
-          registrationRecaptchaVerifier.clear();
-          registrationRecaptchaVerifier = null;
-        }
-      } catch (e) {}
-      const box = document.getElementById('recaptcha-container');
-      if (box) box.innerHTML = '';
-      const status = document.getElementById('registrationOtpStatus');
-      if (status) status.textContent = '';
-    }
-
-    function createRegistrationRecaptcha() {
-      if (!window.firebase || !firebase.auth) throw new Error('Firebase Authentication is not available.');
-      resetRegistrationRecaptcha();
-      registrationRecaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        size: 'normal',
-        callback: function() {},
-        'expired-callback': function() { alert('reCAPTCHA expired. Please complete it again.'); }
-      });
-      return registrationRecaptchaVerifier.render();
-    }
-
-    async function sendRealRegistrationOtp() {
+    // Registration uses Google Authentication on the no-cost Firebase plan.
+    // The mobile number remains mandatory profile information but is not claimed as SMS-verified.
+    async function completeGoogleRegistration() {
       const name = document.getElementById('regName').value.trim();
       const mob = document.getElementById('regMobile').value.trim();
       const email = document.getElementById('regEmail').value.trim();
       const age = document.getElementById('regAge').value.trim();
       const qual = document.getElementById('regClass').value;
       const pass = document.getElementById('regPassword').value.trim();
-      const channel = document.getElementById('regOtpChannel').value;
 
+      const firebaseUser = googleRegistrationUser || (firebase.auth ? firebase.auth().currentUser : null);
+      if (!firebaseUser) {
+        alert('Please click “Autofill with Google Profile” and complete Google Sign-In before submitting the registration form.');
+        return;
+      }
+      if (!firebaseUser.email) {
+        alert('The Google account did not provide an email address. Please use another Google account.');
+        return;
+      }
       if (!name) return alert('Please enter student full name.');
-      if (!/^\d{10}$/.test(mob)) return alert('Please enter a valid 10-digit Indian mobile number.');
+      if (!/^\d{10}$/.test(mob)) return alert('Please enter a valid 10-digit Indian mobile number. Mobile number is mandatory for registration.');
       if (!email) return alert('Please enter a valid email address.');
+      if (!age) return alert('Please enter age.');
+      if (!qual) return alert('Please select Class / Qualification.');
       if (!pass || pass.length < 6) return alert('Password must be at least 6 characters.');
-      if (channel !== 'mobile') return alert('For secure production verification, please select Mobile Number (SMS OTP). Email OTP is not simulated by this version.');
 
       const existing = findExistingUser(mob, email);
-      if (existing) {
+      if (existing && existing.firebaseUid && existing.firebaseUid !== firebaseUser.uid) {
         alert(`This Mobile Number (${mob}) or Email (${email}) is already registered with Registration No: ${existing.regNumber}. Please use Login.`);
-        document.getElementById('loginUserId').value = existing.regNumber || mob || email;
-        showLoginView();
         return;
       }
 
       if (selectedCategories.size === 0) return alert('Please select at least one Main Category of exam in Step 1.');
       const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExam"]:checked'));
       if (checkedBoxes.length === 0) return alert('Please select at least one target exam from the sub-category boxes in Step 2.');
+      if (!firebaseDb) return alert('Firebase Firestore is not available. Please check the Firebase setup.');
 
-      if (!firebase.auth) return alert('Firebase Authentication is not available. Please check the Firebase setup.');
+      const now = new Date();
+      const datePart = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+      const uidSuffix = (firebaseUser.uid || '').replace(/[^a-zA-Z0-9]/g, '').slice(-8).toUpperCase() || String(Date.now()).slice(-8);
+      const registrationNumber = `${datePart}${String(mob).slice(-3)}/${uidSuffix}`;
 
       pendingProfileData = {
-        name, mobile: mob, email, age, qualification: qual, password: pass,
-        categories: Array.from(selectedCategories), exams: checkedBoxes.map(cb => cb.value), enrolledCourses: []
+        name, mobile: mob, email: firebaseUser.email || email, age, qualification: qual, password: pass,
+        categories: Array.from(selectedCategories), exams: checkedBoxes.map(cb => cb.value), enrolledCourses: [],
+        regNumber: registrationNumber, firebaseUid: firebaseUser.uid,
+        googleVerified: true, phoneVerified: false, mobileVerified: false,
+        authProvider: 'google.com', verifiedAt: new Date().toISOString()
       };
-      activeOtpChannel = 'mobile';
-      activeOtpTarget = '+91' + mob;
 
       try {
-        const status = document.getElementById('registrationOtpStatus');
-        if (status) status.textContent = 'Please complete the reCAPTCHA below. SMS will be sent after verification.';
-        await createRegistrationRecaptcha();
-        const appVerifier = registrationRecaptchaVerifier;
-        registrationConfirmationResult = await firebase.auth().signInWithPhoneNumber(activeOtpTarget, appVerifier);
-        if (status) status.textContent = `SMS OTP sent to ${activeOtpTarget}. Enter the code in the next window.`;
-        document.getElementById('authBackdrop').style.display = 'none';
-        document.getElementById('otpModalTitle').innerHTML = '<i class="fas fa-mobile-alt"></i> Real SMS OTP Verification';
-        document.getElementById('otpModalSubtitle').innerHTML = `A real Firebase verification code has been sent by SMS to <strong>${activeOtpTarget}</strong>. Enter it below to complete registration.`;
-        document.getElementById('txtEnteredOtp').value = '';
-        document.getElementById('otpVerifyBackdrop').style.display = 'flex';
+        await saveVerifiedProfileToFirestore(pendingProfileData, firebaseUser.uid);
+        currentStudentProfile = { ...pendingProfileData };
+        currentUserRole = 'student';
+        saveUserToDatabase(currentStudentProfile);
+        localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+        completeLoginUi();
+        closeAuthModal();
+        document.getElementById('displayRegNumber').textContent = registrationNumber;
+        document.getElementById('displayRegMeta').textContent = `Candidate: ${currentStudentProfile.name} | Google account verified | Mobile number recorded`;
+        document.getElementById('regSuccessBackdrop').style.display = 'flex';
+        googleRegistrationUser = firebaseUser;
+        pendingProfileData = null;
       } catch (error) {
         console.error(error);
-        resetRegistrationRecaptcha();
-        const code = error && error.code ? ` [${error.code}]` : '';
-        alert('Unable to send SMS OTP.' + code + '\n\n' + (error.message || 'Please check Firebase Phone Authentication, authorized domains, reCAPTCHA and SMS quota/settings.'));
+        alert('Registration could not be saved to Firebase. ' + (error.message || 'Please try again.'));
       }
     }
 
     function handleRegistrationSubmit(e) {
       e.preventDefault();
-      sendRealRegistrationOtp();
-    }
-
-    async function resendOtpCode() {
-      if (!pendingProfileData || !activeOtpTarget) return alert('Please restart registration.');
-      try {
-        await createRegistrationRecaptcha();
-        registrationConfirmationResult = await firebase.auth().signInWithPhoneNumber(activeOtpTarget, registrationRecaptchaVerifier);
-        alert('A new real SMS OTP has been sent.');
-      } catch (error) {
-        resetRegistrationRecaptcha();
-        alert('Unable to resend OTP. ' + (error.message || 'Please try again later.'));
-      }
-    }
-
-    function closeOtpModal() {
-      document.getElementById('otpVerifyBackdrop').style.display = 'none';
-      resetRegistrationRecaptcha();
-      document.getElementById('authBackdrop').style.display = 'flex';
+      completeGoogleRegistration();
     }
 
     async function saveVerifiedProfileToFirestore(profile, uid) {
@@ -2368,51 +2308,14 @@
         categories: profile.categories || [],
         exams: profile.exams || [],
         regNumber: profile.regNumber || '',
+        googleVerified: profile.googleVerified === true,
+        authProvider: profile.authProvider || 'google.com',
+        phoneVerified: profile.phoneVerified === true,
+        mobileVerified: profile.mobileVerified === true,
         verifiedAt: profile.verifiedAt || new Date().toISOString(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
       await firebaseDb.collection('users').doc(uid).set(safeProfile, { merge: true });
-    }
-
-    async function confirmAndValidateOtp() {
-      const enteredCode = document.getElementById('txtEnteredOtp').value.trim();
-      if (!/^\d{6}$/.test(enteredCode)) return alert('Please enter the 6-digit OTP.');
-      if (!registrationConfirmationResult) return alert('No active OTP request. Please request a new OTP.');
-
-      try {
-        const result = await registrationConfirmationResult.confirm(enteredCode);
-        const firebaseUser = result.user;
-        const mobNumber = pendingProfileData.mobile || '';
-        const uidSuffix = (firebaseUser.uid || '').replace(/[^a-zA-Z0-9]/g, '').slice(-8).toUpperCase() || String(Date.now()).slice(-8);
-        const now = new Date();
-        const datePart = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
-        const registrationNumber = `${datePart}${String(mobNumber).slice(-3)}/${uidSuffix}`;
-
-        currentStudentProfile = {
-          ...pendingProfileData,
-          regNumber: registrationNumber,
-          firebaseUid: firebaseUser.uid,
-          phoneVerified: true,
-          verifiedAt: new Date().toISOString(),
-          enrolledCourses: []
-        };
-
-        currentUserRole = 'student';
-        saveUserToDatabase(currentStudentProfile);
-        localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
-        await saveVerifiedProfileToFirestore(currentStudentProfile, firebaseUser.uid);
-
-        completeLoginUi();
-        document.getElementById('otpVerifyBackdrop').style.display = 'none';
-        resetRegistrationRecaptcha();
-        document.getElementById('displayRegNumber').textContent = registrationNumber;
-        document.getElementById('displayRegMeta').textContent = `Candidate: ${currentStudentProfile.name} | Mobile verified by Firebase SMS OTP`;
-        document.getElementById('regSuccessBackdrop').style.display = 'flex';
-        registrationConfirmationResult = null;
-      } catch (error) {
-        console.error(error);
-        alert('Incorrect or expired OTP. ' + (error.message || 'Please request a new code.'));
-      }
     }
 
     // --- STEP 1: PRE-TRANSACTION OTP AUTHORIZATION ---
@@ -2924,35 +2827,58 @@
       showLoginView();
     }
 
-    function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          const userEmail = user.email || '';
-          const userName = user.displayName || '';
+    async function loginWithGoogle() {
+      if (!firebase || !firebase.auth) {
+        alert('Firebase Authentication is not available. Please check the Firebase setup.');
+        return;
+      }
 
-          const existing = findExistingUser('', userEmail);
-          if (existing) {
-            currentUserRole = 'student';
-            currentStudentProfile = existing;
-            localStorage.setItem('bharti_student', JSON.stringify(existing));
-            completeLoginUi();
-            closeAuthModal();
-            showAllExams();
-            selectCourseBox(activeCourseCategory);
-            alert(`Welcome back, ${existing.name}!\nLogged in with Registration ID: ${existing.regNumber}`);
-          } else {
-            showRegisterView();
-            document.getElementById('regName').value = userName;
-            document.getElementById('regEmail').value = userEmail;
-            document.getElementById('regOtpChannel').value = 'email';
-            alert(`Google account (${userEmail}) connected!\n\nPlease complete Mobile Number, Age, Qualification, Password & Target Exams to generate your Registration ID.`);
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+
+      try {
+        const result = await firebase.auth().signInWithPopup(provider);
+        const user = result.user;
+        googleRegistrationUser = user;
+        const userEmail = user.email || '';
+        const userName = user.displayName || '';
+
+        let remoteProfile = null;
+        if (firebaseDb && user.uid) {
+          try {
+            const snap = await firebaseDb.collection('users').doc(user.uid).get();
+            if (snap.exists) remoteProfile = snap.data();
+          } catch (e) {
+            console.warn('Could not read Firebase profile:', e);
           }
-        })
-        .catch((error) => {
-          alert('Google Sign-In Error: ' + error.message);
-        });
+        }
+
+        const existing = remoteProfile || findExistingUser('', userEmail);
+        if (existing && (existing.regNumber || existing.mobile)) {
+          currentStudentProfile = { ...existing, firebaseUid: user.uid, googleVerified: true, authProvider: 'google.com' };
+          currentUserRole = 'student';
+          localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+          completeLoginUi();
+          closeAuthModal();
+          showAllExams();
+          selectCourseBox(activeCourseCategory);
+          alert(`Welcome back, ${currentStudentProfile.name || userName}!\nRegistration ID: ${currentStudentProfile.regNumber || 'Registered Student'}`);
+          return;
+        }
+
+        showRegisterView();
+        document.getElementById('regName').value = userName;
+        document.getElementById('regEmail').value = userEmail;
+        const status = document.getElementById('registrationGoogleStatus');
+        if (status) {
+          status.innerHTML = '<span style="color:#15803d;font-weight:700;"><i class="fas fa-check-circle"></i> Google account connected.</span> Now enter your mandatory mobile number and complete the remaining required details.';
+        }
+        alert(`Google account (${userEmail}) connected successfully.\n\nNow complete the registration form. Your Mobile Number is mandatory and will be stored in your student profile.`);
+      } catch (error) {
+        console.error(error);
+        if (error && error.code === 'auth/popup-closed-by-user') return;
+        alert('Google Sign-In Error: ' + (error.message || 'Please try again.'));
+      }
     }
 
     function completeLoginUi() {
@@ -3618,7 +3544,7 @@
         if (snap.exists) {
           const remote = snap.data();
           const local = currentStudentProfile || {};
-          currentStudentProfile = { ...local, ...remote, firebaseUid: firebaseUser.uid, phoneVerified: true };
+          currentStudentProfile = { ...local, ...remote, firebaseUid: firebaseUser.uid, googleVerified: true, authProvider: 'google.com', phoneVerified: remote.phoneVerified === true, mobileVerified: remote.mobileVerified === true };
           if (!currentStudentProfile.enrolledCourses) currentStudentProfile.enrolledCourses = [];
           localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
           currentUserRole = 'student';
