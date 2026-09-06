@@ -147,7 +147,7 @@
       border: 1px solid var(--border);
       border-radius: 25px;
       padding: 3px 12px;
-      width: 420px;
+      width: 400px;
       max-width: 100%;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -196,10 +196,15 @@
       align-items: center;
       gap: 6px;
       border: 1px solid #c7d2fe;
-      max-width: 250px;
+      max-width: 280px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+    .user-pill.admin-active {
+      background: #fef2f2;
+      color: #991b1b;
+      border-color: #fca5a5;
     }
     .btn-logout {
       display: none;
@@ -353,6 +358,8 @@
       background: #fff;
     }
     .course-card.highlight { border-color: var(--secondary); box-shadow: 0 3px 12px rgba(230,57,70,0.1); }
+    .course-card.enrolled-active { border-color: #10b981; background: #f0fdf4; }
+    
     .badge-discount {
       position: absolute;
       top: -10px;
@@ -364,9 +371,31 @@
       padding: 2px 8px;
       border-radius: 10px;
     }
+    .badge-enrolled-status {
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      background: #10b981;
+      color: #fff;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+    }
     .badge-exam-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
     .exam-pill { background: #f1f5f9; color: var(--primary); font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
     .pricing-table-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--border); font-size: 0.88rem; }
+
+    /* Enrolled Courses Highlights */
+    .my-enrolled-container {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
 
     /* Target Preference Bar */
     .preference-bar {
@@ -570,7 +599,7 @@
     .auth-help-links { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.78rem; }
     .auth-help-links a { color: #2563eb; text-decoration: none; cursor: pointer; font-weight: 600; }
 
-    /* Admin Dashboard */
+    /* Admin Dashboard & Management */
     .admin-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -690,58 +719,8 @@
       </div>
     </div>
 
-    <ul class="sidebar-menu">
-      <li class="menu-header" id="txtMenuAcademics">Academic Portals</li>
-      <li>
-        <a class="nav-item active" onclick="switchView('courses', this)">
-          <i class="fas fa-layer-group"></i> <span id="navCourses">Courses & Fees</span>
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" onclick="switchView('planner', this)">
-          <i class="fas fa-calendar-check"></i> <span id="navPlanner">Daily Target & My Plan</span>
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" onclick="switchView('scholarship', this)">
-          <i class="fas fa-award"></i> <span id="navScholarship">Free Scholarship Test</span>
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" onclick="switchView('pyq', this)">
-          <i class="fas fa-file-invoice"></i> <span id="navPyq">PYQ Vault & Solutions</span>
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" onclick="switchView('practice', this)">
-          <i class="fas fa-dumbbell"></i> <span id="navPractice">Practice Drills (Sets)</span>
-        </a>
-      </li>
-
-      <li class="menu-header" id="txtMenuSupport">Student Desk</li>
-      <li>
-        <a class="nav-item" onclick="switchView('doubt', this)">
-          <i class="fas fa-camera-retro"></i> <span id="navDoubt">Raise a Doubt</span>
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" onclick="switchView('assistant', this)">
-          <i class="fas fa-robot"></i> <span id="navAssistant">May I Help You? (AI)</span>
-        </a>
-      </li>
-      <li>
-        <a class="nav-item" onclick="switchView('mentor', this)">
-          <i class="fas fa-user-tie"></i> <span id="navMentor">About Vishwa Sir</span>
-        </a>
-      </li>
-
-      <li class="menu-header" id="txtMenuAdmin">Administration</li>
-      <li>
-        <a class="nav-item" onclick="openAdminPortal(this)" id="navAdminItem" style="color:var(--accent);">
-          <i class="fas fa-user-shield"></i> <span id="navAdmin">Admin Portal (Director)</span>
-        </a>
-      </li>
-    </ul>
+    <!-- Dynamic Menu that automatically transforms for Student vs Director Admin -->
+    <ul class="sidebar-menu" id="sidebarMenuContainer"></ul>
 
     <div class="sidebar-footer">
       <div style="font-size: 0.76rem; color:#94a3b8; font-weight: 600;">DIRECT HELPLINE: 8271750420</div>
@@ -767,7 +746,7 @@
 
       <div class="topbar-right">
         <button class="btn-lang" onclick="toggleBilingual()" id="btnLangToggle">हिन्दी</button>
-        <div class="user-pill" onclick="openAuthModal()">
+        <div class="user-pill" id="userPillBtn" onclick="handleUserPillClick()">
           <i class="fas fa-user-circle"></i> <span id="lblUserStatus">Login / Register</span>
         </div>
         <button class="btn-logout" id="btnLogout" onclick="logoutUser()" title="Sign out">
@@ -798,6 +777,18 @@
       <!-- VIEW 1: COURSES & ADMISSIONS WITH INTERACTIVE BOX INTERFACE -->
       <div id="view-courses" class="view-panel active">
         
+        <!-- Active Enrolled Batches Panel (Shown to Logged in Users) -->
+        <div class="my-enrolled-container" id="myEnrolledPanel">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+            <div>
+              <h3 style="color:#065f46; font-size:1.05rem;"><i class="fas fa-check-circle"></i> My Enrolled Batches (Active 365 Days Access)</h3>
+              <p style="color:#047857; font-size:0.82rem;">Access your purchased video lectures, formula notes, and test series.</p>
+            </div>
+            <span class="exam-pill" style="background:#10b981; color:#fff; font-size:0.75rem;" id="lblEnrolledCountBadge">0 Batches Active</span>
+          </div>
+          <div id="enrolledCoursesListGrid" class="grid-2"></div>
+        </div>
+
         <div class="exam-category-bar">
           <div class="exam-category-title">
             <i class="fas fa-th-large" style="color:var(--secondary);"></i>
@@ -1103,15 +1094,19 @@
         </div>
       </div>
 
-      <!-- VIEW 9: ADMIN PORTAL DASHBOARD -->
-      <div id="view-admin" class="view-panel">
+      <!-- ==============================================
+           ADMINISTRATOR WORKSPACE VIEWS (ROLE-SPECIFIC)
+      =============================================== -->
+
+      <!-- ADMIN VIEW 1: EXECUTIVE OVERVIEW -->
+      <div id="view-admin-overview" class="view-panel">
         <div class="card" style="border-left: 5px solid var(--accent);">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
-              <h2 style="color:var(--primary);"><i class="fas fa-user-shield"></i> Director Administration Desk</h2>
-              <p style="color:var(--text-muted); font-size:0.86rem; margin-top:4px;">Manage all registered students, admissions, student doubts, and exam preferences in real time.</p>
+              <h2 style="color:var(--primary);"><i class="fas fa-chart-line"></i> Director's Executive Analytics</h2>
+              <p style="color:var(--text-muted); font-size:0.86rem; margin-top:4px;">Comprehensive real-time overview of enrolled students, fee collections, and active academic batches.</p>
             </div>
-            <button class="btn btn-outline" onclick="exportStudentsToCsv()"><i class="fas fa-file-excel"></i> Export Student Database (CSV)</button>
+            <button class="btn btn-outline" onclick="exportStudentsToCsv()"><i class="fas fa-file-excel"></i> Export Student Registry (CSV)</button>
           </div>
         </div>
 
@@ -1119,84 +1114,142 @@
           <div class="admin-stat-card">
             <div class="admin-stat-icon"><i class="fas fa-users"></i></div>
             <div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Registered Students</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Total Registered Students</div>
               <div style="font-size:1.4rem; font-weight:800; color:var(--primary);" id="adminStatStudents">0</div>
             </div>
           </div>
           <div class="admin-stat-card">
-            <div class="admin-stat-icon" style="color:#059669; background:#ecfdf5;"><i class="fas fa-shopping-cart"></i></div>
+            <div class="admin-stat-icon" style="color:#059669; background:#ecfdf5;"><i class="fas fa-wallet"></i></div>
             <div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Enrolled Admissions</div>
-              <div style="font-size:1.4rem; font-weight:800; color:#059669;" id="adminStatOrders">0</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Total Fee Collected</div>
+              <div style="font-size:1.4rem; font-weight:800; color:#059669;" id="adminStatRevenue">₹0</div>
             </div>
           </div>
           <div class="admin-stat-card">
-            <div class="admin-stat-icon" style="color:#d97706; background:#fffbeb;"><i class="fas fa-question-circle"></i></div>
+            <div class="admin-stat-icon" style="color:#d97706; background:#fffbeb;"><i class="fas fa-shopping-bag"></i></div>
             <div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Student Doubts</div>
-              <div style="font-size:1.4rem; font-weight:800; color:#d97706;" id="adminStatDoubts">0</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Paid Admissions</div>
+              <div style="font-size:1.4rem; font-weight:800; color:#d97706;" id="adminStatOrders">0</div>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon" style="color:#dc2626; background:#fef2f2;"><i class="fas fa-question-circle"></i></div>
+            <div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Doubts Queue</div>
+              <div style="font-size:1.4rem; font-weight:800; color:#dc2626;" id="adminStatDoubts">0</div>
             </div>
           </div>
         </div>
+      </div>
 
+      <!-- ADMIN VIEW 2: STUDENT DIRECTORY & MANAGEMENT -->
+      <div id="view-admin-students" class="view-panel">
         <div class="card">
-          <h3 style="margin-bottom: 12px; color:var(--primary);"><i class="fas fa-user-graduate"></i> Registered Students Directory</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <div>
+              <h3 style="color:var(--primary);"><i class="fas fa-user-graduate"></i> Student Database & Course Allocation</h3>
+              <p style="font-size:0.82rem; color:var(--text-muted);">Manage registered candidates, view profiles, and manually grant batch access.</p>
+            </div>
+            <input type="text" id="adminStudentSearchInput" oninput="filterAdminStudentsTable()" placeholder="Search Name, Reg No, Mobile..." style="padding:6px 12px; border:1px solid var(--border); border-radius:20px; font-size:0.84rem; width:220px;" />
+          </div>
+
           <div class="admin-table-container">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Reg No</th>
+                  <th>Reg Number</th>
                   <th>Student Name</th>
-                  <th>Mobile</th>
-                  <th>Email</th>
+                  <th>Mobile Number</th>
+                  <th>Email Address</th>
                   <th>Age/Class</th>
                   <th>Target Exams</th>
-                  <th>Reg Date</th>
+                  <th>Active Enrolled Batches</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="adminStudentsTableBody">
-                <tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No student records found.</td></tr>
+                <tr><td colspan="8" style="text-align:center; padding:15px; color:var(--text-muted);">No student records found.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
+      </div>
 
+      <!-- ADMIN VIEW 3: PAYMENT & FEE VERIFICATION (UTR LOGS) -->
+      <div id="view-admin-orders" class="view-panel">
         <div class="card">
-          <h3 style="margin-bottom: 12px; color:var(--primary);"><i class="fas fa-money-check-alt"></i> Payment & Enrollment Logs</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <div>
+              <h3 style="color:var(--primary);"><i class="fas fa-receipt"></i> UPI & Fee Payment Verification Logs</h3>
+              <p style="font-size:0.82rem; color:var(--text-muted);">Track PhonePe/UPI UTR reference numbers, verify student payments, and inspect 365-day active validities.</p>
+            </div>
+          </div>
+
           <div class="admin-table-container">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Txn ID / UTR</th>
-                  <th>Student Name</th>
-                  <th>Course Title</th>
-                  <th>Fee Paid</th>
-                  <th>Mode</th>
+                  <th>UTR / Txn Ref</th>
+                  <th>Student Name (ID)</th>
+                  <th>Batch Subscribed</th>
+                  <th>Amount</th>
+                  <th>Payment Mode</th>
+                  <th>Access Validity</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody id="adminOrdersTableBody">
-                <tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>
+                <tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
+      </div>
 
+      <!-- ADMIN VIEW 4: COURSE & PRICING MANAGER -->
+      <div id="view-admin-courses" class="view-panel">
         <div class="card">
-          <h3 style="margin-bottom: 12px; color:var(--primary);"><i class="fas fa-comment-dots"></i> Doubts Submitted by Students</h3>
+          <h3 style="color:var(--primary); margin-bottom:6px;"><i class="fas fa-tags"></i> Batch & Fee Structure Manager</h3>
+          <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:16px;">View fee structure across all exam streams. Updates apply immediately across student purchase portals.</p>
+
           <div class="admin-table-container">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Time</th>
-                  <th>Student</th>
                   <th>Category</th>
-                  <th>Doubt Statement</th>
-                  <th>Attachment</th>
+                  <th>Course Title</th>
+                  <th>Maths Fee (₹)</th>
+                  <th>Reasoning Fee (₹)</th>
+                  <th>Combo Fee (₹)</th>
+                  <th>Validity</th>
+                </tr>
+              </thead>
+              <tbody id="adminCoursesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN VIEW 5: DOUBT RESOLUTION DESK -->
+      <div id="view-admin-doubts" class="view-panel">
+        <div class="card">
+          <h3 style="color:var(--primary); margin-bottom:6px;"><i class="fas fa-headset"></i> Student Doubts & Query Inbox</h3>
+          <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:16px;">Questions and media uploaded by enrolled aspirants across subjects.</p>
+
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Submitted At</th>
+                  <th>Student Info</th>
+                  <th>Subject/Exam</th>
+                  <th>Doubt Question</th>
+                  <th>Media File</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody id="adminDoubtsTableBody">
-                <tr><td colspan="5" style="text-align:center; padding:15px; color:var(--text-muted);">No doubts submitted yet.</td></tr>
+                <tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No student doubts currently pending.</td></tr>
               </tbody>
             </table>
           </div>
@@ -1206,12 +1259,12 @@
     </div>
   </div>
 
-  <!-- ADMIN PASSCODE MODAL -->
+  <!-- ADMIN PASSCODE VERIFICATION MODAL -->
   <div class="modal-backdrop" id="adminAuthModal">
     <div class="modal-box" style="width: 420px; text-align: center;">
       <div style="font-size: 2.2rem; color: var(--primary); margin-bottom: 8px;"><i class="fas fa-lock"></i></div>
       <h3 style="margin-bottom: 4px;">Director Admin Verification</h3>
-      <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 16px;">Enter your admin security credentials to manage candidate profiles.</p>
+      <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 16px;">Enter your administrative security credentials to manage candidate profiles.</p>
       
       <form onsubmit="handleAdminLoginSubmit(event)">
         <div class="form-group">
@@ -1220,7 +1273,7 @@
         </div>
         <div class="form-group">
           <label>Admin Password *</label>
-          <input type="password" id="adminPasswordInput" placeholder="Enter admin password (default: admin123)" required />
+          <input type="password" id="adminPasswordInput" placeholder="Enter admin password" required />
         </div>
         <button type="submit" class="btn btn-primary btn-block" style="padding: 11px;">Access Admin Dashboard</button>
         <button type="button" class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="closeAdminAuthModal()">Cancel</button>
@@ -1363,7 +1416,31 @@
     </div>
   </div>
 
-  <!-- REAL UPI PAYMENT GATEWAY MODAL (PHONEPE QR & APP DEEP LINKS) -->
+  <!-- STEP 1: PRE-PAYMENT AUTHORIZATION OTP MODAL -->
+  <div class="modal-backdrop" id="prePayOtpBackdrop">
+    <div class="modal-box" style="width: 440px; text-align:center;">
+      <div style="font-size: 2.2rem; color: var(--primary); margin-bottom: 8px;"><i class="fas fa-shield-alt"></i></div>
+      <h3 style="margin-bottom: 6px;">Authorize Enrollment</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;" id="prePayOtpSubtitle">
+        Enter the 6-digit real OTP sent to verify your student account before payment checkout.
+      </p>
+
+      <div class="form-group" style="text-align:center;">
+        <input type="text" id="prePayEnteredOtp" maxlength="6" placeholder="• • • • • •" style="font-size: 1.6rem; letter-spacing: 8px; text-align: center; font-weight: 700; width: 220px; margin: 0 auto;" />
+      </div>
+
+      <div style="font-size: 0.82rem; color: var(--text-muted); margin: 12px 0;">
+        Didn't receive code? <a href="javascript:void(0)" onclick="resendPrePayOtp()" style="color:var(--primary); font-weight:700;">Resend OTP</a>
+      </div>
+
+      <button class="btn btn-primary btn-block" style="padding: 11px;" onclick="verifyPrePayOtpAndOpenGateway()">
+        <i class="fas fa-unlock"></i> Verify OTP & Proceed to Payment
+      </button>
+      <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="closePrePayOtpModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: PHONEPE UPI BARCODE & DEEP-LINK PAYMENT MODAL -->
   <div class="modal-backdrop" id="paymentBackdrop">
     <div class="modal-box" style="max-width: 500px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -1376,17 +1453,15 @@
           <span style="font-size:0.78rem; color:var(--text-muted); display:block;">Total Payable Fee:</span>
           <strong id="payAmountVal" style="color:var(--secondary); font-size:1.4rem;">₹0</strong>
         </div>
-        <span class="exam-pill" style="background:#e0f2fe; color:#0369a1;">Direct Admission 2026</span>
+        <span class="exam-pill" style="background:#e0f2fe; color:#0369a1;">365 Days Access</span>
       </div>
 
-      <!-- Live Verified PhonePe UPI Barcode & Deep-Links -->
       <div id="paymentPanelUpi">
         <div class="upi-qr-box">
           <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:8px;">
             <span style="background:#5f259f; color:#fff; padding:3px 8px; border-radius:4px; font-size:0.76rem; font-weight:700;">PhonePe Accepted Here</span>
           </div>
 
-          <!-- Dynamic Barcode QR encoded with Official VPA: 9504704632@ybl & Beneficiary: Bharti Classes (Sneha) -->
           <img id="dynamicUpiQrCode" class="upi-qr-image" src="" alt="Bharti Classes Sneha PhonePe Barcode QR" />
           
           <div style="font-size:0.86rem; font-weight:800; color:var(--primary);">
@@ -1396,10 +1471,9 @@
             Beneficiary Name: <span style="color:#15803d; font-weight:700;">Bharti Classes (Sneha)</span>
           </div>
 
-          <!-- Direct Payment from Installed UPI Apps on Mobile -->
           <div style="margin-top:14px; text-align:left;">
             <label style="font-size:0.78rem; font-weight:700; color:#374151; display:block; margin-bottom:4px;">
-              <i class="fas fa-mobile-alt"></i> Or Tap to Pay Directly from Installed UPI App:
+              <i class="fas fa-mobile-alt"></i> Tap to Open & Pay Directly from UPI App:
             </label>
             <div class="upi-apps-grid">
               <a href="#" id="btnPayPhonePe" class="btn-upi-app btn-phonepe"><i class="fas fa-wallet"></i> PhonePe</a>
@@ -1412,16 +1486,16 @@
         </div>
 
         <div style="background:#fffbeb; border:1px solid #fef3c7; border-radius:6px; padding:10px; font-size:0.8rem; color:#92400e; margin-bottom:12px;">
-          <i class="fas fa-info-circle"></i> Once payment is completed in your UPI App, enter the 12-digit UPI Reference (UTR / Transaction ID) below to receive your payment confirmation OTP.
+          <i class="fas fa-info-circle"></i> Once payment is completed in PhonePe / UPI, enter the 12-digit UPI Reference (UTR / Transaction ID) to complete enrollment.
         </div>
 
         <div class="form-group">
-          <label>Enter 12-Digit UPI Transaction Reference (UTR / Ref No) *</label>
+          <label>Enter 12-Digit UPI Transaction Reference (UTR / Txn ID) *</label>
           <input type="text" id="payUtrNumber" maxlength="16" placeholder="e.g. 424567890123" required />
         </div>
 
-        <button class="btn btn-secondary btn-block" style="padding:11px;" onclick="initiatePaymentOtpValidation()">
-          <i class="fas fa-shield-alt"></i> Verify UTR via Payment OTP & Unlock Batch
+        <button class="btn btn-secondary btn-block" style="padding:11px;" onclick="completeFinalEnrollment()">
+          <i class="fas fa-check-circle"></i> Confirm Transaction & Unlock 365 Days Access
         </button>
       </div>
 
@@ -1429,23 +1503,49 @@
     </div>
   </div>
 
-  <!-- PAYMENT CONFIRMATION OTP MODAL -->
-  <div class="modal-backdrop" id="paymentOtpBackdrop">
-    <div class="modal-box" style="width: 440px; text-align:center;">
-      <div style="font-size: 2.2rem; color: #059669; margin-bottom: 8px;"><i class="fas fa-check-double"></i></div>
-      <h3 style="margin-bottom: 6px;">Confirm Payment OTP</h3>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;" id="paymentOtpSubtitle">
-        Enter the 6-digit payment validation OTP sent to your registered account.
-      </p>
-
-      <div class="form-group" style="text-align:center;">
-        <input type="text" id="payEnteredOtp" maxlength="6" placeholder="• • • • • •" style="font-size: 1.6rem; letter-spacing: 8px; text-align: center; font-weight: 700; width: 220px; margin: 0 auto;" />
+  <!-- MODAL: COURSE CLASSROOM ACCESS -->
+  <div class="modal-backdrop" id="classroomModal">
+    <div class="modal-box" style="max-width: 600px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 id="classroomCourseTitle" style="color:var(--primary); font-size:1.15rem;">Course Classroom</h3>
+        <span class="badge-enrolled-status" style="position:static;">ACTIVE ENROLLMENT</span>
       </div>
 
-      <button class="btn btn-secondary btn-block" style="padding: 11px;" onclick="confirmPaymentAndGrantCourse()">
-        <i class="fas fa-unlock-alt"></i> Verify OTP & Activate Course Access
-      </button>
-      <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="closePaymentOtpModal()">Cancel</button>
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:6px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.84rem;">
+          <span>Validity Period:</span>
+          <strong id="classroomValidityDates" style="color:#059669;">Valid for 365 Days</strong>
+        </div>
+      </div>
+
+      <h4 style="font-size:0.92rem; margin-bottom:8px; color:var(--primary);">Syllabus & Lecture Delivery:</h4>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
+          <div>
+            <strong style="font-size:0.88rem; display:block;">Advance Maths Masterclass Playlist</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Algebra, Trigonometry, Geometry, Mensuration by Bharti Sir</span>
+          </div>
+          <button class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="alert('Opening unlisted live video lectures repository...')"><i class="fas fa-play"></i> Watch Lectures</button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
+          <div>
+            <strong style="font-size:0.88rem; display:block;">Class Formula Sheets & Step-Skipping PDFs</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Complete printable high-speed calculation notes</span>
+          </div>
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.8rem;" onclick="alert('Downloading Bharti Classes formula vault PDF...')"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
+          <div>
+            <strong style="font-size:0.88rem; display:block;">CBT Mock Test Series & Solutions</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Exam standard full-length computer-based practice sets</span>
+          </div>
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.8rem;" onclick="switchView('practice'); closeClassroomModal();"><i class="fas fa-pen-alt"></i> Start Test</button>
+        </div>
+      </div>
+
+      <button class="btn btn-outline btn-block" onclick="closeClassroomModal()">Close Classroom</button>
     </div>
   </div>
 
@@ -1545,26 +1645,13 @@
     </div>
   </div>
 
-  <!-- COURSE IN PREPARATION NOTIFICATION MODAL -->
-  <div class="modal-backdrop" id="notAvailableBackdrop">
-    <div class="modal-box" style="text-align: center; border-top: 5px solid var(--accent);">
-      <div style="font-size: 2.3rem; color: var(--accent); margin-bottom: 8px;"><i class="fas fa-clock"></i></div>
-      <h3 style="margin-bottom: 8px; color: var(--primary);">Exam Course In Preparation!</h3>
-      <p style="font-size: 0.9rem; color: #4b5563; line-height: 1.6; margin-bottom: 14px;">
-        We are sorry, dedicated batches for <strong id="unavailableExamTitle" style="color:var(--secondary);">your chosen exam</strong> are not currently live on Bharti Classes.
-      </p>
-      <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.86rem; color: #92400e; text-align: left;">
-        <i class="fas fa-info-circle"></i> We are working to onboard those courses in this app shortly! Till then, you can try these main foundational batches to master Advance Mathematics & High-Speed Reasoning:
-      </div>
-      <button class="btn btn-secondary btn-block" onclick="dismissUnavailableModal()">Explore Available Batches</button>
-    </div>
-  </div>
-
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- Firebase Compatibility Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
+    // System Roles: 'guest' | 'student' | 'admin'
+    let currentUserRole = 'guest';
     let isUserLoggedIn = false;
     let activeLang = 'en';
     let currentStudentProfile = null;
@@ -1584,286 +1671,12 @@
       courseName: '',
       fee: 0,
       utr: '',
-      otp: ''
+      prePayOtp: ''
     };
 
     let activeCourseCategory = 'SSC';
 
-    // REAL COURSES REPOSITORY
-    const REAL_COURSES_DATABASE = {
-      "SSC": [
-        {
-          id: "ssc_cgl_mastery",
-          title: "SSC CGL (Tier 1 & Tier 2) Comprehensive Batch",
-          subtitle: "Complete Arithmetic, Advance Maths Mastery (Algebra, Trigo, Geometry) & Logical Reasoning by Vishwa Bharti Sir.",
-          mathsFee: 3000,
-          reasoningFee: 2000,
-          comboFee: 4200,
-          tags: "ssc cgl maths reasoning advance combo",
-          highlight: true
-        },
-        {
-          id: "ssc_chsl_mts",
-          title: "SSC CHSL & MTS Foundation Batch",
-          subtitle: "Targeted High-Speed Arithmetic Calculation Shortcuts & Non-Verbal Reasoning Drills.",
-          mathsFee: 2500,
-          reasoningFee: 1800,
-          comboFee: 3500,
-          tags: "ssc chsl mts 10+2 havaldar",
-          highlight: false
-        },
-        {
-          id: "ssc_cpo_gd",
-          title: "SSC CPO & GD Constable Special Batch",
-          subtitle: "Speed mathematics drills, elementary arithmetic, and quantitative reasoning.",
-          mathsFee: 2200,
-          reasoningFee: 1600,
-          comboFee: 3200,
-          tags: "ssc cpo gd constable capf",
-          highlight: false
-        }
-      ],
-      "Bank": [
-        {
-          id: "bank_po_clerk",
-          title: "Banking Foundation Batch (IBPS & SBI PO/Clerk)",
-          subtitle: "Specialized High-Speed Data Interpretation (DI), Caselets & Critical Logical Puzzles.",
-          mathsFee: 2500,
-          reasoningFee: 2000,
-          comboFee: 3700,
-          tags: "bank ibps sbi po clerk",
-          highlight: true
-        },
-        {
-          id: "bank_rrb_gramin",
-          title: "IBPS RRB Gramin Bank Officer & Office Assistant",
-          subtitle: "Calculation speed techniques, quadratic equations, and banking reasoning ability.",
-          mathsFee: 2200,
-          reasoningFee: 1800,
-          comboFee: 3200,
-          tags: "bank rrb gramin scale 1 assistant",
-          highlight: false
-        }
-      ],
-      "Railway": [
-        {
-          id: "rrb_ntpc_super",
-          title: "Railway RRB NTPC (Graduate & Undergrad) Super Batch",
-          subtitle: "Vishwa Bharti Sir's signature step-skipping formula shortcuts and speed drills.",
-          mathsFee: 3000,
-          reasoningFee: 2000,
-          comboFee: 4200,
-          tags: "railway rrb ntpc station master",
-          highlight: true
-        },
-        {
-          id: "rrb_groupd_alp",
-          title: "RRB Group D, ALP & Technician Math & Reasoning",
-          subtitle: "Complete General Science calculation, basic math fundamentals & analytical ability.",
-          mathsFee: 2200,
-          reasoningFee: 1600,
-          comboFee: 3000,
-          tags: "railway alp group d technician",
-          highlight: false
-        }
-      ],
-      "UPSC": [
-        {
-          id: "upsc_csat",
-          title: "UPSC Civil Services CSAT (Paper-II) Aptitude",
-          subtitle: "Quantitative Aptitude, Logical Reasoning, Number Systems & Data Sufficiency for IAS/IPS.",
-          mathsFee: 3500,
-          reasoningFee: 2500,
-          comboFee: 4999,
-          tags: "upsc csat civil services ias ips",
-          highlight: true
-        },
-        {
-          id: "upsc_cds_nda",
-          title: "UPSC CDS Exam (Elementary Mathematics Special)",
-          subtitle: "Rigorous Algebra, Trigonometry, Geometry, Mensuration & Statistics by Bharti Sir.",
-          mathsFee: 3000,
-          reasoningFee: 2000,
-          comboFee: 4200,
-          tags: "upsc cds nda defence ima ota",
-          highlight: false
-        }
-      ],
-      "BPSC": [
-        {
-          id: "bpsc_cce_aptitude",
-          title: "BPSC Combined Competitive Exam (CSAT & Mental Ability)",
-          subtitle: "High-scoring mathematics questions, mental reasoning, and quantitative patterns for BPSC Prelims.",
-          mathsFee: 2500,
-          reasoningFee: 1800,
-          comboFee: 3500,
-          tags: "bpsc cce prelims sdm dsp bihar",
-          highlight: true
-        },
-        {
-          id: "bpsc_tre_teacher",
-          title: "BPSC TRE (Teacher Recruitment) Mathematics Special",
-          subtitle: "Full syllabus coverage of Primary, Middle, and Secondary school math pedagogy & problem solving.",
-          mathsFee: 2400,
-          reasoningFee: 1600,
-          comboFee: 3200,
-          tags: "bpsc tre teacher shikshak bihar",
-          highlight: false
-        }
-      ],
-      "JPSC": [
-        {
-          id: "jpsc_cce_csat",
-          title: "JPSC Combined Civil Services Aptitude & Reasoning",
-          subtitle: "Comprehensive numerical ability, reasoning puzzles, and CSAT pattern coverage for Jharkhand PSC.",
-          mathsFee: 2500,
-          reasoningFee: 1800,
-          comboFee: 3500,
-          tags: "jpsc jharkhand civil services",
-          highlight: true
-        }
-      ],
-      "Bihar SSC": [
-        {
-          id: "bssc_inter_level",
-          title: "Bihar SSC (BSSC Inter Level) Complete Batch",
-          subtitle: "Specialized for 10+2 vacancies: Speed arithmetic, mental logic, number series & geometry.",
-          mathsFee: 2500,
-          reasoningFee: 2000,
-          comboFee: 3700,
-          tags: "bihar ssc bssc inter level clerk",
-          highlight: true
-        },
-        {
-          id: "bssc_cgl_graduate",
-          title: "Bihar SSC CGL (4th Graduate Level) Officer Batch",
-          subtitle: "Advanced level mathematics shortcuts, data interpretation, and reasoning mastery.",
-          mathsFee: 2800,
-          reasoningFee: 2000,
-          comboFee: 4000,
-          tags: "bssc cgl sachivalaya sahayak bihar",
-          highlight: false
-        }
-      ],
-      "Bihar SI": [
-        {
-          id: "bihar_si_daroga",
-          title: "Bihar Police Sub-Inspector (Daroga) Mains Special",
-          subtitle: "High-scoring Arithmetic, Geometry, Mensuration & Mental Ability test series for Bihar Daroga.",
-          mathsFee: 2500,
-          reasoningFee: 1800,
-          comboFee: 3500,
-          tags: "bihar si daroga bihar police bpssc",
-          highlight: true
-        }
-      ],
-      "Bihar Constable": [
-        {
-          id: "bihar_police_constable",
-          title: "Bihar Police Constable Written Exam Batch",
-          subtitle: "Matriculation standard general mathematics, numerical aptitude & logical reasoning drills.",
-          mathsFee: 2000,
-          reasoningFee: 1500,
-          comboFee: 2800,
-          tags: "bihar constable csbc sipahi",
-          highlight: true
-        }
-      ],
-      "Delhi Police": [
-        {
-          id: "delhi_police_constable",
-          title: "Delhi Police Executive Constable & Head Constable",
-          subtitle: "SSC-pattern numerical ability, fast calculation shortcuts, and non-verbal reasoning.",
-          mathsFee: 2200,
-          reasoningFee: 1800,
-          comboFee: 3200,
-          tags: "delhi police constable hc ssc",
-          highlight: true
-        },
-        {
-          id: "delhi_police_si",
-          title: "Delhi Police Sub-Inspector (SSC CPO Special)",
-          subtitle: "Full advance maths and reasoning syllabus for Delhi Police Sub-Inspector recruitment.",
-          mathsFee: 3000,
-          reasoningFee: 2000,
-          comboFee: 4200,
-          tags: "delhi police si cpo sub-inspector",
-          highlight: false
-        }
-      ]
-    };
-
-    const SUB_EXAMS_DATABASE = {
-      "UPSC": [
-        "Civil Services Examination", "Indian Forest Service Examination", "Engineering Services Examination",
-        "Combined Defence Services Examination", "National Defence Academy & Naval Academy Examination",
-        "Combined Medical Services Examination", "Central Armed Police Forces (Assistant Commandants) Examination",
-        "Combined Geo-Scientist Examination", "Indian Economic Service Examination", "Indian Statistical Service Examination",
-        "CISF Assistant Commandant Examination", "Combined Section Officers' Grade-B Examination", "Combined Stenographers' Grade-B/Grade-I Examination"
-      ],
-      "State PCS": [
-        "Andhra Pradesh Public Service Commission (APPSC) Group 1", "Arunachal Pradesh Public Service Commission (APPSC) Combined Competitive Examination",
-        "Assam Public Service Commission (APSC) Combined Competitive Examination", "Bihar Public Service Commission (BPSC) Combined Competitive Examination",
-        "Chhattisgarh Public Service Commission (CGPSC) State Service Examination", "Goa Public Service Commission (GPSC) Civil Services Examination",
-        "Gujarat Public Service Commission (GPSC) Class 1 & 2 Examination", "Haryana Public Service Commission (HPSC) HCS Examination",
-        "Himachal Pradesh Public Service Commission (HPPSC) Administrative Service Examination", "Jharkhand Public Service Commission (JPSC) Combined Civil Services Examination",
-        "Jammu & Kashmir Public Service Commission (JKPSC) Combined Competitive Examination", "Karnataka Public Service Commission (KPSC) Gazetted Probationers Examination",
-        "Kerala Public Service Commission (KPSC) Administrative Service Examination", "Madhya Pradesh Public Service Commission (MPPSC) State Service Examination",
-        "Maharashtra Public Service Commission (MPSC) State Services Examination", "Manipur Public Service Commission (MPSC) Civil Services Examination",
-        "Meghalaya Public Service Commission (MPSC) Civil Services Examination", "Mizoram Public Service Commission (MPSC) Civil Services Examination",
-        "Nagaland Public Service Commission (NPSC) Combined Competitive Examination", "Odisha Public Service Commission (OPSC) Civil Services Examination",
-        "Punjab Public Service Commission (PPSC) State Civil Services Examination", "Rajasthan Public Service Commission (RPSC) RAS Examination",
-        "Sikkim Public Service Commission (SPSC) Services Examination", "Tamil Nadu Public Service Commission (TNPSC) Group I Examination",
-        "Telangana Public Service Commission (TGPSC) Group I Examination", "Tripura Public Service Commission (TPSC) Combined Competitive Examination",
-        "Uttar Pradesh Public Service Commission (UPPSC) PCS Examination", "Uttarakhand Public Service Commission (UKPSC) Combined State Civil/Upper Subordinate Services Examination",
-        "West Bengal Public Service Commission (WBPSC) WBCS Examination"
-      ],
-      "SSC": [
-        "Combined Graduate Level Examination", "Combined Higher Secondary Level Examination", "Multi-Tasking Staff Examination",
-        "General Duty Constable Examination", "Sub-Inspector in Delhi Police and CAPFs Examination", "Junior Engineer Examination",
-        "Stenographer Grade C & Grade D Examination", "Junior Hindi Translator Examination", "Selection Post Examination", "Combined Hindi Translators Examination"
-      ],
-      "State SSC": [
-        "Bihar Staff Selection Commission (BSSC) Combined Graduate Level Examination", "BSSC Inter Level Examination", "BSSC Stenographer Examination",
-        "Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) PET", "UPSSSC Junior Assistant Examination", "UPSSSC Lekhpal Examination",
-        "UPSSSC VDO Examination", "Rajasthan Staff Selection Board (RSSB) CET Graduate Level Examination", "Rajasthan Staff Selection Board (RSSB) CET Senior Secondary Level Examination",
-        "Rajasthan Patwari Examination", "Rajasthan VDO Examination", "Madhya Pradesh ESB Group 2 Examination", "Madhya Pradesh ESB Group 4 Examination",
-        "Madhya Pradesh ESB Group 5 Examination", "Haryana Staff Selection Commission (HSSC) CET", "HSSC Group C Examination", "HSSC Group D Examination",
-        "Odisha Staff Selection Commission (OSSC) CGL Examination", "OSSC CHSL Examination", "Jharkhand Staff Selection Commission (JSSC) CGL Examination",
-        "JSSC Inter Level Examination", "Maharashtra Group B Examination", "Maharashtra Group C Examination", "Gujarat Subordinate Services Examination",
-        "Punjab Subordinate Services Selection Board (PSSSB) Clerk Examination", "Uttarakhand Subordinate Service Selection Commission (UKSSSC) Graduate Level Examination",
-        "UKSSSC Intermediate Level Examination", "West Bengal Clerkship Examination"
-      ],
-      "Police Exams": [
-        "SSC General Duty Constable Examination", "SSC Sub-Inspector Examination", "UPSC Central Armed Police Forces Examination",
-        "Delhi Police Constable Examination", "Delhi Police Head Constable Examination", "Bihar Police Constable Examination",
-        "Bihar Police Sub-Inspector Examination", "Bihar Police Driver Constable Examination", "Uttar Pradesh Police Constable Examination",
-        "Uttar Pradesh Police Sub-Inspector Examination", "Rajasthan Police Constable Examination", "Rajasthan Police Sub-Inspector Examination",
-        "Madhya Pradesh Police Constable Examination", "Madhya Pradesh Police Sub-Inspector Examination", "Maharashtra Police Constable Examination",
-        "Maharashtra Police Sub-Inspector Examination", "Haryana Police Constable Examination", "Haryana Police Sub-Inspector Examination",
-        "Punjab Police Constable Examination", "Punjab Police Sub-Inspector Examination", "Gujarat Police Constable Examination",
-        "Gujarat Police Sub-Inspector Examination", "West Bengal Police Constable Examination", "West Bengal Police Sub-Inspector Examination",
-        "Jharkhand Police Constable Examination", "Jharkhand Police Sub-Inspector Examination", "Odisha Police Constable Examination",
-        "Odisha Police Sub-Inspector Examination", "Chhattisgarh Police Constable Examination", "Chhattisgarh Police Sub-Inspector Examination",
-        "RPF Constable Examination", "RPF Sub-Inspector Examination"
-      ],
-      "Bank Exams": [
-        "IBPS Probationary Officer/Management Trainee Examination", "IBPS Clerk Examination", "IBPS Specialist Officer Examination",
-        "IBPS RRB Office Assistant Examination", "IBPS RRB Officer Scale I Examination", "IBPS RRB Officer Scale II Examination",
-        "IBPS RRB Officer Scale III Examination", "SBI Probationary Officer Examination", "SBI Clerk Examination",
-        "SBI Circle Based Officer Examination", "SBI Specialist Cadre Officer Examination", "RBI Grade B Examination",
-        "RBI Assistant Examination", "NABARD Grade A Examination", "NABARD Grade B Examination", "NABARD Development Assistant Examination",
-        "SEBI Grade A Examination", "LIC Assistant Administrative Officer Examination", "LIC Assistant Examination",
-        "LIC Apprentice Development Officer Examination", "ECGC Probationary Officer Examination", "SIDBI Grade A Examination",
-        "PFRDA Grade A Examination", "NIACL Administrative Officer Examination", "NIACL Assistant Examination", "NICL Administrative Officer Examination"
-      ],
-      "Railway": [
-        "RRB NTPC Graduate Level Examination", "RRB NTPC Undergraduate Level Examination", "RRB Group D Examination",
-        "RRB Assistant Loco Pilot Examination", "RRB Technician Examination", "RRB Junior Engineer Examination",
-        "RRB Paramedical Examination", "RRB Ministerial & Isolated Categories Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination"
-      ]
-    };
-
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyA7ITxaiU2Ot_b6ucuyJ3Zb3uB5uv-wZw8",
       authDomain: "bharti-classes-a54fb.firebaseapp.com",
@@ -1916,6 +1729,190 @@
       document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
     }
 
+    // REAL COURSES MASTER DATA
+    const REAL_COURSES_DATABASE = {
+      "SSC": [
+        { id: "ssc_cgl_mastery", title: "SSC CGL (Tier 1 & Tier 2) Comprehensive Batch", subtitle: "Complete Arithmetic, Advance Maths Mastery (Algebra, Trigo, Geometry) & Logical Reasoning by Vishwa Bharti Sir.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "ssc cgl maths reasoning advance combo", highlight: true },
+        { id: "ssc_chsl_mts", title: "SSC CHSL & MTS Foundation Batch", subtitle: "Targeted High-Speed Arithmetic Calculation Shortcuts & Non-Verbal Reasoning Drills.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "ssc chsl mts 10+2 havaldar", highlight: false },
+        { id: "ssc_cpo_gd", title: "SSC CPO & GD Constable Special Batch", subtitle: "Speed mathematics drills, elementary arithmetic, and quantitative reasoning.", mathsFee: 2200, reasoningFee: 1600, comboFee: 3200, tags: "ssc cpo gd constable capf", highlight: false }
+      ],
+      "Bank": [
+        { id: "bank_po_clerk", title: "Banking Foundation Batch (IBPS & SBI PO/Clerk)", subtitle: "Specialized High-Speed Data Interpretation (DI), Caselets & Critical Logical Puzzles.", mathsFee: 2500, reasoningFee: 2000, comboFee: 3700, tags: "bank ibps sbi po clerk", highlight: true },
+        { id: "bank_rrb_gramin", title: "IBPS RRB Gramin Bank Officer & Office Assistant", subtitle: "Calculation speed techniques, quadratic equations, and banking reasoning ability.", mathsFee: 2200, reasoningFee: 1800, comboFee: 3200, tags: "bank rrb gramin scale 1 assistant", highlight: false }
+      ],
+      "Railway": [
+        { id: "rrb_ntpc_super", title: "Railway RRB NTPC (Graduate & Undergrad) Super Batch", subtitle: "Vishwa Bharti Sir's signature step-skipping formula shortcuts and speed drills.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "railway rrb ntpc station master", highlight: true },
+        { id: "rrb_groupd_alp", title: "RRB Group D, ALP & Technician Math & Reasoning", subtitle: "Complete General Science calculation, basic math fundamentals & analytical ability.", mathsFee: 2200, reasoningFee: 1600, comboFee: 3000, tags: "railway alp group d technician", highlight: false }
+      ],
+      "UPSC": [
+        { id: "upsc_csat", title: "UPSC Civil Services CSAT (Paper-II) Aptitude", subtitle: "Quantitative Aptitude, Logical Reasoning, Number Systems & Data Sufficiency for IAS/IPS.", mathsFee: 3500, reasoningFee: 2500, comboFee: 4999, tags: "upsc csat civil services ias ips", highlight: true },
+        { id: "upsc_cds_nda", title: "UPSC CDS Exam (Elementary Mathematics Special)", subtitle: "Rigorous Algebra, Trigonometry, Geometry, Mensuration & Statistics by Bharti Sir.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "upsc cds nda defence ima ota", highlight: false }
+      ],
+      "BPSC": [
+        { id: "bpsc_cce_aptitude", title: "BPSC Combined Competitive Exam (CSAT & Mental Ability)", subtitle: "High-scoring mathematics questions, mental reasoning, and quantitative patterns for BPSC Prelims.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "bpsc cce prelims sdm dsp bihar", highlight: true },
+        { id: "bpsc_tre_teacher", title: "BPSC TRE (Teacher Recruitment) Mathematics Special", subtitle: "Full syllabus coverage of Primary, Middle, and Secondary school math pedagogy & problem solving.", mathsFee: 2400, reasoningFee: 1600, comboFee: 3200, tags: "bpsc tre teacher shikshak bihar", highlight: false }
+      ],
+      "JPSC": [
+        { id: "jpsc_cce_csat", title: "JPSC Combined Civil Services Aptitude & Reasoning", subtitle: "Comprehensive numerical ability, reasoning puzzles, and CSAT pattern coverage for Jharkhand PSC.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "jpsc jharkhand civil services", highlight: true }
+      ],
+      "Bihar SSC": [
+        { id: "bssc_inter_level", title: "Bihar SSC (BSSC Inter Level) Complete Batch", subtitle: "Specialized for 10+2 vacancies: Speed arithmetic, mental logic, number series & geometry.", mathsFee: 2500, reasoningFee: 2000, comboFee: 3700, tags: "bihar ssc bssc inter level clerk", highlight: true },
+        { id: "bssc_cgl_graduate", title: "Bihar SSC CGL (4th Graduate Level) Officer Batch", subtitle: "Advanced level mathematics shortcuts, data interpretation, and reasoning mastery.", mathsFee: 2800, reasoningFee: 2000, comboFee: 4000, tags: "bssc cgl sachivalaya sahayak bihar", highlight: false }
+      ],
+      "Bihar SI": [
+        { id: "bihar_si_daroga", title: "Bihar Police Sub-Inspector (Daroga) Mains Special", subtitle: "High-scoring Arithmetic, Geometry, Mensuration & Mental Ability test series for Bihar Daroga.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "bihar si daroga bihar police bpssc", highlight: true }
+      ],
+      "Bihar Constable": [
+        { id: "bihar_police_constable", title: "Bihar Police Constable Written Exam Batch", subtitle: "Matriculation standard general mathematics, numerical aptitude & logical reasoning drills.", mathsFee: 2000, reasoningFee: 1500, comboFee: 2800, tags: "bihar constable csbc sipahi", highlight: true }
+      ],
+      "Delhi Police": [
+        { id: "delhi_police_constable", title: "Delhi Police Executive Constable & Head Constable", subtitle: "SSC-pattern numerical ability, fast calculation shortcuts, and non-verbal reasoning.", mathsFee: 2200, reasoningFee: 1800, comboFee: 3200, tags: "delhi police constable hc ssc", highlight: true },
+        { id: "delhi_police_si", title: "Delhi Police Sub-Inspector (SSC CPO Special)", subtitle: "Full advance maths and reasoning syllabus for Delhi Police Sub-Inspector recruitment.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "delhi police si cpo sub-inspector", highlight: false }
+      ]
+    };
+
+    const SUB_EXAMS_DATABASE = {
+      "UPSC": [ "Civil Services Examination", "Indian Forest Service Examination", "Engineering Services Examination", "Combined Defence Services Examination", "National Defence Academy & Naval Academy Examination", "Combined Medical Services Examination", "Central Armed Police Forces (Assistant Commandants) Examination", "Combined Geo-Scientist Examination", "Indian Economic Service Examination", "Indian Statistical Service Examination", "CISF Assistant Commandant Examination", "Combined Section Officers' Grade-B Examination", "Combined Stenographers' Grade-B/Grade-I Examination" ],
+      "State PCS": [ "Andhra Pradesh Public Service Commission (APPSC) Group 1", "Arunachal Pradesh Public Service Commission (APPSC) Combined Competitive Examination", "Assam Public Service Commission (APSC) Combined Competitive Examination", "Bihar Public Service Commission (BPSC) Combined Competitive Examination", "Chhattisgarh Public Service Commission (CGPSC) State Service Examination", "Goa Public Service Commission (GPSC) Civil Services Examination", "Gujarat Public Service Commission (GPSC) Class 1 & 2 Examination", "Haryana Public Service Commission (HPSC) HCS Examination", "Himachal Pradesh Public Service Commission (HPPSC) Administrative Service Examination", "Jharkhand Public Service Commission (JPSC) Combined Civil Services Examination", "Jammu & Kashmir Public Service Commission (JKPSC) Combined Competitive Examination", "Karnataka Public Service Commission (KPSC) Gazetted Probationers Examination", "Kerala Public Service Commission (KPSC) Administrative Service Examination", "Madhya Pradesh Public Service Commission (MPPSC) State Service Examination", "Maharashtra Public Service Commission (MPSC) State Services Examination", "Manipur Public Service Commission (MPSC) Civil Services Examination", "Meghalaya Public Service Commission (MPSC) Civil Services Examination", "Mizoram Public Service Commission (MPSC) Civil Services Examination", "Nagaland Public Service Commission (NPSC) Combined Competitive Examination", "Odisha Public Service Commission (OPSC) Civil Services Examination", "Punjab Public Service Commission (PPSC) State Civil Services Examination", "Rajasthan Public Service Commission (RPSC) RAS Examination", "Sikkim Public Service Commission (SPSC) Services Examination", "Tamil Nadu Public Service Commission (TNPSC) Group I Examination", "Telangana Public Service Commission (TGPSC) Group I Examination", "Tripura Public Service Commission (TPSC) Combined Competitive Examination", "Uttar Pradesh Public Service Commission (UPPSC) PCS Examination", "Uttarakhand Public Service Commission (UKPSC) Combined State Civil/Upper Subordinate Services Examination", "West Bengal Public Service Commission (WBPSC) WBCS Examination" ],
+      "SSC": [ "Combined Graduate Level Examination", "Combined Higher Secondary Level Examination", "Multi-Tasking Staff Examination", "General Duty Constable Examination", "Sub-Inspector in Delhi Police and CAPFs Examination", "Junior Engineer Examination", "Stenographer Grade C & Grade D Examination", "Junior Hindi Translator Examination", "Selection Post Examination", "Combined Hindi Translators Examination" ],
+      "State SSC": [ "Bihar Staff Selection Commission (BSSC) Combined Graduate Level Examination", "BSSC Inter Level Examination", "BSSC Stenographer Examination", "Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) PET", "UPSSSC Junior Assistant Examination", "UPSSSC Lekhpal Examination", "UPSSSC VDO Examination", "Rajasthan Staff Selection Board (RSSB) CET Graduate Level Examination", "Rajasthan Staff Selection Board (RSSB) CET Senior Secondary Level Examination", "Rajasthan Patwari Examination", "Rajasthan VDO Examination", "Madhya Pradesh ESB Group 2 Examination", "Madhya Pradesh ESB Group 4 Examination", "Madhya Pradesh ESB Group 5 Examination", "Haryana Staff Selection Commission (HSSC) CET", "HSSC Group C Examination", "HSSC Group D Examination", "Odisha Staff Selection Commission (OSSC) CGL Examination", "OSSC CHSL Examination", "Jharkhand Staff Selection Commission (JSSC) CGL Examination", "JSSC Inter Level Examination", "Maharashtra Group B Examination", "Maharashtra Group C Examination", "Gujarat Subordinate Services Examination", "Punjab Subordinate Services Selection Board (PSSSB) Clerk Examination", "Uttarakhand Subordinate Service Selection Commission (UKSSSC) Graduate Level Examination", "UKSSSC Intermediate Level Examination", "West Bengal Clerkship Examination" ],
+      "Police Exams": [ "SSC General Duty Constable Examination", "SSC Sub-Inspector Examination", "UPSC Central Armed Police Forces Examination", "Delhi Police Constable Examination", "Delhi Police Head Constable Examination", "Bihar Police Constable Examination", "Bihar Police Sub-Inspector Examination", "Bihar Police Driver Constable Examination", "Uttar Pradesh Police Constable Examination", "Uttar Pradesh Police Sub-Inspector Examination", "Rajasthan Police Constable Examination", "Rajasthan Police Sub-Inspector Examination", "Madhya Pradesh Police Constable Examination", "Madhya Pradesh Police Sub-Inspector Examination", "Maharashtra Police Constable Examination", "Maharashtra Police Sub-Inspector Examination", "Haryana Police Constable Examination", "Haryana Police Sub-Inspector Examination", "Punjab Police Constable Examination", "Punjab Police Sub-Inspector Examination", "Gujarat Police Constable Examination", "Gujarat Police Sub-Inspector Examination", "West Bengal Police Constable Examination", "West Bengal Police Sub-Inspector Examination", "Jharkhand Police Constable Examination", "Jharkhand Police Sub-Inspector Examination", "Odisha Police Constable Examination", "Odisha Police Sub-Inspector Examination", "Chhattisgarh Police Constable Examination", "Chhattisgarh Police Sub-Inspector Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination" ],
+      "Bank Exams": [ "IBPS Probationary Officer/Management Trainee Examination", "IBPS Clerk Examination", "IBPS Specialist Officer Examination", "IBPS RRB Office Assistant Examination", "IBPS RRB Officer Scale I Examination", "IBPS RRB Officer Scale II Examination", "IBPS RRB Officer Scale III Examination", "SBI Probationary Officer Examination", "SBI Clerk Examination", "SBI Circle Based Officer Examination", "SBI Specialist Cadre Officer Examination", "RBI Grade B Examination", "RBI Assistant Examination", "NABARD Grade A Examination", "NABARD Grade B Examination", "NABARD Development Assistant Examination", "SEBI Grade A Examination", "LIC Assistant Administrative Officer Examination", "LIC Assistant Examination", "LIC Apprentice Development Officer Examination", "ECGC Probationary Officer Examination", "SIDBI Grade A Examination", "PFRDA Grade A Examination", "NIACL Administrative Officer Examination", "NIACL Assistant Examination", "NICL Administrative Officer Examination" ],
+      "Railway": [ "RRB NTPC Graduate Level Examination", "RRB NTPC Undergraduate Level Examination", "RRB Group D Examination", "RRB Assistant Loco Pilot Examination", "RRB Technician Examination", "RRB Junior Engineer Examination", "RRB Paramedical Examination", "RRB Ministerial & Isolated Categories Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination" ]
+    };
+
+    // DYNAMIC ROLE-BASED SIDEBAR MENU GENERATOR
+    function renderSidebarMenu() {
+      const container = document.getElementById('sidebarMenuContainer');
+      container.innerHTML = '';
+
+      if (currentUserRole === 'admin') {
+        // --- ADMINISTRATOR SPECIFIC INTERFACES ---
+        container.innerHTML = `
+          <li class="menu-header">Director Management</li>
+          <li>
+            <a class="nav-item active" onclick="switchView('admin-overview', this)">
+              <i class="fas fa-chart-line"></i> <span>Dashboard & Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-students', this)">
+              <i class="fas fa-user-graduate"></i> <span>Student Directory</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-orders', this)">
+              <i class="fas fa-receipt"></i> <span>Admissions & Fee Logs</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-courses', this)">
+              <i class="fas fa-tags"></i> <span>Course & Fee Manager</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-doubts', this)">
+              <i class="fas fa-headset"></i> <span>Doubt Resolution Desk</span>
+            </a>
+          </li>
+
+          <li class="menu-header">Academic Controls</li>
+          <li>
+            <a class="nav-item" onclick="exportStudentsToCsv()">
+              <i class="fas fa-file-csv"></i> <span>Export Students (CSV)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('courses', this)">
+              <i class="fas fa-eye"></i> <span>Preview Student Store</span>
+            </a>
+          </li>
+        `;
+      } else {
+        // --- STUDENT & GUEST INTERFACES ---
+        container.innerHTML = `
+          <li class="menu-header" id="txtMenuAcademics">Academic Portals</li>
+          <li>
+            <a class="nav-item active" onclick="switchView('courses', this)">
+              <i class="fas fa-layer-group"></i> <span id="navCourses">Courses & Fees</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('planner', this)">
+              <i class="fas fa-calendar-check"></i> <span id="navPlanner">Daily Target & My Plan</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('scholarship', this)">
+              <i class="fas fa-award"></i> <span id="navScholarship">Free Scholarship Test</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('pyq', this)">
+              <i class="fas fa-file-invoice"></i> <span id="navPyq">PYQ Vault & Solutions</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('practice', this)">
+              <i class="fas fa-dumbbell"></i> <span id="navPractice">Practice Drills (Sets)</span>
+            </a>
+          </li>
+
+          <li class="menu-header" id="txtMenuSupport">Student Desk</li>
+          <li>
+            <a class="nav-item" onclick="switchView('doubt', this)">
+              <i class="fas fa-camera-retro"></i> <span id="navDoubt">Raise a Doubt</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('assistant', this)">
+              <i class="fas fa-robot"></i> <span id="navAssistant">May I Help You? (AI)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('mentor', this)">
+              <i class="fas fa-user-tie"></i> <span id="navMentor">About Vishwa Sir</span>
+            </a>
+          </li>
+
+          <li class="menu-header" id="txtMenuAdmin">Administration</li>
+          <li>
+            <a class="nav-item" onclick="openAdminPortal(this)" id="navAdminItem" style="color:var(--accent);">
+              <i class="fas fa-user-shield"></i> <span id="navAdmin">Admin Portal (Director)</span>
+            </a>
+          </li>
+        `;
+      }
+    }
+
+    function handleUserPillClick() {
+      if (currentUserRole === 'admin') {
+        switchView('admin-overview');
+      } else if (isUserLoggedIn) {
+        alert(`Student Session Details:\n\nName: ${currentStudentProfile.name}\nRegistration Number: ${currentStudentProfile.regNumber}\nMobile: ${currentStudentProfile.mobile}\nActive Batches: ${(currentStudentProfile.enrolledCourses || []).length}`);
+      } else {
+        openAuthModal();
+      }
+    }
+
+    // CHECK ACTIVE 365-DAY ENROLLMENT
+    function getActiveEnrollment(courseTitle) {
+      if (!currentStudentProfile || !currentStudentProfile.enrolledCourses) return null;
+      const now = new Date();
+      return currentStudentProfile.enrolledCourses.find(c => {
+        const isMatch = (c.courseTitle === courseTitle) || 
+                        (courseTitle.includes('CGL') && c.courseTitle.includes('CGL')) ||
+                        (courseTitle.includes('Maths + Reasoning') && c.courseTitle.includes('Combo'));
+        const isValid = new Date(c.expiryDate) > now;
+        return isMatch && isValid;
+      });
+    }
+
+    function calculateDaysRemaining(expiryDateStr) {
+      const diff = new Date(expiryDateStr) - new Date();
+      return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    }
+
     function selectCourseBox(categoryKey, element) {
       activeCourseCategory = categoryKey;
       document.querySelectorAll('.exam-box-card').forEach(b => b.classList.remove('active'));
@@ -1940,18 +1937,67 @@
 
       container.innerHTML = '';
       courses.forEach(c => {
+        const comboTitle = `${c.title} (Maths + Reasoning Combo)`;
+        const mathsTitle = `${c.title} (Maths Only)`;
+        const reasoningTitle = `${c.title} (Reasoning Only)`;
+
+        const comboEnrollment = getActiveEnrollment(comboTitle);
+        const mathsEnrollment = getActiveEnrollment(mathsTitle);
+        const reasoningEnrollment = getActiveEnrollment(reasoningTitle);
+
+        const isFullyEnrolled = !!comboEnrollment;
+
         const card = document.createElement('div');
-        card.className = 'card course-card' + (c.highlight ? ' highlight' : '');
+        card.className = 'card course-card' + (isFullyEnrolled ? ' enrolled-active' : (c.highlight ? ' highlight' : ''));
         card.setAttribute('data-tags', c.tags);
 
+        let buttonAreaHtml = '';
+
+        if (isFullyEnrolled) {
+          const daysLeft = calculateDaysRemaining(comboEnrollment.expiryDate);
+          buttonAreaHtml = `
+            <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:10px; border-radius:6px; margin-top:14px; text-align:center;">
+              <span style="color:#065f46; font-weight:700; font-size:0.84rem; display:block;"><i class="fas fa-check-circle"></i> Enrolled & Active</span>
+              <span style="font-size:0.76rem; color:#047857;">Valid till: ${new Date(comboEnrollment.expiryDate).toLocaleDateString()} (${daysLeft} days left)</span>
+            </div>
+            <button class="btn btn-secondary btn-block" style="margin-top:8px;" onclick="openClassroomModal('${c.title}', '${comboEnrollment.expiryDate}')">
+              <i class="fas fa-play-circle"></i> Access Lectures, Notes & Tests
+            </button>
+          `;
+        } else {
+          buttonAreaHtml = `
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+              ${mathsEnrollment ? `
+                <button class="btn btn-outline" style="background:#ecfdf5; border-color:#86efac; color:#15803d;" onclick="openClassroomModal('${mathsTitle}', '${mathsEnrollment.expiryDate}')">
+                  <i class="fas fa-check"></i> Maths Enrolled (Valid till ${new Date(mathsEnrollment.expiryDate).toLocaleDateString()})
+                </button>
+              ` : `
+                <button class="btn btn-outline" onclick="triggerCheckout('${mathsTitle}', ${c.mathsFee})">Buy Maths Only (₹${c.mathsFee.toLocaleString()})</button>
+              `}
+
+              ${reasoningEnrollment ? `
+                <button class="btn btn-outline" style="background:#ecfdf5; border-color:#86efac; color:#15803d;" onclick="openClassroomModal('${reasoningTitle}', '${reasoningEnrollment.expiryDate}')">
+                  <i class="fas fa-check"></i> Reasoning Enrolled (Valid till ${new Date(reasoningEnrollment.expiryDate).toLocaleDateString()})
+                </button>
+              ` : `
+                <button class="btn btn-outline" onclick="triggerCheckout('${reasoningTitle}', ${c.reasoningFee})">Buy Reasoning Only (₹${c.reasoningFee.toLocaleString()})</button>
+              `}
+
+              <button class="btn btn-secondary" onclick="triggerCheckout('${comboTitle}', ${c.comboFee})">
+                <i class="fas fa-bolt"></i> Enroll in Combo Batch (₹${c.comboFee.toLocaleString()}) - 365 Days
+              </button>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
-          <span class="badge-discount">SAVE ₹800 (COMBO)</span>
+          ${isFullyEnrolled ? '<span class="badge-enrolled-status"><i class="fas fa-user-check"></i> ENROLLED</span>' : '<span class="badge-discount">SAVE ₹800 (COMBO)</span>'}
           <div>
             <h3>${c.title}</h3>
             <div class="badge-exam-tags">
               <span class="exam-pill">${categoryKey}</span>
-              <span class="exam-pill">Advance Maths</span>
-              <span class="exam-pill">Reasoning</span>
+              <span class="exam-pill">365 Days Validity</span>
+              <span class="exam-pill">Live + VOD</span>
             </div>
             <p style="font-size:0.85rem; color:var(--text-muted); margin:6px 0 12px;">${c.subtitle}</p>
             <div class="pricing-table-row"><span>Mathematics Only:</span> <strong>₹${c.mathsFee.toLocaleString()}</strong></div>
@@ -1961,14 +2007,44 @@
               <span><del style="color:#888; font-weight:normal;">₹${(c.mathsFee + c.reasoningFee).toLocaleString()}</del> ₹${c.comboFee.toLocaleString()}</span>
             </div>
           </div>
-          <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
-            <button class="btn btn-outline" onclick="triggerCheckout('${c.title} (Maths Only)', ${c.mathsFee})">Buy Maths (₹${c.mathsFee.toLocaleString()})</button>
-            <button class="btn btn-outline" onclick="triggerCheckout('${c.title} (Reasoning Only)', ${c.reasoningFee})">Buy Reasoning (₹${c.reasoningFee.toLocaleString()})</button>
-            <button class="btn btn-secondary" onclick="triggerCheckout('${c.title} (Maths + Reasoning Combo)', ${c.comboFee})">Enroll in Combo (₹${c.comboFee.toLocaleString()})</button>
-          </div>
+          ${buttonAreaHtml}
         `;
         container.appendChild(card);
       });
+
+      renderEnrolledBatchesBanner();
+    }
+
+    function renderEnrolledBatchesBanner() {
+      const panel = document.getElementById('myEnrolledPanel');
+      const grid = document.getElementById('enrolledCoursesListGrid');
+      const badge = document.getElementById('lblEnrolledCountBadge');
+
+      if (!currentStudentProfile || !currentStudentProfile.enrolledCourses || currentStudentProfile.enrolledCourses.length === 0) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      const activeCourses = currentStudentProfile.enrolledCourses.filter(c => new Date(c.expiryDate) > new Date());
+      if (activeCourses.length === 0) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      badge.textContent = `${activeCourses.length} Active Batch(es)`;
+      grid.innerHTML = activeCourses.map(c => `
+        <div style="background:#fff; border:1px solid #a7f3d0; border-radius:6px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:var(--primary); font-size:0.88rem; display:block;">${c.courseTitle}</strong>
+            <span style="font-size:0.75rem; color:#059669;"><i class="fas fa-calendar-check"></i> Valid till: ${new Date(c.expiryDate).toLocaleDateString()} (${calculateDaysRemaining(c.expiryDate)} days left)</span>
+          </div>
+          <button class="btn btn-primary" style="padding:5px 12px; font-size:0.8rem;" onclick="openClassroomModal('${c.courseTitle}', '${c.expiryDate}')">
+            <i class="fas fa-play"></i> Open Classroom
+          </button>
+        </div>
+      `).join('');
+
+      panel.style.display = 'block';
     }
 
     const selectedCategories = new Set();
@@ -2021,6 +2097,10 @@
     }
 
     function openAuthModal() {
+      if (currentUserRole === 'admin') {
+        alert('You are currently logged in as Director Admin. To sign in as a student, please log out first.');
+        return;
+      }
       if (isUserLoggedIn) {
         alert('You are already logged in as ' + (currentStudentProfile ? currentStudentProfile.name : 'Student'));
         return;
@@ -2033,18 +2113,30 @@
       document.getElementById('authBackdrop').style.display = 'none';
     }
 
+    // LOGOUT (SUPPORTS BOTH ADMIN & STUDENT ROLES)
     function logoutUser() {
-      if (!confirm('Are you sure you want to log out of Bharti Classes?')) return;
+      const isDirector = currentUserRole === 'admin';
+      const promptMsg = isDirector ? 'Are you sure you want to log out of Director Admin Desk?' : 'Are you sure you want to log out of Bharti Classes?';
+      if (!confirm(promptMsg)) return;
+
       try { firebase.auth().signOut(); } catch(e) {}
+      
+      sessionStorage.removeItem('bharti_admin_logged_in');
       localStorage.removeItem('bharti_student');
+      
+      currentUserRole = 'guest';
       isUserLoggedIn = false;
       currentStudentProfile = null;
 
+      const pill = document.getElementById('userPillBtn');
+      pill.classList.remove('admin-active');
       document.getElementById('lblUserStatus').textContent = 'Login / Register';
       document.getElementById('btnLogout').style.display = 'none';
       document.getElementById('userTargetBar').style.display = 'none';
+      document.getElementById('myEnrolledPanel').style.display = 'none';
 
-      alert('You have been logged out successfully.');
+      renderSidebarMenu();
+      alert('You have logged out successfully.');
       switchView('courses');
       selectCourseBox('SSC');
     }
@@ -2077,6 +2169,7 @@
       });
     }
 
+    // DUAL-CHANNEL CREDENTIAL LOGIN (DIRECTOR ADMIN OR STUDENT)
     function handleCredentialLogin(e) {
       e.preventDefault();
       const inputId = document.getElementById('loginUserId').value.trim();
@@ -2084,6 +2177,14 @@
 
       if (!inputId || !inputPass) return alert('Please enter both User ID and Password.');
 
+      // Check for Director Administrator Credentials
+      if ((inputId === 'admin' || inputId === '8271750420') && (inputPass === 'admin123' || inputPass === '8271750420')) {
+        loginAsAdmin();
+        closeAuthModal();
+        return;
+      }
+
+      // Check Student Credentials in Local DB
       const users = getRegisteredUsersList();
       const cleanId = inputId.toLowerCase();
       const cleanDigits = inputId.replace(/\D/g, '').slice(-10);
@@ -2092,24 +2193,20 @@
         const uMob = (u.mobile || '').replace(/\D/g, '').slice(-10);
         const uEmail = (u.email || '').toLowerCase();
         const uReg = (u.regNumber || '').toLowerCase();
-
         const idMatches = (uReg === cleanId) || (uEmail === cleanId) || (uMob && cleanDigits && uMob === cleanDigits);
         return idMatches && u.password === inputPass;
       });
 
       if (matchedUser) {
+        currentUserRole = 'student';
         currentStudentProfile = matchedUser;
         localStorage.setItem('bharti_student', JSON.stringify(matchedUser));
         completeLoginUi();
         closeAuthModal();
         alert(`Welcome back, ${matchedUser.name}!\nRegistration Number: ${matchedUser.regNumber || 'Verified User'}`);
-        if (matchedUser.exams && matchedUser.exams.length > 0) {
-          checkAndApplyExamFilter(matchedUser.exams);
-        } else {
-          showAllExams();
-        }
+        selectCourseBox(activeCourseCategory);
       } else {
-        alert('Invalid User ID or Password! Please verify your registered Mobile, Email, or Registration Number and password.');
+        alert('Invalid User ID or Password! Please verify your registered credentials.');
       }
     }
 
@@ -2152,7 +2249,8 @@
         qualification: qual,
         password: pass,
         categories: Array.from(selectedCategories),
-        exams: checkedBoxes.map(cb => cb.value)
+        exams: checkedBoxes.map(cb => cb.value),
+        enrolledCourses: []
       };
 
       activeOtpChannel = channel;
@@ -2166,7 +2264,7 @@
       document.getElementById('otpVerifyBackdrop').style.display = 'flex';
 
       const channelName = channel === 'mobile' ? 'SMS Gateway' : 'Mail Server';
-      alert(`[${channelName} Dispatch] Real OTP verification code for ${activeOtpTarget} is: ${serverGeneratedOtp}`);
+      alert(`[${channelName} Dispatch] Real Registration OTP verification code for ${activeOtpTarget} is: ${serverGeneratedOtp}`);
     }
 
     function resendOtpCode() {
@@ -2182,7 +2280,10 @@
     function confirmAndValidateOtp() {
       const enteredCode = document.getElementById('txtEnteredOtp').value.trim();
       if (enteredCode.length !== 6) return alert('Please enter the 6-digit OTP.');
-      if (enteredCode !== serverGeneratedOtp && enteredCode !== '123456') return alert('Incorrect OTP! Please try again.');
+      
+      if (enteredCode !== serverGeneratedOtp) {
+        return alert('Incorrect OTP! Please enter the exact verification code dispatched to your handset/inbox.');
+      }
 
       const mobNumber = pendingProfileData.mobile || '000';
       const registrationNumber = generateAutoRegistrationNumber(mobNumber);
@@ -2190,9 +2291,11 @@
       currentStudentProfile = {
         ...pendingProfileData,
         regNumber: registrationNumber,
-        verifiedAt: new Date().toISOString()
+        verifiedAt: new Date().toISOString(),
+        enrolledCourses: []
       };
 
+      currentUserRole = 'student';
       saveUserToDatabase(currentStudentProfile);
       localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
 
@@ -2203,6 +2306,143 @@
       document.getElementById('regSuccessBackdrop').style.display = 'flex';
     }
 
+    // --- STEP 1: PRE-TRANSACTION OTP AUTHORIZATION ---
+    function triggerCheckout(courseName, fee) {
+      if (!isUserLoggedIn) {
+        alert('Please login or register before purchasing courses.');
+        openAuthModal();
+        return;
+      }
+
+      const activeEnrollment = getActiveEnrollment(courseName);
+      if (activeEnrollment) {
+        alert(`You are already enrolled in "${courseName}"!\nValid till: ${new Date(activeEnrollment.expiryDate).toLocaleDateString()}`);
+        openClassroomModal(courseName, activeEnrollment.expiryDate);
+        return;
+      }
+
+      pendingCheckout.courseName = courseName;
+      pendingCheckout.fee = fee;
+      pendingCheckout.prePayOtp = generateSecureOtp();
+
+      const targetDest = currentStudentProfile.mobile || currentStudentProfile.email;
+      document.getElementById('prePayOtpSubtitle').innerHTML = `A 6-digit payment authorization OTP has been dispatched to <strong>${targetDest}</strong> to authorize enrollment for <strong>${courseName}</strong> (₹${fee.toLocaleString()}).`;
+      document.getElementById('prePayEnteredOtp').value = '';
+      document.getElementById('prePayOtpBackdrop').style.display = 'flex';
+
+      alert(`[Security OTP Dispatch] Your Pre-Transaction Authorization OTP for ${courseName} (₹${fee}) is: ${pendingCheckout.prePayOtp}`);
+    }
+
+    function resendPrePayOtp() {
+      pendingCheckout.prePayOtp = generateSecureOtp();
+      alert(`[Resent Security OTP] New Authorization OTP is: ${pendingCheckout.prePayOtp}`);
+    }
+
+    function closePrePayOtpModal() {
+      document.getElementById('prePayOtpBackdrop').style.display = 'none';
+    }
+
+    // STEP 2: VERIFY OTP BEFORE PROCEEDING TO PAYMENT GATEWAY
+    function verifyPrePayOtpAndOpenGateway() {
+      const entered = document.getElementById('prePayEnteredOtp').value.trim();
+      if (entered.length !== 6) return alert('Please enter the 6-digit OTP code.');
+      
+      if (entered !== pendingCheckout.prePayOtp) {
+        return alert('Incorrect authorization OTP! Transaction cannot proceed.');
+      }
+
+      document.getElementById('prePayOtpBackdrop').style.display = 'none';
+
+      const fee = pendingCheckout.fee;
+      const courseName = pendingCheckout.courseName;
+
+      document.getElementById('payCourseTitle').textContent = courseName;
+      document.getElementById('payAmountVal').textContent = '₹' + fee.toLocaleString();
+      document.getElementById('payUtrNumber').value = '';
+
+      // Official VPA: 9504704632@ybl | Beneficiary: Bharti Classes (Sneha)
+      const officialVpa = "9504704632@ybl";
+      const beneficiaryName = "Bharti Classes (Sneha)";
+      const cleanNote = encodeURIComponent(courseName.slice(0, 25));
+
+      const genericUpiUri = `upi://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(genericUpiUri)}`;
+      
+      document.getElementById('dynamicUpiQrCode').src = qrApiUrl;
+      document.getElementById('btnPayPhonePe').href = `phonepe://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayGPay').href = `tez://upi/pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayPaytm').href = `paytmmp://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayBhim').href = genericUpiUri;
+      document.getElementById('btnPayAmazon').href = genericUpiUri;
+
+      document.getElementById('paymentBackdrop').style.display = 'flex';
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentBackdrop').style.display = 'none';
+    }
+
+    // STEP 3: SUBMIT UTR & SAVE 365-DAY VALID ENROLLMENT
+    function completeFinalEnrollment() {
+      const utr = document.getElementById('payUtrNumber').value.trim();
+      if (!utr || utr.length < 8) {
+        return alert('Please enter your 12-digit UPI Transaction Reference (UTR / Txn ID) after completing payment in PhonePe / UPI App.');
+      }
+
+      const purchaseDate = new Date();
+      const expiryDate = new Date();
+      expiryDate.setDate(purchaseDate.getDate() + 365);
+
+      const enrolledItem = {
+        courseId: 'crs_' + Date.now(),
+        courseTitle: pendingCheckout.courseName,
+        fee: pendingCheckout.fee,
+        utr: utr,
+        purchaseDate: purchaseDate.toISOString(),
+        expiryDate: expiryDate.toISOString()
+      };
+
+      if (!currentStudentProfile.enrolledCourses) {
+        currentStudentProfile.enrolledCourses = [];
+      }
+      currentStudentProfile.enrolledCourses.push(enrolledItem);
+
+      saveUserToDatabase(currentStudentProfile);
+      localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+
+      const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
+      orders.unshift({
+        txnId: utr,
+        studentName: currentStudentProfile.name,
+        regNumber: currentStudentProfile.regNumber,
+        mobile: currentStudentProfile.mobile,
+        courseTitle: pendingCheckout.courseName,
+        fee: pendingCheckout.fee,
+        mode: 'PhonePe UPI (9504704632@ybl - Sneha)',
+        validity: '365 Days (Till ' + expiryDate.toLocaleDateString() + ')',
+        status: 'Success (Verified)',
+        timestamp: purchaseDate.toLocaleString()
+      });
+      localStorage.setItem('bharti_payment_orders', JSON.stringify(orders));
+      refreshAdminTables();
+
+      document.getElementById('paymentBackdrop').style.display = 'none';
+      selectCourseBox(activeCourseCategory);
+
+      alert(`🎉 Admission Confirmed!\n\n• Course: ${pendingCheckout.courseName}\n• Fee Paid: ₹${pendingCheckout.fee.toLocaleString()}\n• UTR: ${utr}\n• Validity: 365 Days (Active till ${expiryDate.toLocaleDateString()})\n\nBatch access is unlocked in your dashboard!`);
+    }
+
+    function openClassroomModal(courseTitle, expiryDateStr) {
+      document.getElementById('classroomCourseTitle').textContent = courseTitle;
+      document.getElementById('classroomValidityDates').textContent = `Valid till ${new Date(expiryDateStr).toLocaleDateString()} (${calculateDaysRemaining(expiryDateStr)} Days Remaining)`;
+      document.getElementById('classroomModal').style.display = 'flex';
+    }
+
+    function closeClassroomModal() {
+      document.getElementById('classroomModal').style.display = 'none';
+    }
+
+    // FORGOT CREDENTIALS
     function openForgotUserIdModal() {
       document.getElementById('authBackdrop').style.display = 'none';
       document.getElementById('forgotIdInput').value = '';
@@ -2276,7 +2516,7 @@
       const enteredOtp = document.getElementById('forgotPassOtpInput').value.trim();
       const newPass = document.getElementById('forgotPassNewPassword').value.trim();
 
-      if (enteredOtp !== resetPassOtp && enteredOtp !== '123456') return alert('Incorrect OTP!');
+      if (enteredOtp !== resetPassOtp) return alert('Incorrect OTP! Please enter the valid code sent.');
       if (!newPass || newPass.length < 6) return alert('New password must be at least 6 characters long.');
 
       resetPassUserObj.password = newPass;
@@ -2299,18 +2539,20 @@
 
           const existing = findExistingUser('', userEmail);
           if (existing) {
+            currentUserRole = 'student';
             currentStudentProfile = existing;
             localStorage.setItem('bharti_student', JSON.stringify(existing));
             completeLoginUi();
             closeAuthModal();
             showAllExams();
+            selectCourseBox(activeCourseCategory);
             alert(`Welcome back, ${existing.name}!\nLogged in with Registration ID: ${existing.regNumber}`);
           } else {
             showRegisterView();
             document.getElementById('regName').value = userName;
             document.getElementById('regEmail').value = userEmail;
             document.getElementById('regOtpChannel').value = 'email';
-            alert(`Google account (${userEmail}) connected!\n\nPlease complete Mobile Number, Age, Qualification, Password & Target Exams to generate your official Registration ID.`);
+            alert(`Google account (${userEmail}) connected!\n\nPlease complete Mobile Number, Age, Qualification, Password & Target Exams to generate your Registration ID.`);
           }
         })
         .catch((error) => {
@@ -2320,45 +2562,19 @@
 
     function completeLoginUi() {
       isUserLoggedIn = true;
+      const pill = document.getElementById('userPillBtn');
+      pill.classList.remove('admin-active');
       const regStr = currentStudentProfile.regNumber ? ` (${currentStudentProfile.regNumber})` : '';
       document.getElementById('lblUserStatus').textContent = `${currentStudentProfile.name}${regStr}`;
       document.getElementById('btnLogout').style.display = 'inline-flex';
+      renderSidebarMenu();
       checkAndTriggerReminderNotification();
+      renderEnrolledBatchesBanner();
     }
 
     function dismissRegSuccessModal() {
       document.getElementById('regSuccessBackdrop').style.display = 'none';
-      checkAndApplyExamFilter(currentStudentProfile.exams || []);
-    }
-
-    function checkAndApplyExamFilter(selectedExams) {
-      renderUserTargetBar(selectedExams);
-      switchView('courses');
-      if (selectedExams.length > 0) {
-        const firstExam = selectedExams[0];
-        if (firstExam.includes('SSC')) selectCourseBox('SSC');
-        else if (firstExam.includes('Bank') || firstExam.includes('IBPS') || firstExam.includes('SBI')) selectCourseBox('Bank');
-        else if (firstExam.includes('Railway') || firstExam.includes('RRB')) selectCourseBox('Railway');
-        else if (firstExam.includes('BPSC')) selectCourseBox('BPSC');
-        else if (firstExam.includes('Bihar SSC') || firstExam.includes('BSSC')) selectCourseBox('Bihar SSC');
-        else if (firstExam.includes('Bihar Police') || firstExam.includes('SI') || firstExam.includes('Daroga')) selectCourseBox('Bihar SI');
-        else selectCourseBox('SSC');
-      }
-    }
-
-    function renderUserTargetBar(exams) {
-      const bar = document.getElementById('userTargetBar');
-      const container = document.getElementById('userTargetBadges');
-      container.innerHTML = '';
-      exams.forEach(ex => {
-        const span = document.createElement('span');
-        span.className = 'exam-pill';
-        span.style.background = '#dbeafe';
-        span.style.color = '#1e40af';
-        span.textContent = ex;
-        container.appendChild(span);
-      });
-      bar.style.display = 'flex';
+      selectCourseBox(activeCourseCategory);
     }
 
     function showAllExams() {
@@ -2366,107 +2582,25 @@
       selectCourseBox(activeCourseCategory);
     }
 
-    function dismissUnavailableModal() {
-      document.getElementById('notAvailableBackdrop').style.display = 'none';
-      switchView('courses');
-      selectCourseBox('SSC');
-    }
+    // --- DIRECTOR ADMIN DASHBOARD MANAGEMENT ---
+    function loginAsAdmin() {
+      currentUserRole = 'admin';
+      sessionStorage.setItem('bharti_admin_logged_in', 'true');
+      
+      const pill = document.getElementById('userPillBtn');
+      pill.classList.add('admin-active');
+      document.getElementById('lblUserStatus').innerHTML = '<i class="fas fa-user-shield"></i> Director Admin Logged In';
+      document.getElementById('btnLogout').style.display = 'inline-flex';
 
-    // --- REAL UPI PAYMENT & APP DEEP LINKS (BHARTI CLASSES - SNEHA) ---
-    function triggerCheckout(courseName, fee) {
-      if (!isUserLoggedIn) {
-        alert('Please login or register before purchasing courses.');
-        openAuthModal();
-        return;
-      }
-
-      pendingCheckout.courseName = courseName;
-      pendingCheckout.fee = fee;
-
-      document.getElementById('payCourseTitle').textContent = courseName;
-      document.getElementById('payAmountVal').textContent = '₹' + fee.toLocaleString();
-      document.getElementById('payUtrNumber').value = '';
-
-      // Official VPA: 9504704632@ybl | Beneficiary: Bharti Classes (Sneha)
-      const officialVpa = "9504704632@ybl";
-      const beneficiaryName = "Bharti Classes (Sneha)";
-      const cleanNote = encodeURIComponent(courseName.slice(0, 25));
-
-      // 1. Standard Generic UPI URI
-      const genericUpiUri = `upi://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
-
-      // 2. Generate Real Dynamic QR Image using API
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(genericUpiUri)}`;
-      document.getElementById('dynamicUpiQrCode').src = qrApiUrl;
-
-      // 3. Direct App-Specific Deep Links
-      document.getElementById('btnPayPhonePe').href = `phonepe://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
-      document.getElementById('btnPayGPay').href = `tez://upi/pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
-      document.getElementById('btnPayPaytm').href = `paytmmp://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
-      document.getElementById('btnPayBhim').href = genericUpiUri;
-      document.getElementById('btnPayAmazon').href = genericUpiUri;
-
-      document.getElementById('paymentBackdrop').style.display = 'flex';
-    }
-
-    function closePaymentModal() {
-      document.getElementById('paymentBackdrop').style.display = 'none';
-    }
-
-    function initiatePaymentOtpValidation() {
-      const utr = document.getElementById('payUtrNumber').value.trim();
-      if (!utr || utr.length < 8) {
-        return alert('Please enter a valid 12-digit UPI Transaction Reference (UTR / Txn ID) after completing payment.');
-      }
-
-      pendingCheckout.utr = utr;
-      pendingCheckout.otp = generateSecureOtp();
-
-      document.getElementById('paymentBackdrop').style.display = 'none';
-      document.getElementById('paymentOtpSubtitle').innerHTML = `A 6-digit payment validation OTP has been dispatched to verify UTR <strong>${utr}</strong> for ${currentStudentProfile.name}.`;
-      document.getElementById('payEnteredOtp').value = '';
-      document.getElementById('paymentOtpBackdrop').style.display = 'flex';
-
-      alert(`[Payment Gateway OTP Dispatch] Your OTP to validate payment of ₹${pendingCheckout.fee} for ${pendingCheckout.courseName} is: ${pendingCheckout.otp}`);
-    }
-
-    function closePaymentOtpModal() {
-      document.getElementById('paymentOtpBackdrop').style.display = 'none';
-      document.getElementById('paymentBackdrop').style.display = 'flex';
-    }
-
-    function confirmPaymentAndGrantCourse() {
-      const enteredOtp = document.getElementById('payEnteredOtp').value.trim();
-      if (enteredOtp.length !== 6) return alert('Please enter the 6-digit OTP code.');
-      if (enteredOtp !== pendingCheckout.otp && enteredOtp !== '123456') {
-        return alert('Incorrect payment OTP code! Please try again.');
-      }
-
-      const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
-      const newOrder = {
-        txnId: pendingCheckout.utr,
-        studentName: currentStudentProfile.name,
-        regNumber: currentStudentProfile.regNumber,
-        mobile: currentStudentProfile.mobile,
-        courseTitle: pendingCheckout.courseName,
-        fee: pendingCheckout.fee,
-        mode: 'PhonePe UPI (9504704632@ybl - Bharti Classes (Sneha))',
-        status: 'Success (Verified via OTP)',
-        timestamp: new Date().toLocaleString()
-      };
-      orders.unshift(newOrder);
-      localStorage.setItem('bharti_payment_orders', JSON.stringify(orders));
+      renderSidebarMenu();
+      switchView('admin-overview');
       refreshAdminTables();
-
-      document.getElementById('paymentOtpBackdrop').style.display = 'none';
-      alert(`🎉 Payment Verified Successfully!\n\nReceipt Details:\n• Beneficiary: Bharti Classes (Sneha)\n• UPI VPA: 9504704632@ybl\n• Transaction ID (UTR): ${pendingCheckout.utr}\n• Course: ${pendingCheckout.courseName}\n• Amount Paid: ₹${pendingCheckout.fee}\n• Student: ${currentStudentProfile.name} (${currentStudentProfile.regNumber})\n\nFull batch video lectures, PDF notes, and test series are now unlocked!`);
+      alert('Welcome Vishwa Bharti Sir! Director Administration Portal Active.');
     }
 
-    // --- DIRECTOR ADMIN DESK ---
     function openAdminPortal(navEl) {
-      const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
-      if (adminSession === 'true') {
-        switchView('admin', navEl);
+      if (currentUserRole === 'admin') {
+        switchView('admin-overview', navEl);
         refreshAdminTables();
       } else {
         document.getElementById('adminUserIdInput').value = '';
@@ -2485,11 +2619,8 @@
       const pass = document.getElementById('adminPasswordInput').value.trim();
 
       if ((id === 'admin' || id === '8271750420') && (pass === 'admin123' || pass === '8271750420')) {
-        sessionStorage.setItem('bharti_admin_logged_in', 'true');
         closeAdminAuthModal();
-        switchView('admin', document.getElementById('navAdminItem'));
-        refreshAdminTables();
-        alert('Welcome Vishwa Bharti Sir! Director Administration Portal unlocked.');
+        loginAsAdmin();
       } else {
         alert('Invalid Admin credentials! Access denied.');
       }
@@ -2500,15 +2631,69 @@
       const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
       const doubts = JSON.parse(localStorage.getItem('bharti_student_doubts') || '[]');
 
+      // Calculate Revenue
+      const totalRev = orders.reduce((sum, o) => sum + (Number(o.fee) || 0), 0);
+
       document.getElementById('adminStatStudents').textContent = students.length;
+      document.getElementById('adminStatRevenue').textContent = '₹' + totalRev.toLocaleString();
       document.getElementById('adminStatOrders').textContent = orders.length;
       document.getElementById('adminStatDoubts').textContent = doubts.length;
 
+      // 1. Students Table
+      renderAdminStudentsTable(students);
+
+      // 2. Orders Table
+      const orderTbody = document.getElementById('adminOrdersTableBody');
+      if (orders.length === 0) {
+        orderTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>';
+      } else {
+        orderTbody.innerHTML = orders.map(o => `
+          <tr>
+            <td><strong>${o.txnId}</strong></td>
+            <td>${o.studentName} (${o.regNumber || o.mobile})</td>
+            <td>${o.courseTitle}</td>
+            <td>₹${Number(o.fee).toLocaleString()}</td>
+            <td>${o.mode}</td>
+            <td>${o.validity || '365 Days'}</td>
+            <td><span style="color:#059669; font-weight:700;"><i class="fas fa-check-circle"></i> ${o.status}</span></td>
+          </tr>
+        `).join('');
+      }
+
+      // 3. Doubts Table
+      const doubtTbody = document.getElementById('adminDoubtsTableBody');
+      if (doubts.length === 0) {
+        doubtTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No student doubts currently pending.</td></tr>';
+      } else {
+        doubtTbody.innerHTML = doubts.map((d, idx) => `
+          <tr>
+            <td>${d.timestamp}</td>
+            <td><strong>${d.studentName}</strong> (${d.mobile})</td>
+            <td><span class="exam-pill">${d.category}</span></td>
+            <td>${d.question}</td>
+            <td>${d.hasAttachment ? '<span class="exam-pill" style="background:#fef3c7; color:#b45309;"><i class="fas fa-paperclip"></i> Attached</span>' : 'None'}</td>
+            <td>
+              <button class="btn btn-outline" style="padding:2px 8px; font-size:0.72rem; color:#059669;" onclick="adminResolveDoubt(${idx})">
+                <i class="fas fa-check"></i> Mark Resolved
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // 4. Admin Courses Table
+      renderAdminCoursesTable();
+    }
+
+    function renderAdminStudentsTable(students) {
       const studentTbody = document.getElementById('adminStudentsTableBody');
       if (students.length === 0) {
-        studentTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No student records found.</td></tr>';
-      } else {
-        studentTbody.innerHTML = students.map(s => `
+        studentTbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:15px; color:var(--text-muted);">No student records found.</td></tr>';
+        return;
+      }
+      studentTbody.innerHTML = students.map(s => {
+        const enrolledNames = (s.enrolledCourses || []).map(c => c.courseTitle).join(', ') || 'None';
+        return `
           <tr>
             <td><strong>${s.regNumber || 'N/A'}</strong></td>
             <td>${s.name}</td>
@@ -2516,51 +2701,99 @@
             <td>${s.email}</td>
             <td>${s.age || '-'} / ${s.qualification || '-'}</td>
             <td><span class="exam-pill" style="font-size:0.7rem;">${(s.exams || []).slice(0, 2).join(', ')}${(s.exams && s.exams.length > 2 ? ' +' + (s.exams.length - 2) : '')}</span></td>
-            <td>${s.verifiedAt ? new Date(s.verifiedAt).toLocaleDateString() : 'Active'}</td>
+            <td style="font-size:0.78rem; max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${enrolledNames}">${enrolledNames}</td>
+            <td>
+              <button class="btn btn-outline" style="padding:3px 8px; font-size:0.72rem;" onclick="adminManualEnrollStudent('${s.regNumber}')">
+                <i class="fas fa-plus-circle"></i> Grant Course
+              </button>
+            </td>
           </tr>
-        `).join('');
-      }
+        `;
+      }).join('');
+    }
 
-      const orderTbody = document.getElementById('adminOrdersTableBody');
-      if (orders.length === 0) {
-        orderTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>';
-      } else {
-        orderTbody.innerHTML = orders.map(o => `
-          <tr>
-            <td><strong>${o.txnId}</strong></td>
-            <td>${o.studentName} (${o.regNumber || o.mobile})</td>
-            <td>${o.courseTitle}</td>
-            <td>₹${o.fee}</td>
-            <td>${o.mode}</td>
-            <td><span style="color:#059669; font-weight:700;"><i class="fas fa-check-circle"></i> ${o.status}</span></td>
-          </tr>
-        `).join('');
-      }
+    function filterAdminStudentsTable() {
+      const q = (document.getElementById('adminStudentSearchInput').value || '').toLowerCase();
+      const students = getRegisteredUsersList();
+      const filtered = students.filter(s => {
+        return (s.name || '').toLowerCase().includes(q) ||
+               (s.mobile || '').includes(q) ||
+               (s.email || '').toLowerCase().includes(q) ||
+               (s.regNumber || '').toLowerCase().includes(q);
+      });
+      renderAdminStudentsTable(filtered);
+    }
 
-      const doubtTbody = document.getElementById('adminDoubtsTableBody');
-      if (doubts.length === 0) {
-        doubtTbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px; color:var(--text-muted);">No doubts submitted yet.</td></tr>';
-      } else {
-        doubtTbody.innerHTML = doubts.map(d => `
-          <tr>
-            <td>${d.timestamp}</td>
-            <td>${d.studentName} (${d.mobile})</td>
-            <td>${d.category}</td>
-            <td>${d.question}</td>
-            <td>${d.hasAttachment ? '<span class="exam-pill" style="background:#fef3c7; color:#b45309;"><i class="fas fa-paperclip"></i> Attached</span>' : 'None'}</td>
-          </tr>
-        `).join('');
+    function renderAdminCoursesTable() {
+      const tbody = document.getElementById('adminCoursesTableBody');
+      let rows = '';
+      for (const [cat, courses] of Object.entries(REAL_COURSES_DATABASE)) {
+        courses.forEach(c => {
+          rows += `
+            <tr>
+              <td><span class="exam-pill">${cat}</span></td>
+              <td><strong>${c.title}</strong></td>
+              <td>₹${c.mathsFee.toLocaleString()}</td>
+              <td>₹${c.reasoningFee.toLocaleString()}</td>
+              <td><strong style="color:var(--secondary);">₹${c.comboFee.toLocaleString()}</strong></td>
+              <td><span style="color:#059669; font-weight:600;">365 Days</span></td>
+            </tr>
+          `;
+        });
       }
+      tbody.innerHTML = rows;
+    }
+
+    function adminResolveDoubt(idx) {
+      const doubts = JSON.parse(localStorage.getItem('bharti_student_doubts') || '[]');
+      if (doubts[idx]) {
+        doubts.splice(idx, 1);
+        localStorage.setItem('bharti_student_doubts', JSON.stringify(doubts));
+        refreshAdminTables();
+        alert('Doubt marked resolved and archived!');
+      }
+    }
+
+    function adminManualEnrollStudent(regNo) {
+      const users = getRegisteredUsersList();
+      const user = users.find(u => u.regNumber === regNo);
+      if (!user) return alert('Student not found!');
+
+      const courseName = prompt(`Enter Course Name to allocate for ${user.name} (365 Days Access):`, 'SSC CGL (Tier 1 & Tier 2) Comprehensive Batch (Maths + Reasoning Combo)');
+      if (!courseName) return;
+
+      const pDate = new Date();
+      const expDate = new Date();
+      expDate.setDate(pDate.getDate() + 365);
+
+      if (!user.enrolledCourses) user.enrolledCourses = [];
+      user.enrolledCourses.push({
+        courseId: 'manual_' + Date.now(),
+        courseTitle: courseName,
+        fee: 0,
+        utr: 'OFFLINE_ADMIN_GRANT',
+        purchaseDate: pDate.toISOString(),
+        expiryDate: expDate.toISOString()
+      });
+
+      saveUserToDatabase(user);
+      if (currentStudentProfile && currentStudentProfile.regNumber === regNo) {
+        currentStudentProfile = user;
+        localStorage.setItem('bharti_student', JSON.stringify(user));
+        selectCourseBox(activeCourseCategory);
+      }
+      alert(`Course "${courseName}" granted successfully to ${user.name} for 365 Days (Till ${expDate.toLocaleDateString()})!`);
     }
 
     function exportStudentsToCsv() {
       const students = getRegisteredUsersList();
       if (students.length === 0) return alert('No registered student data to export.');
 
-      let csv = "Registration_Number,Full_Name,Mobile_Number,Email_Address,Age,Qualification,Target_Exams,Registration_Date\n";
+      let csv = "Registration_Number,Full_Name,Mobile_Number,Email_Address,Age,Qualification,Target_Exams,Registration_Date,Enrolled_Courses\n";
       students.forEach(s => {
         const examsStr = (s.exams || []).join('; ');
-        csv += `"${s.regNumber || ''}","${s.name}","${s.mobile}","${s.email}","${s.age || ''}","${s.qualification || ''}","${examsStr}","${s.verifiedAt || ''}"\n`;
+        const enrolledStr = (s.enrolledCourses || []).map(c => c.courseTitle).join('; ');
+        csv += `"${s.regNumber || ''}","${s.name}","${s.mobile}","${s.email}","${s.age || ''}","${s.qualification || ''}","${examsStr}","${s.verifiedAt || ''}","${enrolledStr}"\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -2886,21 +3119,25 @@
       if (navElement) navElement.classList.add('active');
 
       const titles = {
-        courses: 'Course Store & Admissions',
-        planner: 'What To Do Today - Study Targets & Planner',
-        scholarship: 'Bharti Talent Scholarship Test',
-        pyq: 'Previous Year Question Vault',
-        practice: 'Adaptive Practice Sets',
-        doubt: 'Doubt Submission Desk',
-        assistant: 'May I Help You? - AI Assistant',
-        mentor: 'Instructor Profile & History',
-        admin: 'Director Administration Portal'
+        'courses': 'Course Store & Admissions',
+        'planner': 'What To Do Today - Study Targets & Planner',
+        'scholarship': 'Bharti Talent Scholarship Test',
+        'pyq': 'Previous Year Question Vault',
+        'practice': 'Adaptive Practice Sets',
+        'doubt': 'Doubt Submission Desk',
+        'assistant': 'May I Help You? - AI Assistant',
+        'mentor': 'Instructor Profile & History',
+        'admin-overview': "Director's Dashboard & Analytics",
+        'admin-students': 'Student Directory & Access Grants',
+        'admin-orders': 'Admissions & Payment Logs (365 Days)',
+        'admin-courses': 'Course & Pricing Management',
+        'admin-doubts': 'Student Doubt Resolution Desk'
       };
       document.getElementById('pageHeadingTitle').textContent = titles[viewKey] || 'Bharti Classes';
 
       if (viewKey === 'planner') loadDayTasks();
       if (viewKey === 'courses') selectCourseBox(activeCourseCategory);
-      if (viewKey === 'admin') refreshAdminTables();
+      if (viewKey.startsWith('admin-')) refreshAdminTables();
       if (window.innerWidth <= 860) document.getElementById('appSidebar').classList.remove('open');
     }
 
@@ -2916,7 +3153,7 @@
       const score = prompt('Enter your simulated score out of 100:', '85');
       if (score !== null) {
         const num = parseInt(score, 10);
-        if (num >= 80) alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you.');
+        if (num >= 80) alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you under the Bharti Talent Initiative.');
         else alert('You scored ' + num + '%. Qualifying mark is 80%.');
       }
     }
@@ -2954,15 +3191,6 @@
       if (activeLang === 'en') {
         activeLang = 'hi';
         document.getElementById('btnLangToggle').textContent = 'English';
-        document.getElementById('navCourses').textContent = 'कोर्स एवं शुल्क';
-        document.getElementById('navPlanner').textContent = 'दैनिक लक्ष्य (आज क्या करें)';
-        document.getElementById('navScholarship').textContent = 'मुफ़्त छात्रवृत्ति परीक्षा';
-        document.getElementById('navPyq').textContent = 'पुराने प्रश्न (PYQ) व हल';
-        document.getElementById('navPractice').textContent = 'अभ्यास सेट्स (ड्रिल)';
-        document.getElementById('navDoubt').textContent = 'प्रश्न पूछें (Doubt)';
-        document.getElementById('navAssistant').textContent = 'सहायता डेस्क (AI)';
-        document.getElementById('navMentor').textContent = 'भारती सर का परिचय';
-        document.getElementById('navAdmin').textContent = 'एडमिन पोर्टल (डायरेक्टर)';
         document.getElementById('lblLogout').textContent = 'लॉगआउट';
 
         document.getElementById('txtLoginTitle').textContent = 'विद्यार्थी लॉगिन (Student Login)';
@@ -2979,15 +3207,6 @@
       } else {
         activeLang = 'en';
         document.getElementById('btnLangToggle').textContent = 'हिन्दी';
-        document.getElementById('navCourses').textContent = 'Courses & Fees';
-        document.getElementById('navPlanner').textContent = 'Daily Target & My Plan';
-        document.getElementById('navScholarship').textContent = 'Free Scholarship Test';
-        document.getElementById('navPyq').textContent = 'PYQ Vault & Solutions';
-        document.getElementById('navPractice').textContent = 'Practice Drills (Sets)';
-        document.getElementById('navDoubt').textContent = 'Raise a Doubt';
-        document.getElementById('navAssistant').textContent = 'May I Help You? (AI)';
-        document.getElementById('navMentor').textContent = 'About Vishwa Sir';
-        document.getElementById('navAdmin').textContent = 'Admin Portal (Director)';
         document.getElementById('lblLogout').textContent = 'Logout';
 
         document.getElementById('txtLoginTitle').textContent = 'Student Login';
@@ -3002,25 +3221,37 @@
         document.getElementById('lnkForgotId').innerHTML = '<i class="fas fa-id-badge"></i> Forgot Username / Reg No?';
         document.getElementById('lnkForgotPass').innerHTML = '<i class="fas fa-key"></i> Forgot Password?';
       }
+      renderSidebarMenu();
       checkAndTriggerReminderNotification();
       loadDayTasks();
     }
 
+    // SESSION INITIALIZATION ON APP LOAD
     window.addEventListener('DOMContentLoaded', () => {
       updateDailyQuote();
       document.getElementById('plannerDateInput').value = getTodayDateString();
-      selectCourseBox('SSC');
 
-      const saved = localStorage.getItem('bharti_student');
-      if (saved) {
-        try {
-          currentStudentProfile = JSON.parse(saved);
-          completeLoginUi();
-          if (currentStudentProfile.exams && currentStudentProfile.exams.length > 0) {
-            renderUserTargetBar(currentStudentProfile.exams);
-          }
-        } catch(e){}
+      // Check if Director Admin was logged in
+      const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
+      if (adminSession === 'true') {
+        loginAsAdmin();
+        return;
       }
+
+      // Check if Student was logged in
+      const savedStudent = localStorage.getItem('bharti_student');
+      if (savedStudent) {
+        try {
+          currentStudentProfile = JSON.parse(savedStudent);
+          currentUserRole = 'student';
+          completeLoginUi();
+        } catch(e){}
+      } else {
+        currentUserRole = 'guest';
+        renderSidebarMenu();
+      }
+
+      selectCourseBox('SSC');
       checkAndTriggerReminderNotification();
     });
   </script>
