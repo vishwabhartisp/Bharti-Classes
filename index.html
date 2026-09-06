@@ -599,7 +599,7 @@
     .auth-help-links { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.78rem; }
     .auth-help-links a { color: #2563eb; text-decoration: none; cursor: pointer; font-weight: 600; }
 
-    /* Admin Dashboard & Management */
+    /* Admin Dashboard */
     .admin-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1485,7 +1485,7 @@
           </div>
         </div>
 
-        <div style="background:#fffbeb; border:1px solid #fef3c7; border-radius:6px; padding:10px; font-size:0.8rem; color:#92400e; margin-bottom:12px;">
+        <div style="background:#fffbeb; border:1px solid #fef3c7; border-radius:6px; padding:10px; font-size:0.80rem; color:#92400e; margin-bottom:12px;">
           <i class="fas fa-info-circle"></i> Once payment is completed in PhonePe / UPI, enter the 12-digit UPI Reference (UTR / Transaction ID) to complete enrollment.
         </div>
 
@@ -1787,7 +1787,6 @@
       container.innerHTML = '';
 
       if (currentUserRole === 'admin') {
-        // --- ADMINISTRATOR SPECIFIC INTERFACES ---
         container.innerHTML = `
           <li class="menu-header">Director Management</li>
           <li>
@@ -1829,7 +1828,6 @@
           </li>
         `;
       } else {
-        // --- STUDENT & GUEST INTERFACES ---
         container.innerHTML = `
           <li class="menu-header" id="txtMenuAcademics">Academic Portals</li>
           <li>
@@ -2169,7 +2167,7 @@
       });
     }
 
-    // DUAL-CHANNEL CREDENTIAL LOGIN (DIRECTOR ADMIN OR STUDENT)
+    // DUAL-CHANNEL CREDENTIAL LOGIN (ADMIN OR STUDENT)
     function handleCredentialLogin(e) {
       e.preventDefault();
       const inputId = document.getElementById('loginUserId').value.trim();
@@ -2177,14 +2175,12 @@
 
       if (!inputId || !inputPass) return alert('Please enter both User ID and Password.');
 
-      // Check for Director Administrator Credentials
       if ((inputId === 'admin' || inputId === '8271750420') && (inputPass === 'admin123' || inputPass === '8271750420')) {
         loginAsAdmin();
         closeAuthModal();
         return;
       }
 
-      // Check Student Credentials in Local DB
       const users = getRegisteredUsersList();
       const cleanId = inputId.toLowerCase();
       const cleanDigits = inputId.replace(/\D/g, '').slice(-10);
@@ -2391,7 +2387,7 @@
 
       const purchaseDate = new Date();
       const expiryDate = new Date();
-      expiryDate.setDate(purchaseDate.getDate() + 365);
+      expiryDate.setDate(purchaseDate.getDate() + 365); // 365 Days Validity
 
       const enrolledItem = {
         courseId: 'crs_' + Date.now(),
@@ -2577,11 +2573,6 @@
       selectCourseBox(activeCourseCategory);
     }
 
-    function showAllExams() {
-      document.getElementById('userTargetBar').style.display = 'none';
-      selectCourseBox(activeCourseCategory);
-    }
-
     // --- DIRECTOR ADMIN DASHBOARD MANAGEMENT ---
     function loginAsAdmin() {
       currentUserRole = 'admin';
@@ -2631,7 +2622,6 @@
       const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
       const doubts = JSON.parse(localStorage.getItem('bharti_student_doubts') || '[]');
 
-      // Calculate Revenue
       const totalRev = orders.reduce((sum, o) => sum + (Number(o.fee) || 0), 0);
 
       document.getElementById('adminStatStudents').textContent = students.length;
@@ -2639,10 +2629,8 @@
       document.getElementById('adminStatOrders').textContent = orders.length;
       document.getElementById('adminStatDoubts').textContent = doubts.length;
 
-      // 1. Students Table
       renderAdminStudentsTable(students);
 
-      // 2. Orders Table
       const orderTbody = document.getElementById('adminOrdersTableBody');
       if (orders.length === 0) {
         orderTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>';
@@ -2660,7 +2648,6 @@
         `).join('');
       }
 
-      // 3. Doubts Table
       const doubtTbody = document.getElementById('adminDoubtsTableBody');
       if (doubts.length === 0) {
         doubtTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No student doubts currently pending.</td></tr>';
@@ -2681,7 +2668,6 @@
         `).join('');
       }
 
-      // 4. Admin Courses Table
       renderAdminCoursesTable();
     }
 
@@ -3226,19 +3212,16 @@
       loadDayTasks();
     }
 
-    // SESSION INITIALIZATION ON APP LOAD
     window.addEventListener('DOMContentLoaded', () => {
       updateDailyQuote();
       document.getElementById('plannerDateInput').value = getTodayDateString();
 
-      // Check if Director Admin was logged in
       const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
       if (adminSession === 'true') {
         loginAsAdmin();
         return;
       }
 
-      // Check if Student was logged in
       const savedStudent = localStorage.getItem('bharti_student');
       if (savedStudent) {
         try {
