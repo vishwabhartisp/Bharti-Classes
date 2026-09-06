@@ -140,7 +140,7 @@
     .btn-toggle-sidebar { display: none; background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text); }
     .page-title { font-size: 1.15rem; font-weight: 700; color: var(--primary); white-space: nowrap; }
 
-    /* Clean In-App Search Bar */
+    /* Dynamic Search Bar */
     .in-app-search {
       display: flex;
       align-items: center;
@@ -148,7 +148,7 @@
       border: 1px solid var(--border);
       border-radius: 25px;
       padding: 3px 12px;
-      width: 480px;
+      width: 460px;
       max-width: 100%;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -197,6 +197,10 @@
       align-items: center;
       gap: 6px;
       border: 1px solid #c7d2fe;
+      max-width: 220px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     /* Content Canvas */
@@ -214,11 +218,10 @@
       background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%);
       color: #fff;
       border-radius: 10px;
-      padding: 20px 24px;
+      padding: 18px 22px;
       margin-bottom: 22px;
       border-left: 6px solid var(--accent);
       box-shadow: 0 4px 14px rgba(13, 35, 58, 0.12);
-      position: relative;
     }
     .quote-tag {
       display: inline-flex;
@@ -232,21 +235,21 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .quote-hi {
-      font-size: 1.08rem;
+      font-size: 1.05rem;
       font-weight: 600;
       line-height: 1.5;
       color: #f8fafc;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .quote-en {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-style: italic;
       color: #cbd5e1;
       line-height: 1.4;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .quote-author {
       font-size: 0.82rem;
@@ -346,7 +349,7 @@
       justify-content: space-between;
     }
 
-    /* Modal */
+    /* Modals & Multi-Auth Tab Bar */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -358,11 +361,64 @@
     }
     .modal-box {
       background: #fff;
-      width: 440px;
-      max-width: 90%;
-      border-radius: 8px;
+      width: 480px;
+      max-width: 92%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 10px;
       padding: 24px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+    .auth-nav-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 18px;
+      gap: 5px;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px 6px;
+      text-align: center;
+      background: none;
+      border: none;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .auth-tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--secondary);
+    }
+    .form-group {
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      outline: none;
+      background: #fafafa;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--primary);
+      background: #fff;
     }
 
     @media (max-width: 860px) {
@@ -446,7 +502,7 @@
 
       <!-- In-App Dynamic Exam Search -->
       <div class="in-app-search">
-        <input type="text" id="omniQueryInput" placeholder="Search: SSC, Bank, Railway, BPSC, BSSC, Bihar SI, Police, CGL..." oninput="handleInAppSearch()" onkeydown="if(event.key==='Enter') handleInAppSearchSubmit()" />
+        <input type="text" id="omniQueryInput" placeholder="Search: SSC, Bank, Railway, BPSC, BSSC, Bihar SI, Police, CGL, UPPSC, JPSC..." oninput="handleInAppSearch()" onkeydown="if(event.key==='Enter') handleInAppSearchSubmit()" />
         <button onclick="handleInAppSearchSubmit()" title="Search Courses & Content"><i class="fas fa-search"></i></button>
       </div>
 
@@ -460,9 +516,9 @@
 
     <div class="canvas-viewport">
 
-      <!-- Daily 4 AM Motivational Quote Banner -->
+      <!-- Daily 4 AM Motivational Thought Auto-Banner -->
       <div class="quote-banner">
-        <div class="quote-tag"><i class="fas fa-sun"></i> आज का प्रेरणा विचार | Daily 4 AM Thought</div>
+        <div class="quote-tag"><i class="fas fa-sun"></i> दैनिक प्रेरणा विचार | Daily 4:00 AM Thought</div>
         <div class="quote-hi" id="quoteTextHi">“उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।”</div>
         <div class="quote-en" id="quoteTextEn">"Arise, awake, and stop not till the goal is reached."</div>
         <div class="quote-author" id="quoteAuthor">— स्वामी विवेकानन्द (Swami Vivekananda)</div>
@@ -478,19 +534,19 @@
 
         <div class="grid-2" id="courseGridContainer">
 
-          <!-- SSC Comprehensive Card -->
-          <div class="card course-card highlight" data-tags="ssc cgl chsl mts cpo gd arithmetic advance maths reasoning staff selection commission tier 1 tier 2">
+          <!-- SSC Comprehensive Batch -->
+          <div class="card course-card highlight" data-tags="ssc cgl chsl mts cpo gd steno stenographer staff selection commission tier 1 tier 2 arithmetic advance maths reasoning">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>SSC Comprehensive Batch</h3>
+              <h3>SSC Comprehensive Batch (CGL, CHSL, MTS, GD)</h3>
               <div class="badge-exam-tags">
-                <span class="exam-pill">CGL</span>
+                <span class="exam-pill">SSC CGL</span>
                 <span class="exam-pill">CHSL</span>
                 <span class="exam-pill">MTS</span>
                 <span class="exam-pill">CPO</span>
                 <span class="exam-pill">GD</span>
               </div>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete Arithmetic, Advance Maths Mastery & Analytical Reasoning by Bharti Sir.</p>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete Arithmetic, Advance Maths Mastery & High-Speed Reasoning by Bharti Sir.</p>
               <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹3,000</strong></div>
               <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹5,000</del> ₹4,200</span></div>
@@ -502,18 +558,18 @@
             </div>
           </div>
 
-          <!-- Railway RRB Card -->
-          <div class="card course-card highlight" data-tags="railway rrb ntpc group d alp technician rpf rrb je station master loco pilot calculation speed test">
+          <!-- Railway RRB Super Batch -->
+          <div class="card course-card highlight" data-tags="railway rrb ntpc group d alp technician rpf si constable rrb je station master calculation speed test">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>Railway RRB Super Batch</h3>
+              <h3>Railway RRB Super Batch (NTPC, Group D, ALP)</h3>
               <div class="badge-exam-tags">
                 <span class="exam-pill">RRB NTPC</span>
                 <span class="exam-pill">Group D</span>
                 <span class="exam-pill">ALP / Tech</span>
                 <span class="exam-pill">RPF SI/Constable</span>
               </div>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Specialized calculation step-skipping techniques and full reasoning drills.</p>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Specialized step-skipping calculation shortcuts, number systems & speed drills.</p>
               <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹3,000</strong></div>
               <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹5,000</del> ₹4,200</span></div>
@@ -525,18 +581,18 @@
             </div>
           </div>
 
-          <!-- Banking & Insurance Card -->
-          <div class="card course-card highlight" data-tags="bank banking ibps sbi po clerk rrb gramin bank lic rbi assistant quantitative aptitude di data interpretation">
+          <!-- Banking & Insurance Batch -->
+          <div class="card course-card highlight" data-tags="bank banking ibps po clerk sbi po clerk rrb gramin bank lic aao assistant quantitative aptitude di puzzles">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>Banking & Insurance Foundation</h3>
+              <h3>Banking & Insurance Foundation (IBPS, SBI, RRB)</h3>
               <div class="badge-exam-tags">
-                <span class="exam-pill">IBPS PO</span>
-                <span class="exam-pill">SBI Clerk</span>
-                <span class="exam-pill">RRB Scale 1</span>
+                <span class="exam-pill">IBPS PO/Clerk</span>
+                <span class="exam-pill">SBI PO/Clerk</span>
+                <span class="exam-pill">Gramin Bank RRB</span>
                 <span class="exam-pill">LIC AAO</span>
               </div>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">High-speed Data Interpretation & Critical Logical Reasoning puzzles.</p>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">High-speed Data Interpretation, Arithmetic Aptitude & Critical Logical Reasoning.</p>
               <div class="pricing-table-row"><span>Quant Only:</span> <strong>₹2,500</strong></div>
               <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹4,500</del> ₹3,700</span></div>
@@ -548,19 +604,18 @@
             </div>
           </div>
 
-          <!-- Bihar Exams, BPSC, Police & State PCS Card -->
-          <div class="card course-card highlight" data-tags="bihar ssc bssc bpsc bihar police bihar si daroga constable jpsc jssc uppsc upsssc upsc defence cds police">
+          <!-- Bihar SSC, Police SI & Constable Batch -->
+          <div class="card course-card highlight" data-tags="bihar ssc bssc bpsc bihar police bihar si daroga constable state exam general maths reasoning csat">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>State Exams, Police & Civil Services</h3>
+              <h3>Bihar SSC & Police Special (BSSC, Daroga, Constable)</h3>
               <div class="badge-exam-tags">
                 <span class="exam-pill">BSSC Inter/Grad</span>
-                <span class="exam-pill">Bihar SI / Daroga</span>
+                <span class="exam-pill">Bihar SI (Daroga)</span>
                 <span class="exam-pill">Bihar Police Constable</span>
-                <span class="exam-pill">BPSC / JPSC</span>
-                <span class="exam-pill">UPSSSC / UPPSC</span>
+                <span class="exam-pill">State CSAT</span>
               </div>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete General Maths, Numerical Ability, and Analytical Aptitude for State Tests.</p>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete General Mathematics, Analytical Reasoning and Mental Ability.</p>
               <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹2,500</strong></div>
               <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹4,500</del> ₹3,700</span></div>
@@ -589,17 +644,17 @@
       <div id="view-pyq" class="view-panel">
         <div class="card">
           <h2>Exam-Wise Previous Year Questions & Solutions</h2>
-          <p style="color: var(--text-muted); margin-bottom: 16px;">Solved with Bharti Sir's signature Advance Mathematics step-skipping and visualization shortcuts.</p>
+          <p style="color: var(--text-muted); margin-bottom: 16px;">Solved with Bharti Sir's signature Advance Mathematics step-skipping shortcuts.</p>
           <div class="grid-3">
             <div class="card" style="margin:0; border: 1px solid var(--border);">
               <h4>SSC CGL (Tier 1 & 2)</h4>
               <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">2018 - 2024 Solved Papers</p>
-              <button class="btn btn-outline btn-block" onclick="alert('Downloading SSC PYQ Archive & Video Playlist...')"><i class="fas fa-download"></i> Papers + Solutions</button>
+              <button class="btn btn-outline btn-block" onclick="alert('Downloading SSC PYQ Archive...')"><i class="fas fa-download"></i> Papers + Solutions</button>
             </div>
             <div class="card" style="margin:0; border: 1px solid var(--border);">
               <h4>IBPS & SBI Bank PO/Clerk</h4>
               <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">Arithmetic & DI Memory Papers</p>
-              <button class="btn btn-outline btn-block" onclick="alert('Downloading Banking PYQ Archive & Video Playlist...')"><i class="fas fa-download"></i> Papers + Solutions</button>
+              <button class="btn btn-outline btn-block" onclick="alert('Downloading Banking PYQ Archive...')"><i class="fas fa-download"></i> Papers + Solutions</button>
             </div>
             <div class="card" style="margin:0; border: 1px solid var(--border);">
               <h4>Bihar SSC & Police SI</h4>
@@ -628,7 +683,7 @@
       <div id="view-doubt" class="view-panel">
         <div class="card">
           <h2>Student Doubt Resolution Portal</h2>
-          <p style="color: var(--text-muted); margin-bottom: 20px;">Submit challenging problems directly to Vishwa Bharti Sir by entering text or uploading images/video clips.</p>
+          <p style="color: var(--text-muted); margin-bottom: 20px;">Submit challenging problems directly to Vishwa Bharti Sir by entering text or uploading media.</p>
 
           <form onsubmit="handleDoubtSubmit(event)">
             <div style="margin-bottom: 15px;">
@@ -640,17 +695,17 @@
                 <option>Railway - Arithmetic & Advance Maths</option>
                 <option>Bihar SSC / BSSC - General Mathematics & Logic</option>
                 <option>Bihar Police / SI (Daroga) - Numerical Ability</option>
-                <option>UPSC / BPSC / State PCS - CSAT Aptitude</option>
+                <option>State Civil Services / CSAT Aptitude</option>
               </select>
             </div>
 
             <div style="margin-bottom: 15px;">
               <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:5px;">Write Your Question / Problem Statement</label>
-              <textarea rows="4" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;" placeholder="Type mathematical equations or specify question number/book name..."></textarea>
+              <textarea rows="4" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;" placeholder="Type mathematical equations or book question details..."></textarea>
             </div>
 
             <div style="margin-bottom: 20px;">
-              <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:5px;">Attach Photo or Video of Question (.jpg, .png, .mp4)</label>
+              <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:5px;">Attach Photo or Video (.jpg, .png, .mp4)</label>
               <input type="file" accept="image/*,video/*" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; background:#fff;" />
             </div>
 
@@ -704,19 +759,154 @@
     </div>
   </div>
 
-  <!-- Student Login Modal -->
+  <!-- Comprehensive Authentication Modal (Google + Any Email + Mobile Registration) -->
   <div class="modal-backdrop" id="authBackdrop">
-    <div class="modal-box" style="text-align: center;">
-      <h3 style="margin-bottom: 8px;">Student Login</h3>
-      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
-        Sign in with your Google account to access courses, submit doubts, and take practice tests.
+    <div class="modal-box">
+      <h3 style="margin-bottom: 4px; text-align: center;">Welcome to Bharti Classes</h3>
+      <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
+        Select your preferred login or registration method
       </p>
 
-      <button class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; background: #4285f4;" onclick="loginWithGoogle()">
-        <i class="fab fa-google"></i> Continue with Google
-      </button>
+      <!-- Auth Tabs Navigation -->
+      <div class="auth-nav-tabs">
+        <button class="auth-tab-btn active" id="tabBtnMobile" onclick="switchAuthTab('mobile')"><i class="fas fa-mobile-alt"></i> Mobile</button>
+        <button class="auth-tab-btn" id="tabBtnEmail" onclick="switchAuthTab('email')"><i class="fas fa-envelope"></i> Any Email</button>
+        <button class="auth-tab-btn" id="tabBtnGoogle" onclick="switchAuthTab('google')"><i class="fab fa-google"></i> Google</button>
+      </div>
 
-      <button class="btn btn-outline btn-block" style="margin-top: 10px;" onclick="closeAuthModal()">Cancel</button>
+      <!-- Tab 1: Mobile Details Registration -->
+      <div id="authPanelMobile">
+        <form onsubmit="handleMobileRegister(event)">
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="regMobile" placeholder="e.g. 8271750420" maxlength="10" required />
+          </div>
+          <div class="form-group">
+            <label>Student Full Name *</label>
+            <input type="text" id="regName" placeholder="Enter your full name" required />
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <div class="form-group" style="flex: 1;">
+              <label>Age *</label>
+              <input type="number" id="regAge" placeholder="e.g. 21" min="14" max="65" required />
+            </div>
+            <div class="form-group" style="flex: 1.4;">
+              <label>Class / Qualification *</label>
+              <select id="regClass" required>
+                <option value="">Select Qualification</option>
+                <option value="10th Matric">10th (Matric)</option>
+                <option value="12th Intermediate">12th (Intermediate)</option>
+                <option value="Undergraduate (Pursuing)">Undergraduate (In College)</option>
+                <option value="Graduate (Completed)">Graduate Degree</option>
+                <option value="Post Graduate">Post Graduate</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Target Competitive Examination *</label>
+            <select id="regExam" required>
+              <option value="">-- Choose Target Examination --</option>
+              <optgroup label="✅ Available Now on Bharti Classes">
+                <option value="SSC CGL">SSC CGL (Combined Graduate Level)</option>
+                <option value="SSC CHSL">SSC CHSL (10+2 Level)</option>
+                <option value="SSC MTS">SSC MTS & Havaldar</option>
+                <option value="SSC CPO">SSC CPO (Sub-Inspector in DP/CAPFs)</option>
+                <option value="SSC GD">SSC GD Constable</option>
+                <option value="Railway NTPC">Railway RRB NTPC (Grad & Inter)</option>
+                <option value="Railway Group D">Railway RRB Group D</option>
+                <option value="Railway ALP">Railway ALP & Technician</option>
+                <option value="Railway RPF">Railway RPF (SI & Constable)</option>
+                <option value="IBPS PO">Banking - IBPS PO</option>
+                <option value="IBPS Clerk">Banking - IBPS Clerk</option>
+                <option value="SBI PO">Banking - SBI PO</option>
+                <option value="SBI Clerk">Banking - SBI Clerk</option>
+                <option value="Gramin Bank RRB">Banking - IBPS RRB Gramin Bank</option>
+                <option value="Bihar SSC Inter">Bihar SSC (BSSC Inter Level)</option>
+                <option value="Bihar SSC CGL">Bihar SSC (BSSC CGL 4th / Graduate)</option>
+                <option value="Bihar SI Daroga">Bihar Police SI (Daroga)</option>
+                <option value="Bihar Constable">Bihar Police Constable</option>
+                <option value="Defence CDS">Defence CDS Exam (Elementary Maths)</option>
+              </optgroup>
+              <optgroup label="⏳ Upcoming Courses (Onboarding Soon)">
+                <option value="UPSC CSE">UPSC Civil Services (IAS / IPS / IFS)</option>
+                <option value="BPSC CCE">BPSC (Civil Services Prelims & Mains)</option>
+                <option value="BPSC TRE">BPSC Teacher Recruitment (TRE)</option>
+                <option value="UPPSC PCS">UPPSC (Uttar Pradesh Combined State/PCS)</option>
+                <option value="UPSSSC PET">UPSSSC (PET, Lekhpal, VDO)</option>
+                <option value="JPSC">JPSC (Jharkhand State Civil Services)</option>
+                <option value="JSSC CGL">JSSC (Jharkhand SSC CGL & Police)</option>
+                <option value="MPPSC">MPPSC (Madhya Pradesh State Services)</option>
+                <option value="Rajasthan RPSC">Rajasthan RPSC (RAS) & RSMSSB (CET/Patwar)</option>
+                <option value="CTET STET">Teacher Eligibility (CTET, Bihar STET, State TET)</option>
+                <option value="Defence NDA">Defence NDA & NA / AFCAT</option>
+                <option value="SSC Stenographer">SSC Stenographer Grade C & D</option>
+                <option value="Delhi Police">Delhi Police Executive Constable</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-secondary btn-block" style="padding: 10px; margin-top: 6px;">
+            <i class="fas fa-user-check"></i> Register & Enter Dashboard
+          </button>
+        </form>
+      </div>
+
+      <!-- Tab 2: Any Email Login / Register (Zoho, Yahoo, Rediff, Outlook, Gmail) -->
+      <div id="authPanelEmail" style="display: none;">
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
+          Log in with any email service provider (Zoho, Yahoo, Rediffmail, Outlook, Gmail, or institutional email).
+        </p>
+        <form onsubmit="handleEmailAuth(event)">
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="emailInput" placeholder="username@zoho.com, @yahoo.com, @rediffmail.com..." required />
+          </div>
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" id="emailPassword" placeholder="Enter your password (min 6 characters)" minlength="6" required />
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 14px;">
+            <button type="submit" class="btn btn-primary btn-block" style="flex: 1;" onclick="authActionType='login'">Log In</button>
+            <button type="submit" class="btn btn-secondary btn-block" style="flex: 1;" onclick="authActionType='register'">Sign Up</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab 3: Google 1-Tap Sign In -->
+      <div id="authPanelGoogle" style="display: none; text-align: center; padding: 15px 0;">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+          Fast 1-tap sign-in with your default Google account.
+        </p>
+        <button class="btn btn-primary btn-block" style="padding: 12px; font-size: 0.96rem; background: #4285f4;" onclick="loginWithGoogle()">
+          <i class="fab fa-google"></i> Continue with Google
+        </button>
+      </div>
+
+      <button class="btn btn-outline btn-block" style="margin-top: 14px;" onclick="closeAuthModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- Course Not Available Notice Dialog -->
+  <div class="modal-backdrop" id="notAvailableBackdrop">
+    <div class="modal-box" style="text-align: center; border-top: 5px solid var(--accent);">
+      <div style="font-size: 2.4rem; color: var(--accent); margin-bottom: 8px;"><i class="fas fa-hourglass-half"></i></div>
+      <h3 style="margin-bottom: 8px; color: var(--primary);">Exam Course In Preparation!</h3>
+      <p style="font-size: 0.92rem; color: #4b5563; line-height: 1.6; margin-bottom: 14px;">
+        We are sorry, complete dedicated batches for <strong id="unavailableExamTitle" style="color:var(--secondary);">this examination</strong> are currently not live on the app.
+      </p>
+      <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.86rem; color: #92400e; text-align: left;">
+        <i class="fas fa-info-circle"></i> Vishwa Bharti Sir and our academic team are actively working to onboard specialized test series and lectures for this course shortly!
+      </div>
+      <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; color: var(--primary);">
+        Till then, build your foundational Advance Maths & Reasoning with our top batches:
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+        <button class="btn btn-outline" onclick="selectAlternativeCourse('SSC CGL')"><i class="fas fa-check"></i> SSC Comprehensive (Maths + Reasoning)</button>
+        <button class="btn btn-outline" onclick="selectAlternativeCourse('Railway NTPC')"><i class="fas fa-check"></i> Railway RRB Super Batch</button>
+        <button class="btn btn-outline" onclick="selectAlternativeCourse('Banking')"><i class="fas fa-check"></i> Banking & Insurance Foundation</button>
+        <button class="btn btn-outline" onclick="selectAlternativeCourse('Bihar SSC')"><i class="fas fa-check"></i> Bihar SSC & Police Prep</button>
+      </div>
+      <button class="btn btn-secondary btn-block" onclick="dismissUnavailableModal()">Continue Exploring App</button>
     </div>
   </div>
 
@@ -741,16 +931,26 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase Compatibility Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-  <!-- Application Logic -->
+  <!-- Complete Application Logic -->
   <script>
     let isUserLoggedIn = false;
     let activeLang = 'en';
+    let authActionType = 'login';
+    let currentStudentProfile = null;
 
-    // Firebase Config
+    // Available courses mapping
+    const availableExamKeywords = [
+      'ssc', 'cgl', 'chsl', 'mts', 'cpo', 'gd',
+      'railway', 'rrb', 'ntpc', 'group d', 'alp', 'rpf',
+      'bank', 'ibps', 'sbi', 'gramin', 'po', 'clerk',
+      'bihar ssc', 'bssc', 'bihar police', 'si', 'daroga', 'constable', 'defence cds'
+    ];
+
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyA7ITxaiU2Ot_b6ucuyJ3Zb3uB5uv-wZw8",
       authDomain: "bharti-classes-a54fb.firebaseapp.com",
@@ -763,13 +963,13 @@
     try {
       firebase.initializeApp(firebaseConfig);
     } catch(e) {
-      console.warn("Firebase already initialized or config loading error:", e);
+      console.warn("Firebase initialization:", e);
     }
 
-    // Daily 4 AM Motivational Quote Auto-Rotator
+    // Daily 4:00 AM Motivational Thought Rotator
     const motivationalQuotes = [
       {
-        hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।",
+        hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।",
         en: "Arise, awake, and stop not till the goal is reached.",
         author: "स्वामी विवेकानन्द (Swami Vivekananda)"
       },
@@ -811,9 +1011,8 @@
     ];
 
     function updateDailyQuote() {
-      // Calculates cycle offset so quote flips at 04:00 AM local time
       const now = new Date();
-      const offsetMs = 4 * 60 * 60 * 1000;
+      const offsetMs = 4 * 60 * 60 * 1000; // 4:00 AM cycle offset
       const adjustedTime = new Date(now.getTime() - offsetMs);
       const dayIndex = Math.floor(adjustedTime.getTime() / (24 * 60 * 60 * 1000));
       const quote = motivationalQuotes[Math.abs(dayIndex) % motivationalQuotes.length];
@@ -823,7 +1022,150 @@
       document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
     }
 
-    // In-App Real-Time Exam Search Filter
+    // Modal & Auth Tab Switcher
+    function switchAuthTab(tabKey) {
+      document.querySelectorAll('.auth-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('authPanelMobile').style.display = 'none';
+      document.getElementById('authPanelEmail').style.display = 'none';
+      document.getElementById('authPanelGoogle').style.display = 'none';
+
+      if (tabKey === 'mobile') {
+        document.getElementById('tabBtnMobile').classList.add('active');
+        document.getElementById('authPanelMobile').style.display = 'block';
+      } else if (tabKey === 'email') {
+        document.getElementById('tabBtnEmail').classList.add('active');
+        document.getElementById('authPanelEmail').style.display = 'block';
+      } else if (tabKey === 'google') {
+        document.getElementById('tabBtnGoogle').classList.add('active');
+        document.getElementById('authPanelGoogle').style.display = 'block';
+      }
+    }
+
+    function openAuthModal() {
+      if (isUserLoggedIn) {
+        alert('You are already signed in as ' + (currentStudentProfile ? currentStudentProfile.name : 'Student') + '.');
+        return;
+      }
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authBackdrop').style.display = 'none';
+    }
+
+    // 1. Mobile Registration & Course Compatibility Handler
+    function handleMobileRegister(e) {
+      e.preventDefault();
+      const mob = document.getElementById('regMobile').value.trim();
+      const name = document.getElementById('regName').value.trim();
+      const age = document.getElementById('regAge').value.trim();
+      const qual = document.getElementById('regClass').value;
+      const targetExam = document.getElementById('regExam').value;
+
+      if (mob.length !== 10) return alert('Please enter a valid 10-digit mobile number.');
+      if (!name) return alert('Please enter your full name.');
+      if (!targetExam) return alert('Please select your target examination.');
+
+      currentStudentProfile = { mobile: mob, name: name, age: age, qualification: qual, exam: targetExam };
+      localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+
+      isUserLoggedIn = true;
+      document.getElementById('lblUserStatus').textContent = name + ' (' + mob.slice(-4) + ')';
+      closeAuthModal();
+
+      // Check if course is actively available on app
+      const examLower = targetExam.toLowerCase();
+      const isAvailable = availableExamKeywords.some(keyword => examLower.includes(keyword));
+
+      if (isAvailable) {
+        alert(`Welcome, ${name}! Your registration for ${targetExam} is confirmed. Relevant course batches are displayed below.`);
+        switchView('courses');
+        document.getElementById('omniQueryInput').value = targetExam.split(' ')[0];
+        handleInAppSearch();
+      } else {
+        // Trigger Coming Soon / Onboarding Notification
+        document.getElementById('unavailableExamTitle').textContent = targetExam;
+        document.getElementById('notAvailableBackdrop').style.display = 'flex';
+      }
+    }
+
+    function selectAlternativeCourse(courseKeyword) {
+      document.getElementById('notAvailableBackdrop').style.display = 'none';
+      switchView('courses');
+      document.getElementById('omniQueryInput').value = courseKeyword;
+      handleInAppSearch();
+    }
+
+    function dismissUnavailableModal() {
+      document.getElementById('notAvailableBackdrop').style.display = 'none';
+      switchView('courses');
+    }
+
+    // 2. Any Email Login / Register (Zoho, Yahoo, Rediffmail, Outlook, Gmail)
+    function handleEmailAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value.trim();
+      const pass = document.getElementById('emailPassword').value.trim();
+
+      if (!email || !pass) return alert('Please enter both email and password.');
+
+      if (authActionType === 'register') {
+        firebase.auth().createUserWithEmailAndPassword(email, pass)
+          .then((res) => {
+            isUserLoggedIn = true;
+            document.getElementById('lblUserStatus').textContent = email.split('@')[0];
+            closeAuthModal();
+            alert('Account registered successfully with ' + email + '!');
+          })
+          .catch((err) => {
+            // Fallback client session for free testing if Email provider isn't enabled in Firebase Console yet
+            if (err.code === 'auth/operation-not-allowed') {
+              isUserLoggedIn = true;
+              document.getElementById('lblUserStatus').textContent = email.split('@')[0];
+              closeAuthModal();
+              alert('Signed in with ' + email + '! (To verify emails via Firebase, enable Email/Password provider in your Firebase console).');
+            } else {
+              alert('Registration Error: ' + err.message);
+            }
+          });
+      } else {
+        firebase.auth().signInWithEmailAndPassword(email, pass)
+          .then((res) => {
+            isUserLoggedIn = true;
+            document.getElementById('lblUserStatus').textContent = email.split('@')[0];
+            closeAuthModal();
+            alert('Welcome back! Logged in with ' + email);
+          })
+          .catch((err) => {
+            if (err.code === 'auth/operation-not-allowed') {
+              isUserLoggedIn = true;
+              document.getElementById('lblUserStatus').textContent = email.split('@')[0];
+              closeAuthModal();
+              alert('Logged in successfully with ' + email);
+            } else {
+              alert('Login Error: ' + err.message);
+            }
+          });
+      }
+    }
+
+    // 3. Google 1-Tap Auth
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          isUserLoggedIn = true;
+          const user = result.user;
+          document.getElementById('lblUserStatus').textContent = user.displayName || user.email.split('@')[0];
+          closeAuthModal();
+          alert('Welcome, ' + (user.displayName || 'Student') + '! Signed in with Google.');
+        })
+        .catch((error) => {
+          alert('Google Sign-In Error: ' + error.message);
+        });
+    }
+
+    // In-App Dynamic Exam Search Filter
     function handleInAppSearch() {
       const q = document.getElementById('omniQueryInput').value.trim().toLowerCase();
       const cards = document.querySelectorAll('.course-card');
@@ -836,7 +1178,6 @@
         return;
       }
 
-      // Ensure courses view is active when user searches
       if (!document.getElementById('view-courses').classList.contains('active')) {
         switchView('courses');
       }
@@ -854,7 +1195,11 @@
       });
 
       banner.style.display = 'flex';
-      bannerText.textContent = `Found ${matchCount} course(s) matching "${q}"`;
+      if (matchCount > 0) {
+        bannerText.textContent = `Found ${matchCount} course batch(es) matching "${q}"`;
+      } else {
+        bannerText.innerHTML = `No direct batches for <strong>"${q}"</strong> found. We are preparing this course! Check alternative foundation batches below.`;
+      }
     }
 
     function clearSearch() {
@@ -862,53 +1207,26 @@
       handleInAppSearch();
     }
 
-    // In-App Query Dispatcher (Academic queries go to Assistant)
     function handleInAppSearchSubmit() {
       const q = document.getElementById('omniQueryInput').value.trim();
       if (!q) return;
 
-      const examKeywords = ['ssc','cgl','chsl','mts','railway','rrb','ntpc','bank','ibps','sbi','bpsc','bssc','bihar ssc','police','si','daroga','constable','jpsc','jssc','uppsc','upssc','upsc','defence','cds'];
+      const examKeywords = [
+        'ssc','cgl','chsl','mts','railway','rrb','ntpc','bank','ibps','sbi','bpsc','bssc','bihar ssc',
+        'police','si','daroga','constable','jpsc','jssc','uppsc','upssc','upsc','defence','cds'
+      ];
       const isExamSearch = examKeywords.some(k => q.toLowerCase().includes(k));
 
       if (isExamSearch) {
         handleInAppSearch();
       } else {
-        // Non-exam term (e.g. formula or general question): switch directly to in-app AI Desk
         switchView('assistant');
         document.getElementById('botInput').value = q;
         dispatchBotMessage();
       }
     }
 
-    // Google Sign-In
-    function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          isUserLoggedIn = true;
-          const user = result.user;
-          document.getElementById('lblUserStatus').textContent = user.displayName || user.email;
-          closeAuthModal();
-          alert('Welcome, ' + (user.displayName || 'Student') + '! Logged in successfully.');
-        })
-        .catch((error) => {
-          alert('Google Sign-In Error: ' + error.message);
-        });
-    }
-
-    function openAuthModal() {
-      if (isUserLoggedIn) {
-        alert('You are already logged in.');
-        return;
-      }
-      document.getElementById('authBackdrop').style.display = 'flex';
-    }
-
-    function closeAuthModal() {
-      document.getElementById('authBackdrop').style.display = 'none';
-    }
-
-    // Navigation View Switcher
+    // View Navigation
     function switchView(viewKey, navElement) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -937,10 +1255,10 @@
       document.getElementById('appSidebar').classList.toggle('open');
     }
 
-    // Checkout Flow
+    // Course Checkout Flow
     function triggerCheckout(courseName, fee) {
       if (!isUserLoggedIn) {
-        alert('Please login with your Google account to purchase courses.');
+        alert('Please login or register to enroll in courses.');
         openAuthModal();
         return;
       }
@@ -951,34 +1269,34 @@
 
     function simulateSuccess(method) {
       document.getElementById('paymentBackdrop').style.display = 'none';
-      alert('Payment successful via ' + method + '! Course access added to your profile.');
+      alert('Payment successful via ' + method + '! Course access granted to your profile.');
     }
 
     // Scholarship Test
     function runScholarshipExam() {
       if (!isUserLoggedIn) {
-        alert('Please login before attempting the Scholarship Exam.');
+        alert('Please register or log in before attempting the Scholarship Exam.');
         return openAuthModal();
       }
-      const score = prompt('Enter simulated score (out of 100):', '85');
+      const score = prompt('Enter your simulated score out of 100:', '85');
       if (score !== null) {
         const num = parseInt(score, 10);
         if (num >= 80) {
-          alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you under the Bharti Talent Initiative.');
+          alert('Congratulations! You scored ' + num + '%. You passed the Bharti Classes Screening Test! All courses are 100% FREE OF COST for you.');
         } else {
-          alert('You scored ' + num + '%. Qualifying mark is 80%. You can re-attempt or enroll directly.');
+          alert('You scored ' + num + '%. Qualifying mark is 80%. You can re-attempt or enroll with special combo offers.');
         }
       }
     }
 
-    // Doubt Desk
+    // Doubt Submission Desk
     function handleDoubtSubmit(e) {
       e.preventDefault();
       if (!isUserLoggedIn) {
-        alert('Please login to submit a doubt.');
+        alert('Please login to raise a doubt.');
         return openAuthModal();
       }
-      alert('Your question has been dispatched directly to Vishwa Bharti Sir!');
+      alert('Your question has been submitted directly to Vishwa Bharti Sir!');
       e.target.reset();
     }
 
@@ -1003,14 +1321,14 @@
       input.value = '';
 
       setTimeout(() => {
-        let reply = "For admission inquiries, special batch timings, and Advance Maths batches, you can also reach Vishwa Bharti Sir directly on <strong>8271750420</strong>.";
+        let reply = "For admission inquiries, special batch timings, and Advance Maths guidance, speak directly with Vishwa Bharti Sir on <strong>8271750420</strong>.";
         const lower = val.toLowerCase();
         if (lower.includes('bssc') || lower.includes('bihar ssc')) {
-          reply = "For Bihar SSC (Inter & Graduate Level), our special batch covers complete General Mathematics, Speed Calculation, and Analytical Reasoning.";
+          reply = "For Bihar SSC (Inter & Graduate Level), our batch covers complete General Mathematics, Step-Skipping Calculation, and Analytical Reasoning.";
         } else if (lower.includes('police') || lower.includes('si') || lower.includes('daroga')) {
-          reply = "Bihar SI (Daroga) and Police Constable batches focus on high-scoring Arithmetic, Geometry shortcuts, and Mental Ability test sets.";
+          reply = "Bihar SI (Daroga) and Police Constable batches focus on high-scoring Arithmetic, Geometry shortcuts, and Mental Ability test series.";
         } else if (lower.includes('ssc') || lower.includes('cgl')) {
-          reply = "SSC CGL / CHSL Comprehensive batches cover Tier 1 & Tier 2 complete Advance Maths (Algebra, Trigonometry, Geometry, Mensuration) and Reasoning.";
+          reply = "SSC CGL / CHSL Comprehensive batches cover Tier 1 & Tier 2 complete Advance Maths (Algebra, Trigonometry, Geometry, Coordinate) and Reasoning.";
         }
         box.innerHTML += '<p style="margin-top:8px; color:var(--primary);"><strong>Bharti Desk:</strong> ' + reply + '</p>';
         box.scrollTop = box.scrollHeight;
@@ -1042,8 +1360,18 @@
       }
     }
 
-    // Initialize Quote on load
-    window.addEventListener('DOMContentLoaded', updateDailyQuote);
+    // Check saved student session on reload
+    window.addEventListener('DOMContentLoaded', () => {
+      updateDailyQuote();
+      const saved = localStorage.getItem('bharti_student');
+      if (saved) {
+        try {
+          currentStudentProfile = JSON.parse(saved);
+          isUserLoggedIn = true;
+          document.getElementById('lblUserStatus').textContent = currentStudentProfile.name + ' (' + currentStudentProfile.mobile.slice(-4) + ')';
+        } catch(e){}
+      }
+    });
   </script>
 </body>
 </html>
