@@ -134,54 +134,50 @@
       justify-content: space-between;
       padding: 0 24px;
       flex-shrink: 0;
+      gap: 15px;
     }
-    .topbar-left { display: flex; align-items: center; gap: 15px; }
+    .topbar-left { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
     .btn-toggle-sidebar { display: none; background: none; border: none; font-size: 1.25rem; cursor: pointer; color: var(--text); }
-    .page-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+    .page-title { font-size: 1.15rem; font-weight: 700; color: var(--primary); white-space: nowrap; }
 
-    /* Unified Multi-Engine Search */
-    .omni-search {
+    /* Clean In-App Search Bar */
+    .in-app-search {
       display: flex;
       align-items: center;
       background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 2px 6px;
+      border-radius: 25px;
+      padding: 3px 12px;
       width: 480px;
       max-width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .omni-search select {
+    .in-app-search:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 35, 58, 0.1);
+      background: #fff;
+    }
+    .in-app-search input {
       border: none;
       background: transparent;
-      padding: 6px;
-      font-weight: 600;
-      font-size: 0.82rem;
-      color: var(--primary);
-      outline: none;
-      border-right: 1px solid var(--border);
-      margin-right: 6px;
-      cursor: pointer;
-    }
-    .omni-search input {
-      border: none;
-      background: transparent;
-      padding: 6px 8px;
+      padding: 8px 10px;
       width: 100%;
       outline: none;
       font-size: 0.88rem;
+      color: var(--text);
     }
-    .omni-search button {
-      background: var(--primary);
-      color: #fff;
+    .in-app-search button {
+      background: transparent;
+      color: var(--primary);
       border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
+      padding: 6px;
       cursor: pointer;
+      font-size: 0.95rem;
     }
 
-    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .btn-lang {
-      padding: 5px 10px;
+      padding: 6px 12px;
       border: 1px solid var(--border);
       background: var(--surface);
       border-radius: 4px;
@@ -192,7 +188,7 @@
     .user-pill {
       background: #eef2ff;
       color: var(--primary);
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
       font-weight: 600;
       font-size: 0.85rem;
@@ -200,6 +196,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      border: 1px solid #c7d2fe;
     }
 
     /* Content Canvas */
@@ -211,6 +208,52 @@
     .view-panel { display: none; }
     .view-panel.active { display: block; animation: fadeIn 0.25s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Daily 4 AM Motivational Banner */
+    .quote-banner {
+      background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%);
+      color: #fff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 22px;
+      border-left: 6px solid var(--accent);
+      box-shadow: 0 4px 14px rgba(13, 35, 58, 0.12);
+      position: relative;
+    }
+    .quote-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 183, 3, 0.18);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .quote-hi {
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #f8fafc;
+      margin-bottom: 6px;
+    }
+    .quote-en {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: #cbd5e1;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .quote-author {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-align: right;
+    }
 
     /* Cards & Grids */
     .card {
@@ -254,6 +297,7 @@
       flex-direction: column;
       justify-content: space-between;
       position: relative;
+      background: #fff;
     }
     .course-card.highlight { border-color: var(--secondary); box-shadow: 0 3px 12px rgba(230,57,70,0.1); }
     .badge-discount {
@@ -267,12 +311,39 @@
       padding: 2px 8px;
       border-radius: 10px;
     }
+    .badge-exam-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 8px 0;
+    }
+    .exam-pill {
+      background: #f1f5f9;
+      color: var(--primary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
     .pricing-table-row {
       display: flex;
       justify-content: space-between;
-      padding: 8px 0;
+      padding: 7px 0;
       border-bottom: 1px dashed var(--border);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+    }
+
+    /* Search Results Header */
+    #searchStatusBanner {
+      display: none;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      padding: 10px 16px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 0.88rem;
+      align-items: center;
+      justify-content: space-between;
     }
 
     /* Modal */
@@ -298,7 +369,9 @@
       aside { position: absolute; height: 100vh; left: -280px; }
       aside.open { left: 0; }
       .btn-toggle-sidebar { display: block; }
-      .omni-search { width: 220px; }
+      .in-app-search { width: 100%; }
+      header.topbar { padding: 0 14px; }
+      .page-title { display: none; }
     }
   </style>
 </head>
@@ -371,15 +444,10 @@
         <span class="page-title" id="pageHeadingTitle">Course Store & Admissions</span>
       </div>
 
-      <div class="omni-search">
-        <select id="engineType">
-          <option value="app">App Search</option>
-          <option value="gemini">Google Gemini</option>
-          <option value="chatgpt">OpenAI ChatGPT</option>
-          <option value="google">Google Web</option>
-        </select>
-        <input type="text" id="omniQueryInput" placeholder="Search syllabus, advance maths formulas, PYQs..." onkeydown="if(event.key==='Enter') executeOmniSearch()" />
-        <button onclick="executeOmniSearch()"><i class="fas fa-arrow-right"></i></button>
+      <!-- In-App Dynamic Exam Search -->
+      <div class="in-app-search">
+        <input type="text" id="omniQueryInput" placeholder="Search: SSC, Bank, Railway, BPSC, BSSC, Bihar SI, Police, CGL..." oninput="handleInAppSearch()" onkeydown="if(event.key==='Enter') handleInAppSearchSubmit()" />
+        <button onclick="handleInAppSearchSubmit()" title="Search Courses & Content"><i class="fas fa-search"></i></button>
       </div>
 
       <div class="topbar-right">
@@ -392,18 +460,37 @@
 
     <div class="canvas-viewport">
 
+      <!-- Daily 4 AM Motivational Quote Banner -->
+      <div class="quote-banner">
+        <div class="quote-tag"><i class="fas fa-sun"></i> आज का प्रेरणा विचार | Daily 4 AM Thought</div>
+        <div class="quote-hi" id="quoteTextHi">“उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।”</div>
+        <div class="quote-en" id="quoteTextEn">"Arise, awake, and stop not till the goal is reached."</div>
+        <div class="quote-author" id="quoteAuthor">— स्वामी विवेकानन्द (Swami Vivekananda)</div>
+      </div>
+
       <div id="view-courses" class="view-panel active">
-        <div class="card" style="background: linear-gradient(120deg, #0d233a, #1a365d); color: #fff;">
-          <h2 style="color: var(--accent); margin-bottom: 6px;">Enrollment Open: 2026 Competitive Batches</h2>
-          <p style="font-size: 0.92rem; color: #cbd5e1;">Master Advance Mathematics and High-Speed Reasoning directly under Bharti Sir. Pick individual courses or select combo packs with an automatic <strong>flat ₹800 discount</strong>.</p>
+        
+        <!-- Live Search Status Pill -->
+        <div id="searchStatusBanner">
+          <span id="searchStatusText">Showing matching courses...</span>
+          <button class="btn btn-outline" style="padding:2px 8px; font-size:0.75rem;" onclick="clearSearch()">Clear Filter</button>
         </div>
 
-        <div class="grid-2">
-          <div class="card course-card highlight">
+        <div class="grid-2" id="courseGridContainer">
+
+          <!-- SSC Comprehensive Card -->
+          <div class="card course-card highlight" data-tags="ssc cgl chsl mts cpo gd arithmetic advance maths reasoning staff selection commission tier 1 tier 2">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>SSC Comprehensive (CGL, CHSL, MTS)</h3>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete Arithmetic, Advance Maths Mastery & Analytical Reasoning.</p>
+              <h3>SSC Comprehensive Batch</h3>
+              <div class="badge-exam-tags">
+                <span class="exam-pill">CGL</span>
+                <span class="exam-pill">CHSL</span>
+                <span class="exam-pill">MTS</span>
+                <span class="exam-pill">CPO</span>
+                <span class="exam-pill">GD</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete Arithmetic, Advance Maths Mastery & Analytical Reasoning by Bharti Sir.</p>
               <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹3,000</strong></div>
               <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹5,000</del> ₹4,200</span></div>
@@ -415,11 +502,18 @@
             </div>
           </div>
 
-          <div class="card course-card highlight">
+          <!-- Railway RRB Card -->
+          <div class="card course-card highlight" data-tags="railway rrb ntpc group d alp technician rpf rrb je station master loco pilot calculation speed test">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>Railway (Graduation & Inter Level)</h3>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Specialized for RRB NTPC, Group D, and ALP calculation techniques.</p>
+              <h3>Railway RRB Super Batch</h3>
+              <div class="badge-exam-tags">
+                <span class="exam-pill">RRB NTPC</span>
+                <span class="exam-pill">Group D</span>
+                <span class="exam-pill">ALP / Tech</span>
+                <span class="exam-pill">RPF SI/Constable</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Specialized calculation step-skipping techniques and full reasoning drills.</p>
               <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹3,000</strong></div>
               <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹5,000</del> ₹4,200</span></div>
@@ -431,13 +525,20 @@
             </div>
           </div>
 
-          <div class="card course-card highlight">
+          <!-- Banking & Insurance Card -->
+          <div class="card course-card highlight" data-tags="bank banking ibps sbi po clerk rrb gramin bank lic rbi assistant quantitative aptitude di data interpretation">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>Banking (IBPS PO/Clerk, SBI, Gramin Bank)</h3>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">High-speed Data Interpretation & Critical Logical Reasoning.</p>
-              <div class="pricing-table-row"><span>Quantitative Aptitude Only:</span> <strong>₹2,500</strong></div>
-              <div class="pricing-table-row"><span>Reasoning Ability Only:</span> <strong>₹2,000</strong></div>
+              <h3>Banking & Insurance Foundation</h3>
+              <div class="badge-exam-tags">
+                <span class="exam-pill">IBPS PO</span>
+                <span class="exam-pill">SBI Clerk</span>
+                <span class="exam-pill">RRB Scale 1</span>
+                <span class="exam-pill">LIC AAO</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">High-speed Data Interpretation & Critical Logical Reasoning puzzles.</p>
+              <div class="pricing-table-row"><span>Quant Only:</span> <strong>₹2,500</strong></div>
+              <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹4,500</del> ₹3,700</span></div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
@@ -447,21 +548,30 @@
             </div>
           </div>
 
-          <div class="card course-card highlight">
+          <!-- Bihar Exams, BPSC, Police & State PCS Card -->
+          <div class="card course-card highlight" data-tags="bihar ssc bssc bpsc bihar police bihar si daroga constable jpsc jssc uppsc upsssc upsc defence cds police">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
-              <h3>Bihar SSC Exam & CDS (Defence)</h3>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Targeted syllabus coverage including state-specific mathematical patterns.</p>
+              <h3>State Exams, Police & Civil Services</h3>
+              <div class="badge-exam-tags">
+                <span class="exam-pill">BSSC Inter/Grad</span>
+                <span class="exam-pill">Bihar SI / Daroga</span>
+                <span class="exam-pill">Bihar Police Constable</span>
+                <span class="exam-pill">BPSC / JPSC</span>
+                <span class="exam-pill">UPSSSC / UPPSC</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 12px;">Complete General Maths, Numerical Ability, and Analytical Aptitude for State Tests.</p>
               <div class="pricing-table-row"><span>Maths Only:</span> <strong>₹2,500</strong></div>
               <div class="pricing-table-row"><span>Reasoning Only:</span> <strong>₹2,000</strong></div>
               <div class="pricing-table-row" style="color: var(--secondary); font-weight:700;"><span>Combo Pack:</span> <span><del style="color:#888; font-weight:normal;">₹4,500</del> ₹3,700</span></div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
-              <button class="btn btn-outline" onclick="triggerCheckout('BSSC/CDS Maths Only', 2500)">Buy Maths (₹2,500)</button>
-              <button class="btn btn-outline" onclick="triggerCheckout('BSSC/CDS Reasoning Only', 2000)">Buy Reasoning (₹2,000)</button>
-              <button class="btn btn-secondary" onclick="triggerCheckout('BSSC/CDS Complete Combo', 3700)">Enroll in Combo (₹3,700)</button>
+              <button class="btn btn-outline" onclick="triggerCheckout('BSSC/Police Maths Only', 2500)">Buy Maths (₹2,500)</button>
+              <button class="btn btn-outline" onclick="triggerCheckout('BSSC/Police Reasoning Only', 2000)">Buy Reasoning (₹2,000)</button>
+              <button class="btn btn-secondary" onclick="triggerCheckout('BSSC/Police Complete Combo', 3700)">Enroll in Combo (₹3,700)</button>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -492,9 +602,9 @@
               <button class="btn btn-outline btn-block" onclick="alert('Downloading Banking PYQ Archive & Video Playlist...')"><i class="fas fa-download"></i> Papers + Solutions</button>
             </div>
             <div class="card" style="margin:0; border: 1px solid var(--border);">
-              <h4>Bihar SSC (Inter & Graduate)</h4>
-              <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">Complete BSSC Solved Sets</p>
-              <button class="btn btn-outline btn-block" onclick="alert('Downloading BSSC PYQ Archive & Video Playlist...')"><i class="fas fa-download"></i> Papers + Solutions</button>
+              <h4>Bihar SSC & Police SI</h4>
+              <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">Complete BSSC & Daroga Sets</p>
+              <button class="btn btn-outline btn-block" onclick="alert('Downloading Bihar Exams PYQ Archive...')"><i class="fas fa-download"></i> Papers + Solutions</button>
             </div>
           </div>
         </div>
@@ -528,8 +638,9 @@
                 <option>SSC - General Intelligence & Reasoning</option>
                 <option>Banking - Quantitative Aptitude & DI</option>
                 <option>Railway - Arithmetic & Advance Maths</option>
-                <option>Bihar SSC - General Mathematics & Logic</option>
-                <option>CDS Exam - Elementary Mathematics</option>
+                <option>Bihar SSC / BSSC - General Mathematics & Logic</option>
+                <option>Bihar Police / SI (Daroga) - Numerical Ability</option>
+                <option>UPSC / BPSC / State PCS - CSAT Aptitude</option>
               </select>
             </div>
 
@@ -551,12 +662,12 @@
       <div id="view-assistant" class="view-panel">
         <div class="card">
           <h2>Bharti AI Helpdesk & Exam Counselor</h2>
-          <p style="color: var(--text-muted); margin-bottom: 15px;">Ask questions regarding batch timings, shortcut methods, or exam syllabus.</p>
-          <div id="chatDialogue" style="height:260px; overflow-y:auto; border:1px solid var(--border); padding:12px; border-radius:6px; background:#fafafa; margin-bottom:12px;">
+          <p style="color: var(--text-muted); margin-bottom: 15px;">Ask doubts, syllabus queries, or calculation tips directly in this window.</p>
+          <div id="chatDialogue" style="height:280px; overflow-y:auto; border:1px solid var(--border); padding:14px; border-radius:6px; background:#fafafa; margin-bottom:12px;">
             <p><strong>Bharti Desk:</strong> Namaste! How can I assist your competitive exam preparation today?</p>
           </div>
           <div style="display:flex; gap:8px;">
-            <input type="text" id="botInput" style="flex:1; padding:10px; border:1px solid var(--border); border-radius:6px;" placeholder="Type question here..." onkeydown="if(event.key==='Enter') dispatchBotMessage()" />
+            <input type="text" id="botInput" style="flex:1; padding:10px; border:1px solid var(--border); border-radius:6px;" placeholder="Type your doubt or question here..." onkeydown="if(event.key==='Enter') dispatchBotMessage()" />
             <button class="btn btn-primary" onclick="dispatchBotMessage()"><i class="fas fa-paper-plane"></i> Send</button>
           </div>
         </div>
@@ -630,16 +741,16 @@
     </div>
   </div>
 
-  <!-- Firebase Compatibility Libraries -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-  <!-- Complete Application & Auth Logic -->
+  <!-- Application Logic -->
   <script>
     let isUserLoggedIn = false;
     let activeLang = 'en';
 
-    // Firebase Configuration
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyA7ITxaiU2Ot_b6ucuyJ3Zb3uB5uv-wZw8",
       authDomain: "bharti-classes-a54fb.firebaseapp.com",
@@ -649,9 +760,127 @@
       appId: "1:320350203929:web:9f25da9a804cd02db8ba88"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    try {
+      firebase.initializeApp(firebaseConfig);
+    } catch(e) {
+      console.warn("Firebase already initialized or config loading error:", e);
+    }
 
-    // 1-Tap Google Sign-In
+    // Daily 4 AM Motivational Quote Auto-Rotator
+    const motivationalQuotes = [
+      {
+        hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य प्राप्त न हो जाए।",
+        en: "Arise, awake, and stop not till the goal is reached.",
+        author: "स्वामी विवेकानन्द (Swami Vivekananda)"
+      },
+      {
+        hi: "सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।",
+        en: "Dreams are not what you see in sleep, dreams are those that do not let you sleep.",
+        author: "डॉ. ए.पी.जे. अब्दुल कलाम (Dr. A.P.J. Abdul Kalam)"
+      },
+      {
+        hi: "शिक्षा वह शेरनी का दूध है जो पिएगा वह दहाड़ेगा।",
+        en: "Education is the milk of a lioness; whoever drinks it will roar.",
+        author: "डॉ. बी.आर. अम्बेडकर (Dr. B.R. Ambedkar)"
+      },
+      {
+        hi: "जिंदगी तो सिर्फ अपने दम पर जी जाती है, दूसरों के कंधों पर तो सिर्फ जनाजे उठाए जाते हैं।",
+        en: "Life is lived on one's own strength; on others' shoulders, only funerals are carried.",
+        author: "शहीद भगत सिंह (Shaheed Bhagat Singh)"
+      },
+      {
+        hi: "कठिन परिश्रम का कोई विकल्प नहीं होता। सफलता उसी को मिलती है जो निरंतर संघर्ष करता है।",
+        en: "There is no substitute for hard work. Success comes to those who persevere continuously.",
+        author: "सरदार वल्लभभाई पटेल (Sardar Vallabhbhai Patel)"
+      },
+      {
+        hi: "जिस व्यक्ति ने कभी गलती नहीं की, उसने कभी कुछ नया करने की कोशिश नहीं की।",
+        en: "A person who never made a mistake never tried anything new.",
+        author: "अल्बर्ट आइंस्टीन (Albert Einstein)"
+      },
+      {
+        hi: "शिक्षा सबसे शक्तिशाली हथियार है जिससे आप पूरी दुनिया बदल सकते हैं।",
+        en: "Education is the most powerful weapon which you can use to change the world.",
+        author: "नेल्सन मंडेला (Nelson Mandela)"
+      },
+      {
+        hi: "मुसीबतों से डरकर भागना कायरता है, उनका डटकर मुकाबला करना ही विजेता की पहचान है।",
+        en: "Running away from problems is cowardice; facing them head-on is the mark of a champion.",
+        author: "आचार्य चाणक्य (Acharya Chanakya)"
+      }
+    ];
+
+    function updateDailyQuote() {
+      // Calculates cycle offset so quote flips at 04:00 AM local time
+      const now = new Date();
+      const offsetMs = 4 * 60 * 60 * 1000;
+      const adjustedTime = new Date(now.getTime() - offsetMs);
+      const dayIndex = Math.floor(adjustedTime.getTime() / (24 * 60 * 60 * 1000));
+      const quote = motivationalQuotes[Math.abs(dayIndex) % motivationalQuotes.length];
+
+      document.getElementById('quoteTextHi').textContent = '“' + quote.hi + '”';
+      document.getElementById('quoteTextEn').textContent = '"' + quote.en + '"';
+      document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
+    }
+
+    // In-App Real-Time Exam Search Filter
+    function handleInAppSearch() {
+      const q = document.getElementById('omniQueryInput').value.trim().toLowerCase();
+      const cards = document.querySelectorAll('.course-card');
+      const banner = document.getElementById('searchStatusBanner');
+      const bannerText = document.getElementById('searchStatusText');
+
+      if (!q) {
+        cards.forEach(card => card.style.display = 'flex');
+        banner.style.display = 'none';
+        return;
+      }
+
+      // Ensure courses view is active when user searches
+      if (!document.getElementById('view-courses').classList.contains('active')) {
+        switchView('courses');
+      }
+
+      let matchCount = 0;
+      cards.forEach(card => {
+        const tags = (card.getAttribute('data-tags') || '').toLowerCase();
+        const content = card.innerText.toLowerCase();
+        if (tags.includes(q) || content.includes(q)) {
+          card.style.display = 'flex';
+          matchCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      banner.style.display = 'flex';
+      bannerText.textContent = `Found ${matchCount} course(s) matching "${q}"`;
+    }
+
+    function clearSearch() {
+      document.getElementById('omniQueryInput').value = '';
+      handleInAppSearch();
+    }
+
+    // In-App Query Dispatcher (Academic queries go to Assistant)
+    function handleInAppSearchSubmit() {
+      const q = document.getElementById('omniQueryInput').value.trim();
+      if (!q) return;
+
+      const examKeywords = ['ssc','cgl','chsl','mts','railway','rrb','ntpc','bank','ibps','sbi','bpsc','bssc','bihar ssc','police','si','daroga','constable','jpsc','jssc','uppsc','upssc','upsc','defence','cds'];
+      const isExamSearch = examKeywords.some(k => q.toLowerCase().includes(k));
+
+      if (isExamSearch) {
+        handleInAppSearch();
+      } else {
+        // Non-exam term (e.g. formula or general question): switch directly to in-app AI Desk
+        switchView('assistant');
+        document.getElementById('botInput').value = q;
+        dispatchBotMessage();
+      }
+    }
+
+    // Google Sign-In
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
@@ -667,7 +896,6 @@
         });
     }
 
-    // Modal Handlers
     function openAuthModal() {
       if (isUserLoggedIn) {
         alert('You are already logged in.');
@@ -680,7 +908,7 @@
       document.getElementById('authBackdrop').style.display = 'none';
     }
 
-    // View Switching Controller
+    // Navigation View Switcher
     function switchView(viewKey, navElement) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -709,23 +937,6 @@
       document.getElementById('appSidebar').classList.toggle('open');
     }
 
-    // Multi-Engine Search
-    function executeOmniSearch() {
-      const engine = document.getElementById('engineType').value;
-      const q = document.getElementById('omniQueryInput').value.trim();
-      if (!q) return alert('Please enter a query.');
-
-      if (engine === 'app') {
-        alert('Filtering Bharti Classes database for: "' + q + '"');
-      } else if (engine === 'gemini') {
-        window.open('https://gemini.google.com/app?q=' + encodeURIComponent(q), '_blank');
-      } else if (engine === 'chatgpt') {
-        window.open('https://chatgpt.com/?q=' + encodeURIComponent(q), '_blank');
-      } else if (engine === 'google') {
-        window.open('https://www.google.com/search?q=' + encodeURIComponent('Bharti Classes ' + q), '_blank');
-      }
-    }
-
     // Checkout Flow
     function triggerCheckout(courseName, fee) {
       if (!isUserLoggedIn) {
@@ -743,19 +954,19 @@
       alert('Payment successful via ' + method + '! Course access added to your profile.');
     }
 
-    // Scholarship Screening Test
+    // Scholarship Test
     function runScholarshipExam() {
       if (!isUserLoggedIn) {
-        alert('Please login with your Google account before attempting the Scholarship Exam.');
+        alert('Please login before attempting the Scholarship Exam.');
         return openAuthModal();
       }
-      const score = prompt('Simulated Test Score (Enter your score out of 100):', '85');
+      const score = prompt('Enter simulated score (out of 100):', '85');
       if (score !== null) {
-        const numericScore = parseInt(score, 10);
-        if (numericScore >= 80) {
-          alert('Congratulations! You scored ' + numericScore + '%. You passed the Bharti Classes Screening Test!\nAll courses are 100% FREE OF COST for you.');
+        const num = parseInt(score, 10);
+        if (num >= 80) {
+          alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you under the Bharti Talent Initiative.');
         } else {
-          alert('You scored ' + numericScore + '%. Qualifying mark is 80%. You can re-attempt or enroll with regular combo discounts.');
+          alert('You scored ' + num + '%. Qualifying mark is 80%. You can re-attempt or enroll directly.');
         }
       }
     }
@@ -764,10 +975,10 @@
     function handleDoubtSubmit(e) {
       e.preventDefault();
       if (!isUserLoggedIn) {
-        alert('You must be logged in to raise a question.');
+        alert('Please login to submit a doubt.');
         return openAuthModal();
       }
-      alert('Your doubt and media files have been submitted to Vishwa Bharti Sir for review!');
+      alert('Your question has been dispatched directly to Vishwa Bharti Sir!');
       e.target.reset();
     }
 
@@ -782,18 +993,28 @@
         '</ol>';
     }
 
-    // Assistant Bot
+    // In-App AI Assistant Desk
     function dispatchBotMessage() {
       const input = document.getElementById('botInput');
       const val = input.value.trim();
       if (!val) return;
       const box = document.getElementById('chatDialogue');
-      box.innerHTML += '<p style="margin-top:6px;"><strong>You:</strong> ' + val + '</p>';
+      box.innerHTML += '<p style="margin-top:8px;"><strong>You:</strong> ' + val + '</p>';
       input.value = '';
+
       setTimeout(() => {
-        box.innerHTML += '<p style="margin-top:6px; color:var(--primary);"><strong>Bharti Desk:</strong> For quick admission inquiries or batch timings, you can also speak directly with Vishwa Bharti Sir on <strong>8271750420</strong>.</p>';
+        let reply = "For admission inquiries, special batch timings, and Advance Maths batches, you can also reach Vishwa Bharti Sir directly on <strong>8271750420</strong>.";
+        const lower = val.toLowerCase();
+        if (lower.includes('bssc') || lower.includes('bihar ssc')) {
+          reply = "For Bihar SSC (Inter & Graduate Level), our special batch covers complete General Mathematics, Speed Calculation, and Analytical Reasoning.";
+        } else if (lower.includes('police') || lower.includes('si') || lower.includes('daroga')) {
+          reply = "Bihar SI (Daroga) and Police Constable batches focus on high-scoring Arithmetic, Geometry shortcuts, and Mental Ability test sets.";
+        } else if (lower.includes('ssc') || lower.includes('cgl')) {
+          reply = "SSC CGL / CHSL Comprehensive batches cover Tier 1 & Tier 2 complete Advance Maths (Algebra, Trigonometry, Geometry, Mensuration) and Reasoning.";
+        }
+        box.innerHTML += '<p style="margin-top:8px; color:var(--primary);"><strong>Bharti Desk:</strong> ' + reply + '</p>';
         box.scrollTop = box.scrollHeight;
-      }, 500);
+      }, 400);
     }
 
     // Bilingual Support
@@ -820,6 +1041,9 @@
         document.getElementById('navMentor').textContent = 'About Vishwa Sir';
       }
     }
+
+    // Initialize Quote on load
+    window.addEventListener('DOMContentLoaded', updateDailyQuote);
   </script>
 </body>
 </html>
