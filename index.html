@@ -594,23 +594,17 @@
   </div>
 
   <div class="modal-backdrop" id="authBackdrop">
-    <div class="modal-box">
-      <h3 style="margin-bottom:6px;">Mobile Login & OTP Verification</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Login with your phone number to access enrolled courses and submit questions.</p>
+    <div class="modal-box" style="text-align: center;">
+      <h3 style="margin-bottom: 8px;">Student Login</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+        Sign in with your Google account to access courses, submit doubts, and take practice tests.
+      </p>
 
-      <div id="stepPhone">
-        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Mobile Number</label>
-        <input type="tel" id="txtMobile" placeholder="e.g., 8271750420" maxlength="10" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; margin-bottom:12px;" />
-        <button class="btn btn-primary btn-block" onclick="sendOtp()">Send OTP</button>
-      </div>
+      <button class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; background: #4285f4;" onclick="loginWithGoogle()">
+        <i class="fab fa-google"></i> Continue with Google
+      </button>
 
-      <div id="stepOtp" style="display:none;">
-        <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:5px;">Enter 6-Digit OTP</label>
-        <input type="text" id="txtOtp" placeholder="123456" maxlength="6" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; margin-bottom:12px;" />
-        <button class="btn btn-secondary btn-block" onclick="verifyOtp()">Confirm & Log In</button>
-      </div>
-
-      <button class="btn btn-outline btn-block" style="margin-top:8px;" onclick="closeAuthModal()">Cancel</button>
+      <button class="btn btn-outline btn-block" style="margin-top: 10px;" onclick="closeAuthModal()">Cancel</button>
     </div>
   </div>
 
@@ -666,33 +660,15 @@
     let confirmationResultPayload = null;
 
     // Real Mobile SMS OTP Sender
-    function sendOtp() {
-      const numInput = document.getElementById('txtMobile');
-      if (!numInput) return alert('Input element not found.');
-      const rawNumber = numInput.value.trim();
+// Real Mobile SMS OTP Sender
+ function sendOtp() {
+   ...
+ }
 
-      if (rawNumber.length !== 10) {
-        alert('Please enter a valid 10-digit Indian mobile number.');
-        return;
-      }
-      const fullPhoneNumber = "+91" + rawNumber;
-
-      firebase.auth().signInWithPhoneNumber(fullPhoneNumber, window.recaptchaVerifier)
-        .then((confirmationResult) => {
-          confirmationResultPayload = confirmationResult;
-          document.getElementById('stepPhone').style.display = 'none';
-          document.getElementById('stepOtp').style.display = 'block';
-          alert('Real SMS OTP has been dispatched to ' + fullPhoneNumber);
-        }).catch((error) => {
-          alert('Firebase SMS Error: ' + error.message);
-          if (window.recaptchaVerifier && typeof grecaptcha !== 'undefined') {
-            window.recaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));
-          }
-        });
-    }
-
-    // Real OTP Confirmation
-    function verifyOtp() {
+ // Real OTP Verification
+ function verifyOtp() {
+   ...
+ }
       const codeInput = document.getElementById('txtOtp');
       if (!codeInput) return alert('OTP input field not found.');
       const enteredCode = codeInput.value.trim();
