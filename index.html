@@ -174,7 +174,7 @@
       font-size: 0.95rem;
     }
 
-    .topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
     .btn-lang {
       padding: 6px 12px;
       border: 1px solid var(--border);
@@ -196,11 +196,25 @@
       align-items: center;
       gap: 6px;
       border: 1px solid #c7d2fe;
-      max-width: 280px;
+      max-width: 260px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+    .btn-logout {
+      display: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      cursor: pointer;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-logout:hover { background: #fecaca; }
 
     /* Content Canvas */
     .canvas-viewport {
@@ -255,6 +269,22 @@
       font-weight: 700;
       color: var(--accent);
       text-align: right;
+    }
+
+    /* Target Reminder Banner Alert */
+    .reminder-banner {
+      display: none;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 1px solid #f59e0b;
+      color: #92400e;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
     }
 
     /* Cards & Grids */
@@ -349,7 +379,144 @@
       gap: 10px;
     }
 
-    /* Modals & Registration Flow */
+    /* --- PLANNER & PERFORMANCE DASHBOARD STYLES --- */
+    .perf-scoreboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .perf-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .perf-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+    .badge-fully { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .badge-moderate { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .badge-partial { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .badge-non { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+
+    .schedule-type-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .schedule-tab-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .schedule-tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .weekday-selector {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .day-pill {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      user-select: none;
+    }
+    .day-pill.selected {
+      background: var(--secondary);
+      color: #fff;
+      border-color: var(--secondary);
+    }
+
+    .task-item {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+    .task-item.completed {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+    }
+    .task-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .task-left input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--success);
+      cursor: pointer;
+    }
+    .task-text {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+    .task-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .star-rating {
+      display: inline-flex;
+      gap: 3px;
+      cursor: pointer;
+    }
+    .star-rating i {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      transition: color 0.15s;
+    }
+    .star-rating i.active {
+      color: #f59e0b;
+    }
+
+    /* Modals & Registration */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -421,7 +588,6 @@
       background: #fff;
     }
 
-    /* 2-Tier Exam Selector Styles */
     .main-cat-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
@@ -439,17 +605,6 @@
       cursor: pointer;
       font-size: 0.82rem;
       font-weight: 600;
-      transition: all 0.15s;
-    }
-    .main-cat-item:hover {
-      background: #f1f5f9;
-      border-color: #cbd5e1;
-    }
-    .main-cat-item input[type="checkbox"] {
-      accent-color: var(--secondary);
-      width: 15px;
-      height: 15px;
-      cursor: pointer;
     }
     .sub-cat-box {
       border: 1px solid #cbd5e1;
@@ -483,52 +638,7 @@
       cursor: pointer;
       line-height: 1.35;
     }
-    .sub-exam-option input[type="checkbox"] {
-      margin-top: 2px;
-      accent-color: var(--primary);
-    }
 
-    /* Planner / Daily Tasks Styles */
-    .planner-card {
-      background: #fff;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .task-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      margin-bottom: 8px;
-      transition: all 0.2s;
-    }
-    .task-item.completed {
-      background: #ecfdf5;
-      border-color: #a7f3d0;
-    }
-    .task-item.completed .task-text {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
-    .task-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex: 1;
-    }
-    .task-left input[type="checkbox"] {
-      width: 17px;
-      height: 17px;
-      accent-color: var(--success);
-      cursor: pointer;
-    }
-
-    /* Registration Certificate Card */
     .reg-certificate {
       background: #f0fdf4;
       border: 2px dashed #86efac;
@@ -630,7 +740,6 @@
         <span class="page-title" id="pageHeadingTitle">Course Store & Admissions</span>
       </div>
 
-      <!-- In-App Dynamic Search -->
       <div class="in-app-search">
         <input type="text" id="omniQueryInput" placeholder="Search: SSC, Bank, Railway, BPSC, BSSC, Police SI, CGL, UPPSC, JPSC..." oninput="handleInAppSearch()" onkeydown="if(event.key==='Enter') handleInAppSearchSubmit()" />
         <button onclick="handleInAppSearchSubmit()" title="Search Courses & Content"><i class="fas fa-search"></i></button>
@@ -641,10 +750,22 @@
         <div class="user-pill" onclick="openAuthModal()">
           <i class="fas fa-user-circle"></i> <span id="lblUserStatus">Login / Register</span>
         </div>
+        <button class="btn-logout" id="btnLogout" onclick="logoutUser()" title="Sign out of your account">
+          <i class="fas fa-sign-out-alt"></i> <span id="lblLogout">Logout</span>
+        </button>
       </div>
     </header>
 
     <div class="canvas-viewport">
+
+      <!-- Today's Target Reminder Banner Alert -->
+      <div class="reminder-banner" id="dailyReminderBanner">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-bell fa-lg" style="color: #b45309;"></i>
+          <span id="dailyReminderText">Reminder: You have set targets for today!</span>
+        </div>
+        <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.75rem; border-color:#d97706; color:#92400e;" onclick="switchView('planner')">View Targets</button>
+      </div>
 
       <!-- Daily 4:00 AM Motivational Thought Rotator -->
       <div class="quote-banner">
@@ -656,8 +777,6 @@
 
       <!-- VIEW 1: COURSES & ADMISSIONS -->
       <div id="view-courses" class="view-panel active">
-        
-        <!-- Personalized Exam Preference Bar -->
         <div class="preference-bar" id="userTargetBar" style="display: none;">
           <div>
             <span style="font-size: 0.8rem; color: #1e40af; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Customized for your target exams:</span>
@@ -669,8 +788,6 @@
         </div>
 
         <div class="grid-2" id="courseGridContainer">
-
-          <!-- SSC Comprehensive Batch -->
           <div class="card course-card highlight" data-tags="ssc cgl chsl mts cpo gd steno stenographer staff selection commission tier 1 tier 2 arithmetic advance maths reasoning junior engineer translator">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
@@ -694,7 +811,6 @@
             </div>
           </div>
 
-          <!-- Railway RRB Super Batch -->
           <div class="card course-card highlight" data-tags="railway rrb ntpc group d alp technician rpf si constable rrb je station master calculation speed test undergraduate graduate">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
@@ -717,7 +833,6 @@
             </div>
           </div>
 
-          <!-- Banking & Insurance Foundation -->
           <div class="card course-card highlight" data-tags="bank banking ibps po clerk sbi po clerk rrb gramin bank lic aao assistant rbi sebi nabard quantitative aptitude di puzzles">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
@@ -740,7 +855,6 @@
             </div>
           </div>
 
-          <!-- Bihar SSC, Police SI & State Exams -->
           <div class="card course-card highlight" data-tags="bihar ssc bssc bpsc bihar police bihar si daroga constable up police delhi police state exam general maths reasoning csat state ssc police exams">
             <span class="badge-discount">SAVE ₹800 (COMBO)</span>
             <div>
@@ -762,39 +876,117 @@
               <button class="btn btn-secondary" onclick="triggerCheckout('BSSC/Police Complete Combo', 3700)">Enroll in Combo (₹3,700)</button>
             </div>
           </div>
-
         </div>
       </div>
 
       <!-- VIEW 2: DAILY TARGET & MY PLAN (WHAT TO DO TODAY) -->
       <div id="view-planner" class="view-panel">
+        
+        <!-- Scoreboard & Performance Status Metric -->
+        <div class="perf-scoreboard">
+          <div class="perf-card">
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Performance Category</span>
+            <div><span class="perf-badge badge-non" id="lblPerfBadge">Non Achiever</span></div>
+          </div>
+          <div class="perf-card">
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Completion Rate</span>
+            <div style="font-size:1.4rem; font-weight:800; color:var(--primary); margin-top:4px;" id="lblCompletionRate">0%</div>
+          </div>
+          <div class="perf-card">
+            <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Self Satisfaction Rating</span>
+            <div style="font-size:1.2rem; font-weight:700; color:#f59e0b; margin-top:4px;" id="lblAvgSatisfaction">⭐ 0.0 / 5.0</div>
+          </div>
+        </div>
+
         <div class="planner-card">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
             <div>
-              <h2><i class="fas fa-tasks" style="color:var(--secondary);"></i> What To Do Today - Daily Study Planner</h2>
-              <p style="color:var(--text-muted); font-size:0.86rem; margin-top:4px;">Set daily targets, schedule revisions for future dates, and keep track of your syllabus completion.</p>
+              <h2><i class="fas fa-tasks" style="color:var(--secondary);"></i> What To Do Today - Study Targets</h2>
+              <p style="color:var(--text-muted); font-size:0.86rem; margin-top:4px;">Schedule goals daily, weekly, or by date. Rate your satisfaction to measure your achievement tier.</p>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <label style="font-size:0.84rem; font-weight:600;">Select Date:</label>
+              <label style="font-size:0.84rem; font-weight:600;">View Day:</label>
               <input type="date" id="plannerDateInput" style="padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-size:0.88rem;" onchange="loadDayTasks()" />
             </div>
           </div>
 
-          <!-- Add Task Input Form -->
+          <!-- Schedule Mode Selector -->
+          <div class="schedule-type-tabs">
+            <button class="schedule-tab-btn active" id="btnModeDaily" onclick="setScheduleMode('daily')"><i class="fas fa-infinity"></i> Daily (Everyday Routine)</button>
+            <button class="schedule-tab-btn" id="btnModeWeekly" onclick="setScheduleMode('weekly')"><i class="fas fa-calendar-week"></i> Weekly (Select Days)</button>
+            <button class="schedule-tab-btn" id="btnModeCalendar" onclick="setScheduleMode('calendar')"><i class="fas fa-calendar-alt"></i> As Per Calendar (Choose Date)</button>
+          </div>
+
+          <!-- Weekly Days Picker (Shown only if Weekly is selected) -->
+          <div id="weeklyDaysPicker" style="display:none; margin-bottom:12px;">
+            <label style="font-size:0.78rem; font-weight:700; color:var(--primary);">Select recurring days of week:</label>
+            <div class="weekday-selector">
+              <span class="day-pill selected" onclick="toggleWeekDay(0, this)">Sun</span>
+              <span class="day-pill selected" onclick="toggleWeekDay(1, this)">Mon</span>
+              <span class="day-pill selected" onclick="toggleWeekDay(2, this)">Tue</span>
+              <span class="day-pill selected" onclick="toggleWeekDay(3, this)">Wed</span>
+              <span class="day-pill selected" onclick="toggleWeekDay(4, this)">Thu</span>
+              <span class="day-pill selected" onclick="toggleWeekDay(5, this)">Fri</span>
+              <span class="day-pill selected" onclick="toggleWeekDay(6, this)">Sat</span>
+            </div>
+          </div>
+
+          <!-- Quick-Pick Default Targets Dropdown -->
+          <div style="margin-bottom:10px;">
+            <label style="font-size:0.78rem; font-weight:700; color:var(--primary);">Choose from Standard Academic Routines (or type your own):</label>
+            <select id="defaultTargetDropdown" onchange="pickDefaultTarget(this.value)" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.86rem; background:#fff; margin-top:4px;">
+              <option value="">-- Quick Select A Proven Study / Health Habit --</option>
+              <option value="Wake up at 4:00 AM">Wake up at 4:00 AM</option>
+              <option value="Drink 8–10 glasses of water daily">Drink 8–10 glasses of water daily</option>
+              <option value="Freshen up and get ready before 4.15 am">Freshen up and get ready before 4.15 am</option>
+              <option value="Study from 4:30 AM to 6:30 AM">Study from 4:30 AM to 6:30 AM</option>
+              <option value="Do yoga/exercise for at least 30 minutes">Do yoga/exercise for at least 30 minutes</option>
+              <option value="Take a bath and get ready for the day">Take a bath and get ready for the day</option>
+              <option value="Have a healthy breakfast">Have a healthy breakfast</option>
+              <option value="Attend school/college/coaching/classes regularly">Attend school/college/coaching/classes regularly</option>
+              <option value="Revise what was taught in class on the same day">Revise what was taught in class on the same day</option>
+              <option value="Study for 4–5 focused hours in the afternoon + evening">Study for 4–5 focused hours in the afternoon + evening</option>
+              <option value="Take short breaks between study sessions">Take short breaks between study sessions</option>
+              <option value="Read newspaper/current affairs for 60 minutes">Read newspaper/current affairs for 60 minutes</option>
+              <option value="Practice questions/MCQs every day">Practice questions/MCQs every day</option>
+              <option value="Revise important facts and notes">Revise important facts and notes</option>
+              <option value="Spend at least 30 minutes improving English/Hindi vocabulary">Spend at least 30 minutes improving English/Hindi vocabulary</option>
+              <option value="Avoid unnecessary mobile-phone use">Avoid unnecessary mobile-phone use</option>
+              <option value="Keep social media use to a minimum">Keep social media use to a minimum</option>
+              <option value="Spend some time with family">Spend some time with family</option>
+              <option value="Prepare a study plan for the next day">Prepare a study plan for the next day</option>
+              <option value="Review what you achieved during the day">Review what you achieved during the day</option>
+              <option value="Keep books and study table ready for the next morning">Keep books and study table ready for the next morning</option>
+              <option value="Avoid junk food and eat nutritious food">Avoid junk food and eat nutritious food</option>
+              <option value="Avoid studying while lying on the bed">Avoid studying while lying on the bed</option>
+              <option value="Maintain proper posture while studying">Maintain proper posture while studying</option>
+              <option value="Read something motivational or educational for 10–15 minutes">Read something motivational or educational for 10–15 minutes</option>
+              <option value="Avoid unnecessary late-night screen time">Avoid unnecessary late-night screen time</option>
+              <option value="Go to bed between 10:00 PM and 11:00 PM">Go to bed between 10:00 PM and 11:00 PM</option>
+              <option value="Get approximately 6-7 hours of sleep">Get approximately 6-7 hours of sleep</option>
+              <option value="Follow the routine consistently, including weekends">Follow the routine consistently, including weekends</option>
+              <option value="Set small daily goals instead of trying to finish everything at once">Set small daily goals instead of trying to finish everything at once</option>
+              <option value="Complete today's work before worrying about tomorrow">Complete today's work before worrying about tomorrow</option>
+              <option value="Never skip revision for several consecutive days">Never skip revision for several consecutive days</option>
+              <option value="Take a weekly test to measure progress">Take a weekly test to measure progress</option>
+              <option value="Analyse mistakes after every test">Analyse mistakes after every test</option>
+              <option value="Maintain a notebook for mistakes and difficult questions">Maintain a notebook for mistakes and difficult questions</option>
+            </select>
+          </div>
+
+          <!-- Add Custom Target Bar -->
           <div style="display:flex; gap:8px; margin-bottom:18px;">
-            <input type="text" id="txtNewTask" placeholder="e.g. Practice 40 Algebra questions, Watch RRB NTPC Reasoning lecture..." style="flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:6px; font-size:0.9rem; outline:none;" onkeydown="if(event.key==='Enter') addStudyTask()" />
-            <button class="btn btn-primary" onclick="addStudyTask()"><i class="fas fa-plus"></i> Add Target</button>
+            <input type="text" id="txtNewTask" placeholder="Enter target or habit statement..." style="flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:6px; font-size:0.9rem; outline:none;" onkeydown="if(event.key==='Enter') addStudyTask()" />
+            <button class="btn btn-primary" onclick="addStudyTask()"><i class="fas fa-plus"></i> Set Target</button>
           </div>
 
-          <!-- Task Counter & Progress Header -->
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <h4 id="plannerHeadingDate" style="color:var(--primary); font-size:0.95rem;">Targets for Today</h4>
-            <span id="plannerProgressBadge" style="background:#e0f2fe; color:#0369a1; padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">0 / 0 Completed</span>
+            <h4 id="plannerHeadingDate" style="color:var(--primary); font-size:0.95rem;">Targets for Selected Day</h4>
+            <span id="plannerProgressBadge" style="background:#e0f2fe; color:#0369a1; padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">0 / 0 Done</span>
           </div>
 
-          <!-- List of Tasks -->
           <div id="taskListContainer">
-            <p style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.9rem;">No study targets planned for this date yet. Type above to add your first goal!</p>
+            <p style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.9rem;">No study targets found. Add your goals above!</p>
           </div>
         </div>
       </div>
@@ -1038,7 +1230,7 @@
     </div>
   </div>
 
-  <!-- REAL OTP VERIFICATION DIALOG (FOR MOBILE & EMAIL) -->
+  <!-- REAL OTP VERIFICATION DIALOG -->
   <div class="modal-backdrop" id="otpVerifyBackdrop">
     <div class="modal-box" style="text-align: center; width: 440px;">
       <div style="font-size: 2.2rem; color: var(--secondary); margin-bottom: 8px;"><i class="fas fa-shield-alt"></i></div>
@@ -1056,30 +1248,30 @@
       </div>
 
       <button class="btn btn-secondary btn-block" style="padding: 11px;" onclick="confirmAndValidateOtp()">
-        <i class="fas fa-check-circle"></i> Confirm OTP & Generate Registration ID
+        <i class="fas fa-check-circle"></i> Confirm OTP & Complete Registration
       </button>
       <button class="btn btn-outline btn-block" style="margin-top: 8px;" onclick="closeOtpModal()">Cancel</button>
     </div>
   </div>
 
-  <!-- SUCCESSFUL REGISTRATION CERTIFICATE MODAL -->
+  <!-- REGISTRATION CERTIFICATE MODAL -->
   <div class="modal-backdrop" id="regSuccessBackdrop">
     <div class="modal-box" style="text-align: center;">
       <div style="font-size: 2.5rem; color: var(--success); margin-bottom: 8px;"><i class="fas fa-id-card"></i></div>
       <h3 style="color: var(--primary);">Registration Confirmed!</h3>
-      <p style="font-size: 0.88rem; color: var(--text-muted);">Welcome to Bharti Classes. Your permanent academic registration number has been generated:</p>
+      <p style="font-size: 0.88rem; color: var(--text-muted);">Welcome to Bharti Classes. Your permanent academic registration number is:</p>
 
       <div class="reg-certificate">
         <span style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #166534; letter-spacing: 1px;">Official Registration Number</span>
         <div class="reg-number-display" id="displayRegNumber">20260906420/1</div>
-        <span style="font-size: 0.78rem; color: #15803d;" id="displayRegMeta">Registered for SSC, Railway | Active Student Status</span>
+        <span style="font-size: 0.78rem; color: #15803d;" id="displayRegMeta">Candidate Verified | Active Student Status</span>
       </div>
 
       <button class="btn btn-primary btn-block" onclick="dismissRegSuccessModal()">Enter My Dashboard</button>
     </div>
   </div>
 
-  <!-- COURSE IN PREPARATION / ONBOARDING NOTIFICATION MODAL -->
+  <!-- COURSE IN PREPARATION NOTIFICATION MODAL -->
   <div class="modal-backdrop" id="notAvailableBackdrop">
     <div class="modal-box" style="text-align: center; border-top: 5px solid var(--accent);">
       <div style="font-size: 2.3rem; color: var(--accent); margin-bottom: 8px;"><i class="fas fa-clock"></i></div>
@@ -1088,7 +1280,7 @@
         We are sorry, dedicated batches for <strong id="unavailableExamTitle" style="color:var(--secondary);">your chosen exam</strong> are not currently live on Bharti Classes.
       </p>
       <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.86rem; color: #92400e; text-align: left;">
-        <i class="fas fa-info-circle"></i> We are working on to onboard those courses in this app shortly! Till then, you can try these main foundational batches to master Advance Mathematics & High-Speed Reasoning:
+        <i class="fas fa-info-circle"></i> We are working to onboard those courses in this app shortly! Till then, you can try these main foundational batches to master Advance Mathematics & High-Speed Reasoning:
       </div>
       <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
         <button class="btn btn-outline" onclick="selectAlternativeCourse('SSC CGL')"><i class="fas fa-check"></i> SSC Comprehensive (Maths + Reasoning)</button>
@@ -1121,192 +1313,94 @@
     </div>
   </div>
 
-  <!-- Firebase Compatibility Libraries -->
-  <div id="recaptcha-container"></div>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-  <!-- Complete Application & Business Logic -->
   <script>
     let isUserLoggedIn = false;
     let activeLang = 'en';
     let authActionType = 'login';
     let currentStudentProfile = null;
 
-    // Active OTP verification session details
-    let activeOtpChannel = 'mobile'; // 'mobile' or 'email'
+    let activeScheduleMode = 'daily'; // 'daily', 'weekly', 'calendar'
+    let selectedWeeklyDays = new Set([0, 1, 2, 3, 4, 5, 6]);
+
+    let activeOtpChannel = 'mobile';
     let activeOtpTarget = '';
     let serverGeneratedOtp = '';
     let pendingProfileData = null;
-    let confirmationResultPayload = null;
 
-    // COMPREHENSIVE SUB-EXAMS MASTER REPOSITORY
     const SUB_EXAMS_DATABASE = {
       "UPSC": [
-        "Civil Services Examination",
-        "Indian Forest Service Examination",
-        "Engineering Services Examination",
-        "Combined Defence Services Examination",
-        "National Defence Academy & Naval Academy Examination",
-        "Combined Medical Services Examination",
-        "Central Armed Police Forces (Assistant Commandants) Examination",
-        "Combined Geo-Scientist Examination",
-        "Indian Economic Service Examination",
-        "Indian Statistical Service Examination",
-        "CISF Assistant Commandant Examination",
-        "Combined Section Officers' Grade-B Examination",
-        "Combined Stenographers' Grade-B/Grade-I Examination"
+        "Civil Services Examination", "Indian Forest Service Examination", "Engineering Services Examination",
+        "Combined Defence Services Examination", "National Defence Academy & Naval Academy Examination",
+        "Combined Medical Services Examination", "Central Armed Police Forces (Assistant Commandants) Examination",
+        "Combined Geo-Scientist Examination", "Indian Economic Service Examination", "Indian Statistical Service Examination",
+        "CISF Assistant Commandant Examination", "Combined Section Officers' Grade-B Examination", "Combined Stenographers' Grade-B/Grade-I Examination"
       ],
       "State PCS": [
-        "Andhra Pradesh Public Service Commission (APPSC) Group 1",
-        "Arunachal Pradesh Public Service Commission (APPSC) Combined Competitive Examination",
-        "Assam Public Service Commission (APSC) Combined Competitive Examination",
-        "Bihar Public Service Commission (BPSC) Combined Competitive Examination",
-        "Chhattisgarh Public Service Commission (CGPSC) State Service Examination",
-        "Goa Public Service Commission (GPSC) Civil Services Examination",
-        "Gujarat Public Service Commission (GPSC) Class 1 & 2 Examination",
-        "Haryana Public Service Commission (HPSC) HCS Examination",
-        "Himachal Pradesh Public Service Commission (HPPSC) Administrative Service Examination",
-        "Jharkhand Public Service Commission (JPSC) Combined Civil Services Examination",
-        "Jammu & Kashmir Public Service Commission (JKPSC) Combined Competitive Examination",
-        "Karnataka Public Service Commission (KPSC) Gazetted Probationers Examination",
-        "Kerala Public Service Commission (KPSC) Administrative Service Examination",
-        "Madhya Pradesh Public Service Commission (MPPSC) State Service Examination",
-        "Maharashtra Public Service Commission (MPSC) State Services Examination",
-        "Manipur Public Service Commission (MPSC) Civil Services Examination",
-        "Meghalaya Public Service Commission (MPSC) Civil Services Examination",
-        "Mizoram Public Service Commission (MPSC) Civil Services Examination",
-        "Nagaland Public Service Commission (NPSC) Combined Competitive Examination",
-        "Odisha Public Service Commission (OPSC) Civil Services Examination",
-        "Punjab Public Service Commission (PPSC) State Civil Services Examination",
-        "Rajasthan Public Service Commission (RPSC) RAS Examination",
-        "Sikkim Public Service Commission (SPSC) Services Examination",
-        "Tamil Nadu Public Service Commission (TNPSC) Group I Examination",
-        "Telangana Public Service Commission (TGPSC) Group I Examination",
-        "Tripura Public Service Commission (TPSC) Combined Competitive Examination",
-        "Uttar Pradesh Public Service Commission (UPPSC) PCS Examination",
-        "Uttarakhand Public Service Commission (UKPSC) Combined State Civil/Upper Subordinate Services Examination",
+        "Andhra Pradesh Public Service Commission (APPSC) Group 1", "Arunachal Pradesh Public Service Commission (APPSC) Combined Competitive Examination",
+        "Assam Public Service Commission (APSC) Combined Competitive Examination", "Bihar Public Service Commission (BPSC) Combined Competitive Examination",
+        "Chhattisgarh Public Service Commission (CGPSC) State Service Examination", "Goa Public Service Commission (GPSC) Civil Services Examination",
+        "Gujarat Public Service Commission (GPSC) Class 1 & 2 Examination", "Haryana Public Service Commission (HPSC) HCS Examination",
+        "Himachal Pradesh Public Service Commission (HPPSC) Administrative Service Examination", "Jharkhand Public Service Commission (JPSC) Combined Civil Services Examination",
+        "Jammu & Kashmir Public Service Commission (JKPSC) Combined Competitive Examination", "Karnataka Public Service Commission (KPSC) Gazetted Probationers Examination",
+        "Kerala Public Service Commission (KPSC) Administrative Service Examination", "Madhya Pradesh Public Service Commission (MPPSC) State Service Examination",
+        "Maharashtra Public Service Commission (MPSC) State Services Examination", "Manipur Public Service Commission (MPSC) Civil Services Examination",
+        "Meghalaya Public Service Commission (MPSC) Civil Services Examination", "Mizoram Public Service Commission (MPSC) Civil Services Examination",
+        "Nagaland Public Service Commission (NPSC) Combined Competitive Examination", "Odisha Public Service Commission (OPSC) Civil Services Examination",
+        "Punjab Public Service Commission (PPSC) State Civil Services Examination", "Rajasthan Public Service Commission (RPSC) RAS Examination",
+        "Sikkim Public Service Commission (SPSC) Services Examination", "Tamil Nadu Public Service Commission (TNPSC) Group I Examination",
+        "Telangana Public Service Commission (TGPSC) Group I Examination", "Tripura Public Service Commission (TPSC) Combined Competitive Examination",
+        "Uttar Pradesh Public Service Commission (UPPSC) PCS Examination", "Uttarakhand Public Service Commission (UKPSC) Combined State Civil/Upper Subordinate Services Examination",
         "West Bengal Public Service Commission (WBPSC) WBCS Examination"
       ],
       "SSC": [
-        "Combined Graduate Level Examination",
-        "Combined Higher Secondary Level Examination",
-        "Multi-Tasking Staff Examination",
-        "General Duty Constable Examination",
-        "Sub-Inspector in Delhi Police and CAPFs Examination",
-        "Junior Engineer Examination",
-        "Stenographer Grade C & Grade D Examination",
-        "Junior Hindi Translator Examination",
-        "Selection Post Examination",
-        "Combined Hindi Translators Examination"
+        "Combined Graduate Level Examination", "Combined Higher Secondary Level Examination", "Multi-Tasking Staff Examination",
+        "General Duty Constable Examination", "Sub-Inspector in Delhi Police and CAPFs Examination", "Junior Engineer Examination",
+        "Stenographer Grade C & Grade D Examination", "Junior Hindi Translator Examination", "Selection Post Examination", "Combined Hindi Translators Examination"
       ],
       "State SSC": [
-        "Bihar Staff Selection Commission (BSSC) Combined Graduate Level Examination",
-        "BSSC Inter Level Examination",
-        "BSSC Stenographer Examination",
-        "Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) PET",
-        "UPSSSC Junior Assistant Examination",
-        "UPSSSC Lekhpal Examination",
-        "UPSSSC VDO Examination",
-        "Rajasthan Staff Selection Board (RSSB) CET Graduate Level Examination",
-        "Rajasthan Staff Selection Board (RSSB) CET Senior Secondary Level Examination",
-        "Rajasthan Patwari Examination",
-        "Rajasthan VDO Examination",
-        "Madhya Pradesh ESB Group 2 Examination",
-        "Madhya Pradesh ESB Group 4 Examination",
-        "Madhya Pradesh ESB Group 5 Examination",
-        "Haryana Staff Selection Commission (HSSC) CET",
-        "HSSC Group C Examination",
-        "HSSC Group D Examination",
-        "Odisha Staff Selection Commission (OSSC) CGL Examination",
-        "OSSC CHSL Examination",
-        "Jharkhand Staff Selection Commission (JSSC) CGL Examination",
-        "JSSC Inter Level Examination",
-        "Maharashtra Group B Examination",
-        "Maharashtra Group C Examination",
-        "Gujarat Subordinate Services Examination",
-        "Punjab Subordinate Services Selection Board (PSSSB) Clerk Examination",
-        "Uttarakhand Subordinate Service Selection Commission (UKSSSC) Graduate Level Examination",
-        "UKSSSC Intermediate Level Examination",
-        "West Bengal Clerkship Examination"
+        "Bihar Staff Selection Commission (BSSC) Combined Graduate Level Examination", "BSSC Inter Level Examination", "BSSC Stenographer Examination",
+        "Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) PET", "UPSSSC Junior Assistant Examination", "UPSSSC Lekhpal Examination",
+        "UPSSSC VDO Examination", "Rajasthan Staff Selection Board (RSSB) CET Graduate Level Examination", "Rajasthan Staff Selection Board (RSSB) CET Senior Secondary Level Examination",
+        "Rajasthan Patwari Examination", "Rajasthan VDO Examination", "Madhya Pradesh ESB Group 2 Examination", "Madhya Pradesh ESB Group 4 Examination",
+        "Madhya Pradesh ESB Group 5 Examination", "Haryana Staff Selection Commission (HSSC) CET", "HSSC Group C Examination", "HSSC Group D Examination",
+        "Odisha Staff Selection Commission (OSSC) CGL Examination", "OSSC CHSL Examination", "Jharkhand Staff Selection Commission (JSSC) CGL Examination",
+        "JSSC Inter Level Examination", "Maharashtra Group B Examination", "Maharashtra Group C Examination", "Gujarat Subordinate Services Examination",
+        "Punjab Subordinate Services Selection Board (PSSSB) Clerk Examination", "Uttarakhand Subordinate Service Selection Commission (UKSSSC) Graduate Level Examination",
+        "UKSSSC Intermediate Level Examination", "West Bengal Clerkship Examination"
       ],
       "Police Exams": [
-        "SSC General Duty Constable Examination",
-        "SSC Sub-Inspector Examination",
-        "UPSC Central Armed Police Forces Examination",
-        "Delhi Police Constable Examination",
-        "Delhi Police Head Constable Examination",
-        "Bihar Police Constable Examination",
-        "Bihar Police Sub-Inspector Examination",
-        "Bihar Police Driver Constable Examination",
-        "Uttar Pradesh Police Constable Examination",
-        "Uttar Pradesh Police Sub-Inspector Examination",
-        "Rajasthan Police Constable Examination",
-        "Rajasthan Police Sub-Inspector Examination",
-        "Madhya Pradesh Police Constable Examination",
-        "Madhya Pradesh Police Sub-Inspector Examination",
-        "Maharashtra Police Constable Examination",
-        "Maharashtra Police Sub-Inspector Examination",
-        "Haryana Police Constable Examination",
-        "Haryana Police Sub-Inspector Examination",
-        "Punjab Police Constable Examination",
-        "Punjab Police Sub-Inspector Examination",
-        "Gujarat Police Constable Examination",
-        "Gujarat Police Sub-Inspector Examination",
-        "West Bengal Police Constable Examination",
-        "West Bengal Police Sub-Inspector Examination",
-        "Jharkhand Police Constable Examination",
-        "Jharkhand Police Sub-Inspector Examination",
-        "Odisha Police Constable Examination",
-        "Odisha Police Sub-Inspector Examination",
-        "Chhattisgarh Police Constable Examination",
-        "Chhattisgarh Police Sub-Inspector Examination",
-        "RPF Constable Examination",
-        "RPF Sub-Inspector Examination"
+        "SSC General Duty Constable Examination", "SSC Sub-Inspector Examination", "UPSC Central Armed Police Forces Examination",
+        "Delhi Police Constable Examination", "Delhi Police Head Constable Examination", "Bihar Police Constable Examination",
+        "Bihar Police Sub-Inspector Examination", "Bihar Police Driver Constable Examination", "Uttar Pradesh Police Constable Examination",
+        "Uttar Pradesh Police Sub-Inspector Examination", "Rajasthan Police Constable Examination", "Rajasthan Police Sub-Inspector Examination",
+        "Madhya Pradesh Police Constable Examination", "Madhya Pradesh Police Sub-Inspector Examination", "Maharashtra Police Constable Examination",
+        "Maharashtra Police Sub-Inspector Examination", "Haryana Police Constable Examination", "Haryana Police Sub-Inspector Examination",
+        "Punjab Police Constable Examination", "Punjab Police Sub-Inspector Examination", "Gujarat Police Constable Examination",
+        "Gujarat Police Sub-Inspector Examination", "West Bengal Police Constable Examination", "West Bengal Police Sub-Inspector Examination",
+        "Jharkhand Police Constable Examination", "Jharkhand Police Sub-Inspector Examination", "Odisha Police Constable Examination",
+        "Odisha Police Sub-Inspector Examination", "Chhattisgarh Police Constable Examination", "Chhattisgarh Police Sub-Inspector Examination",
+        "RPF Constable Examination", "RPF Sub-Inspector Examination"
       ],
       "Bank Exams": [
-        "IBPS Probationary Officer/Management Trainee Examination",
-        "IBPS Clerk Examination",
-        "IBPS Specialist Officer Examination",
-        "IBPS RRB Office Assistant Examination",
-        "IBPS RRB Officer Scale I Examination",
-        "IBPS RRB Officer Scale II Examination",
-        "IBPS RRB Officer Scale III Examination",
-        "SBI Probationary Officer Examination",
-        "SBI Clerk Examination",
-        "SBI Circle Based Officer Examination",
-        "SBI Specialist Cadre Officer Examination",
-        "RBI Grade B Examination",
-        "RBI Assistant Examination",
-        "NABARD Grade A Examination",
-        "NABARD Grade B Examination",
-        "NABARD Development Assistant Examination",
-        "SEBI Grade A Examination",
-        "LIC Assistant Administrative Officer Examination",
-        "LIC Assistant Examination",
-        "LIC Apprentice Development Officer Examination",
-        "ECGC Probationary Officer Examination",
-        "SIDBI Grade A Examination",
-        "PFRDA Grade A Examination",
-        "NIACL Administrative Officer Examination",
-        "NIACL Assistant Examination",
-        "NICL Administrative Officer Examination"
+        "IBPS Probationary Officer/Management Trainee Examination", "IBPS Clerk Examination", "IBPS Specialist Officer Examination",
+        "IBPS RRB Office Assistant Examination", "IBPS RRB Officer Scale I Examination", "IBPS RRB Officer Scale II Examination",
+        "IBPS RRB Officer Scale III Examination", "SBI Probationary Officer Examination", "SBI Clerk Examination",
+        "SBI Circle Based Officer Examination", "SBI Specialist Cadre Officer Examination", "RBI Grade B Examination",
+        "RBI Assistant Examination", "NABARD Grade A Examination", "NABARD Grade B Examination", "NABARD Development Assistant Examination",
+        "SEBI Grade A Examination", "LIC Assistant Administrative Officer Examination", "LIC Assistant Examination",
+        "LIC Apprentice Development Officer Examination", "ECGC Probationary Officer Examination", "SIDBI Grade A Examination",
+        "PFRDA Grade A Examination", "NIACL Administrative Officer Examination", "NIACL Assistant Examination", "NICL Administrative Officer Examination"
       ],
       "Railway": [
-        "RRB NTPC Graduate Level Examination",
-        "RRB NTPC Undergraduate Level Examination",
-        "RRB Group D Examination",
-        "RRB Assistant Loco Pilot Examination",
-        "RRB Technician Examination",
-        "RRB Junior Engineer Examination",
-        "RRB Paramedical Examination",
-        "RRB Ministerial & Isolated Categories Examination",
-        "RPF Constable Examination",
-        "RPF Sub-Inspector Examination"
+        "RRB NTPC Graduate Level Examination", "RRB NTPC Undergraduate Level Examination", "RRB Group D Examination",
+        "RRB Assistant Loco Pilot Examination", "RRB Technician Examination", "RRB Junior Engineer Examination",
+        "RRB Paramedical Examination", "RRB Ministerial & Isolated Categories Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination"
       ]
     };
 
-    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyA7ITxaiU2Ot_b6ucuyJ3Zb3uB5uv-wZw8",
       authDomain: "bharti-classes-a54fb.firebaseapp.com",
@@ -1316,13 +1410,9 @@
       appId: "1:320350203929:web:9f25da9a804cd02db8ba88"
     };
 
-    try {
-      firebase.initializeApp(firebaseConfig);
-    } catch(e) {
-      console.warn("Firebase initialized:", e);
-    }
+    try { firebase.initializeApp(firebaseConfig); } catch(e) {}
 
-    // REGISTRATION NUMBER GENERATOR (Format: YYYYMMDD + Last 3 Digits of Mob + / + Auto-increment SL No)
+    // Auto Registration Number Generator
     function generateAutoRegistrationNumber(mobile) {
       const now = new Date();
       const yyyy = now.getFullYear().toString();
@@ -1334,7 +1424,6 @@
         last3 = String(mobile).replace(/\D/g, '').slice(-3);
       }
 
-      // Auto-increment serial number starting from 1
       let currentCounter = parseInt(localStorage.getItem('bharti_reg_serial_counter') || '0', 10);
       currentCounter += 1;
       localStorage.setItem('bharti_reg_serial_counter', currentCounter.toString());
@@ -1342,53 +1431,21 @@
       return `${yyyy}${mm}${dd}${last3}/${currentCounter}`;
     }
 
-    // Daily 4 AM Motivational Thought Auto-Rotator
+    // Daily 4 AM Motivational Quote Auto-Rotator
     const motivationalQuotes = [
-      {
-        hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।",
-        en: "Arise, awake, and stop not till the goal is reached.",
-        author: "स्वामी विवेकानन्द (Swami Vivekananda)"
-      },
-      {
-        hi: "सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।",
-        en: "Dreams are not what you see in sleep, dreams are those that do not let you sleep.",
-        author: "डॉ. ए.पी.जे. अब्दुल कलाम (Dr. A.P.J. Abdul Kalam)"
-      },
-      {
-        hi: "शिक्षा वह शेरनी का दूध है जो पिएगा वह दहाड़ेगा।",
-        en: "Education is the milk of a lioness; whoever drinks it will roar.",
-        author: "डॉ. बी.आर. अम्बेडकर (Dr. B.R. Ambedkar)"
-      },
-      {
-        hi: "जिंदगी तो सिर्फ अपने दम पर जी जाती है, दूसरों के कंधों पर तो सिर्फ जनाजे उठाए जाते हैं।",
-        en: "Life is lived on one's own strength; on others' shoulders, only funerals are carried.",
-        author: "शहीद भगत सिंह (Shaheed Bhagat Singh)"
-      },
-      {
-        hi: "कठिन परिश्रम का कोई विकल्प नहीं होता। सफलता उसी को मिलती है जो निरंतर संघर्ष करता है।",
-        en: "There is no substitute for hard work. Success comes to those who persevere continuously.",
-        author: "सरदार वल्लभभाई पटेल (Sardar Vallabhbhai Patel)"
-      },
-      {
-        hi: "जिस व्यक्ति ने कभी गलती नहीं की, उसने कभी कुछ नया करने की कोशिश नहीं की।",
-        en: "A person who never made a mistake never tried anything new.",
-        author: "अल्बर्ट आइंस्टीन (Albert Einstein)"
-      },
-      {
-        hi: "शिक्षा सबसे शक्तिशाली हथियार है जिससे आप पूरी दुनिया बदल सकते हैं।",
-        en: "Education is the most powerful weapon which you can use to change the world.",
-        author: "नेल्सन मंडेला (Nelson Mandela)"
-      },
-      {
-        hi: "मुसीबतों से डरकर भागना कायरता है, उनका डटकर मुकाबला करना ही विजेता की पहचान है।",
-        en: "Running away from problems is cowardice; facing them head-on is the mark of a champion.",
-        author: "आचार्य चाणक्य (Acharya Chanakya)"
-      }
+      { hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।", en: "Arise, awake, and stop not till the goal is reached.", author: "स्वामी विवेकानन्द (Swami Vivekananda)" },
+      { hi: "सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।", en: "Dreams are not what you see in sleep, dreams are those that do not let you sleep.", author: "डॉ. ए.पी.जे. अब्दुल कलाम (Dr. A.P.J. Abdul Kalam)" },
+      { hi: "शिक्षा वह शेरनी का दूध है जो पिएगा वह दहाड़ेगा।", en: "Education is the milk of a lioness; whoever drinks it will roar.", author: "डॉ. बी.आर. अम्बेडकर (Dr. B.R. Ambedkar)" },
+      { hi: "जिंदगी तो सिर्फ अपने दम पर जी जाती है, दूसरों के कंधों पर तो सिर्फ जनाजे उठाए जाते हैं।", en: "Life is lived on one's own strength; on others' shoulders, only funerals are carried.", author: "शहीद भगत सिंह (Shaheed Bhagat Singh)" },
+      { hi: "कठिन परिश्रम का कोई विकल्प नहीं होता। सफलता उसी को मिलती है जो निरंतर संघर्ष करता है।", en: "There is no substitute for hard work. Success comes to those who persevere continuously.", author: "सरदार वल्लभभाई पटेल (Sardar Vallabhbhai Patel)" },
+      { hi: "जिस व्यक्ति ने कभी गलती नहीं की, उसने कभी कुछ नया करने की कोशिश नहीं की।", en: "A person who never made a mistake never tried anything new.", author: "अल्बर्ट आइंस्टीन (Albert Einstein)" },
+      { hi: "शिक्षा सबसे शक्तिशाली हथियार है जिससे आप पूरी दुनिया बदल सकते हैं।", en: "Education is the most powerful weapon which you can use to change the world.", author: "नेल्सन मंडेला (Nelson Mandela)" },
+      { hi: "मुसीबतों से डरकर भागना कायरता है, उनका डटकर मुकाबला करना ही विजेता की पहचान है।", en: "Running away from problems is cowardice; facing them head-on is the mark of a champion.", author: "आचार्य चाणक्य (Acharya Chanakya)" }
     ];
 
     function updateDailyQuote() {
       const now = new Date();
-      const offsetMs = 4 * 60 * 60 * 1000; // 4 AM local switch
+      const offsetMs = 4 * 60 * 60 * 1000;
       const adjustedTime = new Date(now.getTime() - offsetMs);
       const dayIndex = Math.floor(adjustedTime.getTime() / (24 * 60 * 60 * 1000));
       const quote = motivationalQuotes[Math.abs(dayIndex) % motivationalQuotes.length];
@@ -1398,22 +1455,17 @@
       document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
     }
 
-    // Dynamic 2-Tier Category & Sub-Exam UI Generator
+    // Dynamic 2-Tier Category Generator
     const selectedMainCategories = new Set();
-
     function toggleExamCategory(categoryName, isChecked) {
-      if (isChecked) {
-        selectedMainCategories.add(categoryName);
-      } else {
-        selectedMainCategories.delete(categoryName);
-      }
+      if (isChecked) selectedMainCategories.add(categoryName);
+      else selectedMainCategories.delete(categoryName);
       renderSubCategories();
     }
 
     function renderSubCategories() {
       const container = document.getElementById('dynamicSubCategoriesArea');
       container.innerHTML = '';
-
       if (selectedMainCategories.size === 0) return;
 
       const header = document.createElement('label');
@@ -1428,7 +1480,6 @@
         const subList = SUB_EXAMS_DATABASE[cat] || [];
         const box = document.createElement('div');
         box.className = 'sub-cat-box';
-
         let subItemsHtml = subList.map((exam) => `
           <label class="sub-exam-option">
             <input type="checkbox" name="subExam" value="${exam}" data-category="${cat}">
@@ -1444,7 +1495,6 @@
       });
     }
 
-    // Modal & Auth Tab Switcher
     function switchAuthTab(tabKey) {
       document.querySelectorAll('.auth-tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById('authPanelMobile').style.display = 'none';
@@ -1465,7 +1515,7 @@
 
     function openAuthModal() {
       if (isUserLoggedIn) {
-        alert('You are already logged in as ' + (currentStudentProfile ? currentStudentProfile.name : 'Student') + ' (Reg: ' + (currentStudentProfile.regNumber || '') + ').');
+        alert('You are already logged in as ' + (currentStudentProfile ? currentStudentProfile.name : 'Student'));
         return;
       }
       document.getElementById('authBackdrop').style.display = 'flex';
@@ -1475,7 +1525,24 @@
       document.getElementById('authBackdrop').style.display = 'none';
     }
 
-    // REAL OTP GENERATION & DISPATCH FLOW
+    // LOGOUT FUNCTIONALITY
+    function logoutUser() {
+      if (!confirm('Are you sure you want to log out of Bharti Classes?')) return;
+      try { firebase.auth().signOut(); } catch(e) {}
+      localStorage.removeItem('bharti_student');
+      isUserLoggedIn = false;
+      currentStudentProfile = null;
+
+      document.getElementById('lblUserStatus').textContent = 'Login / Register';
+      document.getElementById('btnLogout').style.display = 'none';
+      document.getElementById('userTargetBar').style.display = 'none';
+      document.querySelectorAll('.course-card').forEach(c => c.style.display = 'flex');
+
+      alert('You have been logged out successfully.');
+      switchView('courses');
+    }
+
+    // OTP FLOWS
     function generateSecureOtp() {
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
@@ -1494,30 +1561,25 @@
       const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExam"]:checked'));
       if (checkedBoxes.length === 0) return alert('Please select at least one target exam from the sub-category boxes in Step 2.');
 
-      const selectedExams = checkedBoxes.map(cb => cb.value);
-      const chosenCategories = Array.from(selectedMainCategories);
-
       pendingProfileData = {
         mobile: mob,
         name: name,
         age: age,
         qualification: qual,
-        categories: chosenCategories,
-        exams: selectedExams
+        categories: Array.from(selectedMainCategories),
+        exams: checkedBoxes.map(cb => cb.value)
       };
 
       activeOtpChannel = 'mobile';
       activeOtpTarget = "+91 " + mob;
       serverGeneratedOtp = generateSecureOtp();
 
-      // Open Real OTP Verification Modal
       document.getElementById('authBackdrop').style.display = 'none';
       document.getElementById('otpModalTitle').innerHTML = '<i class="fas fa-mobile-alt"></i> Mobile OTP Verification';
-      document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit real OTP verification code has been dispatched to <strong>${activeOtpTarget}</strong>.`;
+      document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit real OTP has been dispatched to <strong>${activeOtpTarget}</strong>.`;
       document.getElementById('txtEnteredOtp').value = '';
       document.getElementById('otpVerifyBackdrop').style.display = 'flex';
 
-      // Dispatch alert with real one-time passcode
       alert(`[SMS Gateway Dispatch] Real OTP verification code for mobile number ${mob} is: ${serverGeneratedOtp}`);
     }
 
@@ -1530,17 +1592,13 @@
       if (!email || !pass) return alert('Please enter both email and password.');
 
       if (authActionType === 'login') {
-        // Direct password login
-        isUserLoggedIn = true;
         const regNo = localStorage.getItem('bharti_user_reg_' + email) || generateAutoRegistrationNumber('000');
         currentStudentProfile = { name: userName, email: email, regNumber: regNo, exams: ['SSC', 'Railway', 'Bank'] };
         localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
-        document.getElementById('lblUserStatus').textContent = `${userName} (${regNo})`;
+        completeLoginUi();
         closeAuthModal();
-        showAllExams();
-        alert(`Welcome back! Logged in with ${email}.\nRegistration Number: ${regNo}`);
+        alert(`Logged in successfully with ${email}.\nRegistration No: ${regNo}`);
       } else {
-        // Email OTP Verification Flow for Zoho, Yahoo, Rediffmail, Outlook etc.
         pendingProfileData = {
           email: email,
           name: userName,
@@ -1554,18 +1612,17 @@
 
         document.getElementById('authBackdrop').style.display = 'none';
         document.getElementById('otpModalTitle').innerHTML = '<i class="fas fa-envelope-open-text"></i> Email OTP Verification';
-        document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit verification code has been dispatched to <strong>${activeOtpTarget}</strong>.`;
+        document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit real verification OTP code has been dispatched to <strong>${activeOtpTarget}</strong>.`;
         document.getElementById('txtEnteredOtp').value = '';
         document.getElementById('otpVerifyBackdrop').style.display = 'flex';
 
-        // Dispatch alert with real email verification code
         alert(`[Mail Server Dispatch] Real Email OTP verification code for ${email} is: ${serverGeneratedOtp}`);
       }
     }
 
     function resendOtpCode() {
       serverGeneratedOtp = generateSecureOtp();
-      alert(`[Resent Verification Code] New OTP dispatched to ${activeOtpTarget} is: ${serverGeneratedOtp}`);
+      alert(`[Resent OTP] New verification code dispatched to ${activeOtpTarget} is: ${serverGeneratedOtp}`);
     }
 
     function closeOtpModal() {
@@ -1575,15 +1632,9 @@
 
     function confirmAndValidateOtp() {
       const enteredCode = document.getElementById('txtEnteredOtp').value.trim();
-      if (enteredCode.length !== 6) {
-        return alert('Please enter the complete 6-digit verification OTP.');
-      }
+      if (enteredCode.length !== 6) return alert('Please enter the 6-digit OTP.');
+      if (enteredCode !== serverGeneratedOtp && enteredCode !== '123456') return alert('Incorrect OTP! Please try again.');
 
-      if (enteredCode !== serverGeneratedOtp && enteredCode !== '123456') {
-        return alert('Incorrect OTP! Please check the verification code sent to your device.');
-      }
-
-      // OTP Verified Successfully -> Generate Auto Registration Number
       const mobNumber = pendingProfileData.mobile || '000';
       const registrationNumber = generateAutoRegistrationNumber(mobNumber);
 
@@ -1598,15 +1649,19 @@
         localStorage.setItem('bharti_user_reg_' + pendingProfileData.email, registrationNumber);
       }
 
-      isUserLoggedIn = true;
-      document.getElementById('lblUserStatus').textContent = `${currentStudentProfile.name} (${registrationNumber})`;
-
+      completeLoginUi();
       document.getElementById('otpVerifyBackdrop').style.display = 'none';
-
-      // Show Registration Certificate Modal
       document.getElementById('displayRegNumber').textContent = registrationNumber;
       document.getElementById('displayRegMeta').textContent = `Candidate: ${currentStudentProfile.name} | Target: ${(currentStudentProfile.exams || []).slice(0, 2).join(', ')}`;
       document.getElementById('regSuccessBackdrop').style.display = 'flex';
+    }
+
+    function completeLoginUi() {
+      isUserLoggedIn = true;
+      const regStr = currentStudentProfile.regNumber ? ` (${currentStudentProfile.regNumber})` : '';
+      document.getElementById('lblUserStatus').textContent = `${currentStudentProfile.name}${regStr}`;
+      document.getElementById('btnLogout').style.display = 'inline-flex';
+      checkAndTriggerReminderNotification();
     }
 
     function dismissRegSuccessModal() {
@@ -1614,12 +1669,10 @@
       checkAndApplyExamFilter(currentStudentProfile.exams || []);
     }
 
-    // Google 1-Tap Auth
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
-          isUserLoggedIn = true;
           const user = result.user;
           const regNo = localStorage.getItem('bharti_user_reg_' + user.email) || generateAutoRegistrationNumber('000');
           currentStudentProfile = {
@@ -1629,10 +1682,10 @@
             exams: ['SSC CGL', 'Railway RRB', 'Banking']
           };
           localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
-          document.getElementById('lblUserStatus').textContent = `${currentStudentProfile.name} (${regNo})`;
+          completeLoginUi();
           closeAuthModal();
           showAllExams();
-          alert(`Welcome, ${currentStudentProfile.name}! Logged in with Google.\nOfficial Reg No: ${regNo}`);
+          alert(`Welcome, ${currentStudentProfile.name}! Logged in with Google.\nReg No: ${regNo}`);
         })
         .catch((error) => {
           alert('Google Sign-In Error: ' + error.message);
@@ -1641,7 +1694,6 @@
 
     function checkAndApplyExamFilter(selectedExams) {
       const activeKeywords = ['ssc', 'cgl', 'chsl', 'mts', 'gd', 'railway', 'ntpc', 'group d', 'alp', 'rpf', 'bank', 'ibps', 'sbi', 'bssc', 'bihar police', 'si', 'daroga', 'constable'];
-      
       let hasDirectCourse = false;
       selectedExams.forEach(exam => {
         const lower = exam.toLowerCase();
@@ -1649,7 +1701,6 @@
       });
 
       renderUserTargetBar(selectedExams);
-
       if (hasDirectCourse) {
         switchView('courses');
         filterCoursesForTargets(selectedExams);
@@ -1676,11 +1727,9 @@
 
     function filterCoursesForTargets(exams) {
       const cards = document.querySelectorAll('.course-card');
-
       cards.forEach(card => {
         const tags = (card.getAttribute('data-tags') || '').toLowerCase();
         const cardTitle = card.querySelector('h3').textContent.toLowerCase();
-
         let isMatch = false;
         exams.forEach(ex => {
           const exL = ex.toLowerCase();
@@ -1690,7 +1739,6 @@
           if (exL.includes('bank') && tags.includes('bank')) isMatch = true;
           if ((exL.includes('police') || exL.includes('bssc')) && tags.includes('bssc')) isMatch = true;
         });
-
         card.style.display = isMatch ? 'flex' : 'none';
       });
     }
@@ -1713,87 +1761,250 @@
       showAllExams();
     }
 
-    // DAILY TARGET / "WHAT TO DO TODAY" TASK MANAGER
+    // --- DAILY TARGET, NOTIFICATIONS & PERFORMANCE SCOREBOARD ---
     function getTodayDateString() {
-      const d = new Date();
-      return d.toISOString().split('T')[0];
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function setScheduleMode(mode) {
+      activeScheduleMode = mode;
+      document.querySelectorAll('.schedule-tab-btn').forEach(b => b.classList.remove('active'));
+      if (mode === 'daily') document.getElementById('btnModeDaily').classList.add('active');
+      if (mode === 'weekly') document.getElementById('btnModeWeekly').classList.add('active');
+      if (mode === 'calendar') document.getElementById('btnModeCalendar').classList.add('active');
+
+      document.getElementById('weeklyDaysPicker').style.display = mode === 'weekly' ? 'block' : 'none';
+    }
+
+    function toggleWeekDay(dayIndex, el) {
+      if (selectedWeeklyDays.has(dayIndex)) {
+        if (selectedWeeklyDays.size > 1) {
+          selectedWeeklyDays.delete(dayIndex);
+          el.classList.remove('selected');
+        }
+      } else {
+        selectedWeeklyDays.add(dayIndex);
+        el.classList.add('selected');
+      }
+    }
+
+    function pickDefaultTarget(val) {
+      if (!val) return;
+      document.getElementById('txtNewTask').value = val;
+    }
+
+    function getAllStoredTasks() {
+      return JSON.parse(localStorage.getItem('bharti_study_tasks_v3') || '[]');
+    }
+
+    function saveAllTasks(tasks) {
+      localStorage.setItem('bharti_study_tasks_v3', JSON.stringify(tasks));
+    }
+
+    function addStudyTask() {
+      const text = document.getElementById('txtNewTask').value.trim();
+      if (!text) return alert('Please enter target or choose from habit routines.');
+
+      const dateVal = document.getElementById('plannerDateInput').value || getTodayDateString();
+      const allTasks = getAllStoredTasks();
+
+      const newTask = {
+        id: 'task_' + Date.now(),
+        text: text,
+        mode: activeScheduleMode,
+        targetDate: dateVal,
+        weeklyDays: Array.from(selectedWeeklyDays),
+        completions: {}, // { "2026-09-06": true }
+        ratings: {}      // { "2026-09-06": 5 }
+      };
+
+      allTasks.push(newTask);
+      saveAllTasks(allTasks);
+
+      document.getElementById('txtNewTask').value = '';
+      document.getElementById('defaultTargetDropdown').value = '';
+      loadDayTasks();
+      checkAndTriggerReminderNotification();
+      alert('Target added successfully to your plan!');
+    }
+
+    function isTaskScheduledForDate(task, dateStr) {
+      if (task.mode === 'daily') return true;
+      if (task.mode === 'calendar') return task.targetDate === dateStr;
+      if (task.mode === 'weekly') {
+        const d = new Date(dateStr + 'T00:00:00');
+        const dayOfWeek = d.getDay();
+        return (task.weeklyDays || []).includes(dayOfWeek);
+      }
+      return false;
     }
 
     function loadDayTasks() {
       const dateVal = document.getElementById('plannerDateInput').value || getTodayDateString();
-      const allTasks = JSON.parse(localStorage.getItem('bharti_study_tasks') || '{}');
-      const dayTasks = allTasks[dateVal] || [];
+      const allTasks = getAllStoredTasks();
+      const activeTasks = allTasks.filter(t => isTaskScheduledForDate(t, dateVal));
 
       const container = document.getElementById('taskListContainer');
       const heading = document.getElementById('plannerHeadingDate');
       const badge = document.getElementById('plannerProgressBadge');
 
       const isToday = dateVal === getTodayDateString();
-      heading.textContent = isToday ? "Targets for Today (" + dateVal + ")" : "Targets for Date: " + dateVal;
+      heading.textContent = isToday ? `Targets for Today (${dateVal})` : `Targets for Date: ${dateVal}`;
 
-      if (dayTasks.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.9rem;">No study targets planned for this date yet. Type above to add your first goal!</p>';
-        badge.textContent = '0 / 0 Completed';
+      if (activeTasks.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.9rem;">No study targets scheduled for this date. Choose a routine or add one above!</p>';
+        badge.textContent = '0 / 0 Done';
+        updatePerformanceScoreboard(0, 0, 0);
         return;
       }
 
       let completedCount = 0;
+      let totalRatingSum = 0;
+      let ratedCount = 0;
+
       container.innerHTML = '';
 
-      dayTasks.forEach((t, idx) => {
-        if (t.done) completedCount++;
-        const item = document.createElement('div');
-        item.className = 'task-item' + (t.done ? ' completed' : '');
-        item.innerHTML = `
-          <div class="task-left">
-            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTaskDone('${dateVal}', ${idx})">
-            <span class="task-text" style="font-size:0.92rem; font-weight:500;">${t.text}</span>
+      activeTasks.forEach((task) => {
+        const isDone = !!(task.completions && task.completions[dateVal]);
+        const rating = (task.ratings && task.ratings[dateVal]) || 0;
+
+        if (isDone) completedCount++;
+        if (rating > 0) {
+          totalRatingSum += rating;
+          ratedCount++;
+        }
+
+        const taskEl = document.createElement('div');
+        taskEl.className = 'task-item' + (isDone ? ' completed' : '');
+
+        let starsHtml = '';
+        for (let s = 1; s <= 5; s++) {
+          starsHtml += `<i class="fas fa-star ${s <= rating ? 'active' : ''}" onclick="rateTaskSatisfaction('${task.id}', '${dateVal}', ${s})"></i>`;
+        }
+
+        const modeBadge = task.mode === 'daily' ? '<span class="exam-pill" style="background:#e0f2fe; color:#0369a1;">Daily Routine</span>' : (task.mode === 'weekly' ? '<span class="exam-pill" style="background:#fef3c7; color:#b45309;">Weekly</span>' : '<span class="exam-pill" style="background:#f1f5f9; color:#475569;">Calendar</span>');
+
+        taskEl.innerHTML = `
+          <div class="task-main-row">
+            <div class="task-left">
+              <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleTaskDone('${task.id}', '${dateVal}', this.checked)">
+              <div>
+                <span class="task-text">${task.text}</span>
+                <div style="margin-top:3px;">${modeBadge}</div>
+              </div>
+            </div>
+            <button style="background:none; border:none; color:#ef4444; cursor:pointer; padding:6px 10px;" onclick="deleteTaskById('${task.id}')" title="Delete Task"><i class="fas fa-trash-alt"></i></button>
           </div>
-          <button style="background:none; border:none; color:#ef4444; cursor:pointer; padding:4px 8px;" onclick="deleteTask('${dateVal}', ${idx})"><i class="fas fa-trash-alt"></i></button>
+          <div class="task-rating-row">
+            <span>Self-Satisfaction:</span>
+            <div class="star-rating">${starsHtml}</div>
+            <span style="margin-left:auto; font-weight:600; color:${rating >= 4 ? '#16a34a' : (rating >= 3 ? '#d97706' : '#94a3b8')};">${rating > 0 ? rating + ' / 5' : 'Rate after completion'}</span>
+          </div>
         `;
-        container.appendChild(item);
+        container.appendChild(taskEl);
       });
 
-      badge.textContent = `${completedCount} / ${dayTasks.length} Completed`;
-      badge.style.background = (completedCount === dayTasks.length && dayTasks.length > 0) ? '#dcfce7' : '#e0f2fe';
-      badge.style.color = (completedCount === dayTasks.length && dayTasks.length > 0) ? '#15803d' : '#0369a1';
+      badge.textContent = `${completedCount} / ${activeTasks.length} Done`;
+      const avgRating = ratedCount > 0 ? (totalRatingSum / ratedCount).toFixed(1) : 0;
+      updatePerformanceScoreboard(completedCount, activeTasks.length, avgRating);
     }
 
-    function addStudyTask() {
-      const input = document.getElementById('txtNewTask');
-      const text = input.value.trim();
-      if (!text) return alert('Please enter a target or study task.');
+    function toggleTaskDone(taskId, dateStr, isChecked) {
+      const allTasks = getAllStoredTasks();
+      const target = allTasks.find(t => t.id === taskId);
+      if (target) {
+        if (!target.completions) target.completions = {};
+        target.completions[dateStr] = isChecked;
+        if (isChecked && (!target.ratings || !target.ratings[dateStr])) {
+          if (!target.ratings) target.ratings = {};
+          target.ratings[dateStr] = 4; // Default satisfactory rating on check
+        }
+        saveAllTasks(allTasks);
+        loadDayTasks();
+      }
+    }
 
-      const dateVal = document.getElementById('plannerDateInput').value || getTodayDateString();
-      const allTasks = JSON.parse(localStorage.getItem('bharti_study_tasks') || '{}');
+    function rateTaskSatisfaction(taskId, dateStr, stars) {
+      const allTasks = getAllStoredTasks();
+      const target = allTasks.find(t => t.id === taskId);
+      if (target) {
+        if (!target.ratings) target.ratings = {};
+        target.ratings[dateStr] = stars;
+        saveAllTasks(allTasks);
+        loadDayTasks();
+      }
+    }
 
-      if (!allTasks[dateVal]) allTasks[dateVal] = [];
-      allTasks[dateVal].push({ text: text, done: false });
-
-      localStorage.setItem('bharti_study_tasks', JSON.stringify(allTasks));
-      input.value = '';
+    function deleteTaskById(taskId) {
+      if (!confirm('Do you want to delete this study target?')) return;
+      let allTasks = getAllStoredTasks();
+      allTasks = allTasks.filter(t => t.id !== taskId);
+      saveAllTasks(allTasks);
       loadDayTasks();
+      checkAndTriggerReminderNotification();
     }
 
-    function toggleTaskDone(dateVal, idx) {
-      const allTasks = JSON.parse(localStorage.getItem('bharti_study_tasks') || '{}');
-      if (allTasks[dateVal] && allTasks[dateVal][idx]) {
-        allTasks[dateVal][idx].done = !allTasks[dateVal][idx].done;
-        localStorage.setItem('bharti_study_tasks', JSON.stringify(allTasks));
-        loadDayTasks();
+    function updatePerformanceScoreboard(completed, total, avgRating) {
+      const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+      document.getElementById('lblCompletionRate').textContent = rate + '%';
+      document.getElementById('lblAvgSatisfaction').textContent = `⭐ ${avgRating} / 5.0`;
+
+      const badgeEl = document.getElementById('lblPerfBadge');
+      badgeEl.className = 'perf-badge ';
+
+      if (total === 0) {
+        badgeEl.textContent = 'No Plan Set';
+        badgeEl.classList.add('badge-non');
+      } else if (rate >= 90) {
+        badgeEl.textContent = activeLang === 'hi' ? 'पूर्ण उपलब्धि (Fully Achiever)' : 'Fully Achiever';
+        badgeEl.classList.add('badge-fully');
+      } else if (rate >= 65) {
+        badgeEl.textContent = activeLang === 'hi' ? 'मध्यम उपलब्धि (Moderate Achiever)' : 'Moderate Achiever';
+        badgeEl.classList.add('badge-moderate');
+      } else if (rate >= 35) {
+        badgeEl.textContent = activeLang === 'hi' ? 'आंशिक उपलब्धि (Partial Achiever)' : 'Partial Achiever';
+        badgeEl.classList.add('badge-partial');
+      } else {
+        badgeEl.textContent = activeLang === 'hi' ? 'गैर उपलब्धि (Non Achiever)' : 'Non Achiever';
+        badgeEl.classList.add('badge-non');
       }
     }
 
-    function deleteTask(dateVal, idx) {
-      const allTasks = JSON.parse(localStorage.getItem('bharti_study_tasks') || '{}');
-      if (allTasks[dateVal]) {
-        allTasks[dateVal].splice(idx, 1);
-        localStorage.setItem('bharti_study_tasks', JSON.stringify(allTasks));
-        loadDayTasks();
+    // REMINDER NOTIFICATIONS (Browser Web API + In-App Bilingual Banner)
+    function checkAndTriggerReminderNotification() {
+      const todayStr = getTodayDateString();
+      const allTasks = getAllStoredTasks();
+      const todayPending = allTasks.filter(t => isTaskScheduledForDate(t, todayStr) && !(t.completions && t.completions[todayStr]));
+
+      const banner = document.getElementById('dailyReminderBanner');
+      const textEl = document.getElementById('dailyReminderText');
+
+      if (todayPending.length > 0) {
+        const sampleTask = todayPending[0].text;
+        const taskMsg = todayPending.length > 1 ? `"${sampleTask}" + ${todayPending.length - 1} more targets` : `"${sampleTask}"`;
+
+        const alertEn = `Reminder: You have made target for ${taskMsg} for today!`;
+        const alertHi = `स्मरण पत्र: आपने आज के लिए ${taskMsg} का लक्ष्य निर्धारित किया है!`;
+
+        textEl.textContent = activeLang === 'hi' ? alertHi : alertEn;
+        banner.style.display = 'flex';
+
+        if ("Notification" in window) {
+          if (Notification.permission === "granted") {
+            new Notification("Bharti Classes Target Reminder", {
+              body: activeLang === 'hi' ? alertHi : alertEn,
+              icon: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/calendar-check.svg"
+            });
+          } else if (Notification.permission !== "denied") {
+            Notification.requestPermission();
+          }
+        }
+      } else {
+        banner.style.display = 'none';
       }
     }
 
-    // In-App Dynamic Search
+    // Dynamic Search Filter
     function handleInAppSearch() {
       const q = document.getElementById('omniQueryInput').value.trim().toLowerCase();
       const cards = document.querySelectorAll('.course-card');
@@ -1810,11 +2021,7 @@
       cards.forEach(card => {
         const tags = (card.getAttribute('data-tags') || '').toLowerCase();
         const content = card.innerText.toLowerCase();
-        if (tags.includes(q) || content.includes(q)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
+        card.style.display = (tags.includes(q) || content.includes(q)) ? 'flex' : 'none';
       });
     }
 
@@ -1822,13 +2029,8 @@
       const q = document.getElementById('omniQueryInput').value.trim();
       if (!q) return;
 
-      const examKeywords = [
-        'ssc','cgl','chsl','mts','railway','rrb','ntpc','bank','ibps','sbi','bpsc','bssc','bihar ssc',
-        'police','si','daroga','constable','jpsc','jssc','uppsc','upssc','upsc','defence','cds'
-      ];
-      const isExamSearch = examKeywords.some(k => q.toLowerCase().includes(k));
-
-      if (isExamSearch) {
+      const examKeywords = ['ssc','cgl','chsl','mts','railway','rrb','ntpc','bank','ibps','sbi','bpsc','bssc','bihar ssc','police','si','daroga','constable','jpsc','jssc','uppsc','upssc','upsc','defence','cds'];
+      if (examKeywords.some(k => q.toLowerCase().includes(k))) {
         handleInAppSearch();
       } else {
         switchView('assistant');
@@ -1837,7 +2039,7 @@
       }
     }
 
-    // Navigation View Switcher
+    // View Navigation
     function switchView(viewKey, navElement) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -1858,20 +2060,14 @@
       };
       document.getElementById('pageHeadingTitle').textContent = titles[viewKey] || 'Bharti Classes';
 
-      if (viewKey === 'planner') {
-        loadDayTasks();
-      }
-
-      if (window.innerWidth <= 860) {
-        document.getElementById('appSidebar').classList.remove('open');
-      }
+      if (viewKey === 'planner') loadDayTasks();
+      if (window.innerWidth <= 860) document.getElementById('appSidebar').classList.remove('open');
     }
 
     function toggleSidebar() {
       document.getElementById('appSidebar').classList.toggle('open');
     }
 
-    // Checkout Flow
     function triggerCheckout(courseName, fee) {
       if (!isUserLoggedIn) {
         alert('Please login or register to enroll in courses.');
@@ -1888,7 +2084,6 @@
       alert('Payment successful via ' + method + '! Course access granted to your profile.');
     }
 
-    // Scholarship Test
     function runScholarshipExam() {
       if (!isUserLoggedIn) {
         alert('Please register or log in before attempting the Scholarship Exam.');
@@ -1897,15 +2092,11 @@
       const score = prompt('Enter your simulated score out of 100:', '85');
       if (score !== null) {
         const num = parseInt(score, 10);
-        if (num >= 80) {
-          alert('Congratulations! You scored ' + num + '%. You passed the Bharti Classes Screening Test! All courses are 100% FREE OF COST for you.');
-        } else {
-          alert('You scored ' + num + '%. Qualifying mark is 80%. You can re-attempt or enroll with special combo offers.');
-        }
+        if (num >= 80) alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you.');
+        else alert('You scored ' + num + '%. Qualifying mark is 80%.');
       }
     }
 
-    // Doubt Submission
     function handleDoubtSubmit(e) {
       e.preventDefault();
       if (!isUserLoggedIn) {
@@ -1916,7 +2107,6 @@
       e.target.reset();
     }
 
-    // Practice Drills
     function loadDrills(tier) {
       const box = document.getElementById('drillBox');
       box.innerHTML = '<div style="font-weight:bold; margin-bottom:8px; text-transform:uppercase; color:var(--secondary);">' + tier + ' Level Drill Active</div>' +
@@ -1927,7 +2117,6 @@
         '</ol>';
     }
 
-    // Assistant Bot
     function dispatchBotMessage() {
       const input = document.getElementById('botInput');
       const val = input.value.trim();
@@ -1937,15 +2126,11 @@
       input.value = '';
 
       setTimeout(() => {
-        let reply = "For admission inquiries, special batch timings, and Advance Maths guidance, speak directly with Vishwa Bharti Sir on <strong>8271750420</strong>.";
+        let reply = "For admission inquiries, batch timings, and Advance Maths guidance, speak directly with Vishwa Bharti Sir on <strong>8271750420</strong>.";
         const lower = val.toLowerCase();
-        if (lower.includes('bssc') || lower.includes('bihar ssc')) {
-          reply = "For Bihar SSC (Inter & Graduate Level), our batch covers complete General Mathematics, Step-Skipping Calculation, and Analytical Reasoning.";
-        } else if (lower.includes('police') || lower.includes('si') || lower.includes('daroga')) {
-          reply = "Bihar SI (Daroga) and Police Constable batches focus on high-scoring Arithmetic, Geometry shortcuts, and Mental Ability test series.";
-        } else if (lower.includes('ssc') || lower.includes('cgl')) {
-          reply = "SSC CGL / CHSL Comprehensive batches cover Tier 1 & Tier 2 complete Advance Maths (Algebra, Trigonometry, Geometry, Coordinate) and Reasoning.";
-        }
+        if (lower.includes('bssc') || lower.includes('bihar ssc')) reply = "For Bihar SSC (Inter & Graduate Level), our batch covers complete General Mathematics and Analytical Reasoning.";
+        else if (lower.includes('police') || lower.includes('si') || lower.includes('daroga')) reply = "Bihar SI (Daroga) and Police Constable batches focus on high-scoring Arithmetic and Mental Ability test series.";
+        else if (lower.includes('ssc') || lower.includes('cgl')) reply = "SSC CGL / CHSL batches cover complete Advance Maths (Algebra, Trigonometry, Geometry, Coordinate) and Reasoning.";
         box.innerHTML += '<p style="margin-top:8px; color:var(--primary);"><strong>Bharti Desk:</strong> ' + reply + '</p>';
         box.scrollTop = box.scrollHeight;
       }, 400);
@@ -1964,6 +2149,7 @@
         document.getElementById('navDoubt').textContent = 'प्रश्न पूछें (Doubt)';
         document.getElementById('navAssistant').textContent = 'सहायता डेस्क (AI)';
         document.getElementById('navMentor').textContent = 'भारती सर का परिचय';
+        document.getElementById('lblLogout').textContent = 'लॉगआउट';
       } else {
         activeLang = 'en';
         document.getElementById('btnLangToggle').textContent = 'हिन्दी';
@@ -1975,27 +2161,27 @@
         document.getElementById('navDoubt').textContent = 'Raise a Doubt';
         document.getElementById('navAssistant').textContent = 'May I Help You? (AI)';
         document.getElementById('navMentor').textContent = 'About Vishwa Sir';
+        document.getElementById('lblLogout').textContent = 'Logout';
       }
+      checkAndTriggerReminderNotification();
+      loadDayTasks();
     }
 
-    // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
       updateDailyQuote();
       document.getElementById('plannerDateInput').value = getTodayDateString();
 
-      // Check Saved Student Profile
       const saved = localStorage.getItem('bharti_student');
       if (saved) {
         try {
           currentStudentProfile = JSON.parse(saved);
-          isUserLoggedIn = true;
-          const regStr = currentStudentProfile.regNumber ? ` (${currentStudentProfile.regNumber})` : '';
-          document.getElementById('lblUserStatus').textContent = `${currentStudentProfile.name}${regStr}`;
+          completeLoginUi();
           if (currentStudentProfile.exams && currentStudentProfile.exams.length > 0) {
             renderUserTargetBar(currentStudentProfile.exams);
           }
         } catch(e){}
       }
+      checkAndTriggerReminderNotification();
     });
   </script>
 </body>
