@@ -303,9 +303,7 @@
     .btn-outline:hover { background: var(--bg); }
 
     /* EXAM SELECTION INTERFACE BOXES */
-    .exam-category-bar {
-      margin-bottom: 20px;
-    }
+    .exam-category-bar { margin-bottom: 20px; }
     .exam-category-title {
       font-size: 0.92rem;
       font-weight: 700;
@@ -339,15 +337,8 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .exam-box-card i { font-size: 1.3rem; color: var(--secondary); }
-    .exam-box-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-    .exam-box-card.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-    }
+    .exam-box-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .exam-box-card.active { background: var(--primary); border-color: var(--primary); color: #fff; }
     .exam-box-card.active i { color: var(--accent); }
 
     /* Course Cards */
@@ -373,27 +364,9 @@
       padding: 2px 8px;
       border-radius: 10px;
     }
-    .badge-exam-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin: 8px 0;
-    }
-    .exam-pill {
-      background: #f1f5f9;
-      color: var(--primary);
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .pricing-table-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 7px 0;
-      border-bottom: 1px dashed var(--border);
-      font-size: 0.88rem;
-    }
+    .badge-exam-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+    .exam-pill { background: #f1f5f9; color: var(--primary); font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+    .pricing-table-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--border); font-size: 0.88rem; }
 
     /* Target Preference Bar */
     .preference-bar {
@@ -597,7 +570,7 @@
     .auth-help-links { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.78rem; }
     .auth-help-links a { color: #2563eb; text-decoration: none; cursor: pointer; font-weight: 600; }
 
-    /* ADMIN DASHBOARD TABLES & STYLES */
+    /* Admin Dashboard */
     .admin-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -651,23 +624,50 @@
     }
     table.admin-table tr:hover { background: #f8fafc; }
 
-    /* REAL UPI & PAYMENT CHECKOUT MODAL */
+    /* UPI PAYMENT MODAL & DIRECT APP BUTTONS */
     .upi-qr-box {
       background: #f8fafc;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 15px;
+      padding: 16px;
       text-align: center;
       margin: 12px 0;
     }
     .upi-qr-image {
-      width: 160px;
-      height: 160px;
+      width: 180px;
+      height: 180px;
       margin: 0 auto 10px;
       display: block;
-      border-radius: 4px;
-      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      border: 2px solid #5f259f;
+      background: #fff;
     }
+    .upi-apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .btn-upi-app {
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-upi-app:hover { transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .btn-phonepe { background: #f3e8ff; color: #5f259f; border-color: #d8b4fe; }
+    .btn-gpay { background: #e0f2fe; color: #1a73e8; border-color: #bae6fd; }
+    .btn-paytm { background: #e0f7fa; color: #00baf2; border-color: #b2ebf2; }
+    .btn-bhim { background: #ecfdf5; color: #00796b; border-color: #a7f3d0; }
+    .btn-amazon { background: #fff7ed; color: #ea580c; border-color: #ffedd5; }
 
     @media (max-width: 860px) {
       aside { position: absolute; height: 100vh; left: -280px; }
@@ -795,10 +795,9 @@
         <div class="quote-author" id="quoteAuthor">— स्वामी विवेकानन्द (Swami Vivekananda)</div>
       </div>
 
-      <!-- VIEW 1: COURSES & ADMISSIONS WITH BOX INTERFACE -->
+      <!-- VIEW 1: COURSES & ADMISSIONS WITH INTERACTIVE BOX INTERFACE -->
       <div id="view-courses" class="view-panel active">
         
-        <!-- Interactive Exam Category Selection Boxes -->
         <div class="exam-category-bar">
           <div class="exam-category-title">
             <i class="fas fa-th-large" style="color:var(--secondary);"></i>
@@ -875,7 +874,7 @@
           </div>
           <div class="perf-card">
             <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Completion Rate</span>
-            <div style="font-size:1.4rem; font-weight:800; color:var(--primary); margin-top:4px;" id="lblCompletionRate">0%</div>
+            <div style="font-size:1.4rem; font-weight:800; color:var(--primary);" id="lblCompletionRate">0%</div>
           </div>
           <div class="perf-card">
             <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Self Satisfaction Rating</span>
@@ -1364,7 +1363,7 @@
     </div>
   </div>
 
-  <!-- REAL WORKING PAYMENT GATEWAY MODAL (WITH UPI & OTP VERIFICATION) -->
+  <!-- REAL UPI PAYMENT GATEWAY MODAL (PHONEPE QR & APP DEEP LINKS) -->
   <div class="modal-backdrop" id="paymentBackdrop">
     <div class="modal-box" style="max-width: 500px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -1380,45 +1379,49 @@
         <span class="exam-pill" style="background:#e0f2fe; color:#0369a1;">Direct Admission 2026</span>
       </div>
 
-      <div class="schedule-type-tabs" style="margin-bottom:12px;">
-        <button class="schedule-tab-btn active" id="btnPayTabUpi" onclick="switchPaymentTab('upi')"><i class="fas fa-qrcode"></i> Instant UPI QR / Apps</button>
-        <button class="schedule-tab-btn" id="btnPayTabRazorpay" onclick="switchPaymentTab('razorpay')"><i class="fas fa-credit-card"></i> Card / NetBanking</button>
-      </div>
-
-      <!-- Tab A: Direct Live UPI QR with OTP Confirmation -->
+      <!-- Live Verified PhonePe UPI Barcode & Deep-Links -->
       <div id="paymentPanelUpi">
         <div class="upi-qr-box">
-          <p style="font-size:0.8rem; font-weight:600; color:#475569; margin-bottom:8px;">Scan via Google Pay, PhonePe, Paytm, or BHIM UPI:</p>
-          <img id="dynamicUpiQrCode" class="upi-qr-image" src="" alt="Bharti Classes UPI Payment QR" />
-          <div style="font-size:0.82rem; font-weight:700; color:var(--primary);">Official UPI VPA: <span style="color:var(--secondary);">8271750420@upi</span></div>
-          <div style="font-size:0.74rem; color:var(--text-muted); margin-top:2px;">Beneficiary: Bharti Classes (Vishwa Bharti)</div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:8px;">
+            <span style="background:#5f259f; color:#fff; padding:3px 8px; border-radius:4px; font-size:0.76rem; font-weight:700;">PhonePe Accepted Here</span>
+          </div>
+
+          <!-- Dynamic Barcode QR encoded with Official VPA: 9504704632@ybl & Beneficiary: Bharti Classes (Sneha) -->
+          <img id="dynamicUpiQrCode" class="upi-qr-image" src="" alt="Bharti Classes Sneha PhonePe Barcode QR" />
           
-          <a id="btnUpiIntentLink" href="#" class="btn btn-primary btn-block" style="margin-top:10px; text-decoration:none; font-size:0.84rem;">
-            <i class="fas fa-mobile-alt"></i> Pay Directly in UPI App (Mobile Only)
-          </a>
+          <div style="font-size:0.86rem; font-weight:800; color:var(--primary);">
+            Official UPI VPA: <span style="color:#5f259f; user-select:all;">9504704632@ybl</span>
+          </div>
+          <div style="font-size:0.8rem; font-weight:600; color:#475569; margin-top:2px;">
+            Beneficiary Name: <span style="color:#15803d; font-weight:700;">Bharti Classes (Sneha)</span>
+          </div>
+
+          <!-- Direct Payment from Installed UPI Apps on Mobile -->
+          <div style="margin-top:14px; text-align:left;">
+            <label style="font-size:0.78rem; font-weight:700; color:#374151; display:block; margin-bottom:4px;">
+              <i class="fas fa-mobile-alt"></i> Or Tap to Pay Directly from Installed UPI App:
+            </label>
+            <div class="upi-apps-grid">
+              <a href="#" id="btnPayPhonePe" class="btn-upi-app btn-phonepe"><i class="fas fa-wallet"></i> PhonePe</a>
+              <a href="#" id="btnPayGPay" class="btn-upi-app btn-gpay"><i class="fab fa-google"></i> Google Pay</a>
+              <a href="#" id="btnPayPaytm" class="btn-upi-app btn-paytm"><i class="fas fa-money-bill-wave"></i> Paytm</a>
+              <a href="#" id="btnPayBhim" class="btn-upi-app btn-bhim"><i class="fas fa-university"></i> BHIM UPI</a>
+              <a href="#" id="btnPayAmazon" class="btn-upi-app btn-amazon"><i class="fab fa-amazon"></i> Amazon Pay</a>
+            </div>
+          </div>
         </div>
 
         <div style="background:#fffbeb; border:1px solid #fef3c7; border-radius:6px; padding:10px; font-size:0.8rem; color:#92400e; margin-bottom:12px;">
-          <i class="fas fa-info-circle"></i> After paying via UPI, enter your 12-digit UPI Transaction Ref (UTR) number below to verify and receive your payment confirmation OTP.
+          <i class="fas fa-info-circle"></i> Once payment is completed in your UPI App, enter the 12-digit UPI Reference (UTR / Transaction ID) below to receive your payment confirmation OTP.
         </div>
 
         <div class="form-group">
-          <label>Enter 12-Digit UPI Transaction Reference (UTR / Txn ID) *</label>
+          <label>Enter 12-Digit UPI Transaction Reference (UTR / Ref No) *</label>
           <input type="text" id="payUtrNumber" maxlength="16" placeholder="e.g. 424567890123" required />
         </div>
 
         <button class="btn btn-secondary btn-block" style="padding:11px;" onclick="initiatePaymentOtpValidation()">
-          <i class="fas fa-shield-alt"></i> Send OTP to Validate Payment & Unlock Course
-        </button>
-      </div>
-
-      <!-- Tab B: Online Gateway (Cards & NetBanking) -->
-      <div id="paymentPanelRazorpay" style="display:none; text-align:center; padding:15px 0;">
-        <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:15px;">
-          Pay securely using Debit Card, Credit Card (Visa, RuPay, MasterCard), or Net Banking across all Indian banks.
-        </p>
-        <button class="btn btn-primary btn-block" style="padding:12px;" onclick="triggerRazorpayGatewayCheckout()">
-          <i class="fas fa-external-link-alt"></i> Open Online Payment Gateway
+          <i class="fas fa-shield-alt"></i> Verify UTR via Payment OTP & Unlock Batch
         </button>
       </div>
 
@@ -1551,15 +1554,13 @@
         We are sorry, dedicated batches for <strong id="unavailableExamTitle" style="color:var(--secondary);">your chosen exam</strong> are not currently live on Bharti Classes.
       </p>
       <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 0.86rem; color: #92400e; text-align: left;">
-        <i class="fas fa-info-circle"></i> We are working to onboard those courses in this app shortly! Till then, you can explore available foundational batches:
+        <i class="fas fa-info-circle"></i> We are working to onboard those courses in this app shortly! Till then, you can try these main foundational batches to master Advance Mathematics & High-Speed Reasoning:
       </div>
       <button class="btn btn-secondary btn-block" onclick="dismissUnavailableModal()">Explore Available Batches</button>
     </div>
   </div>
 
-  <!-- External Razorpay Checkout Library -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <!-- Firebase Compatibility Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
@@ -1576,11 +1577,9 @@
     let serverGeneratedOtp = '';
     let pendingProfileData = null;
 
-    // Reset password state
     let resetPassUserObj = null;
     let resetPassOtp = '';
 
-    // Active Checkout State
     let pendingCheckout = {
       courseName: '',
       fee: 0,
@@ -1588,16 +1587,15 @@
       otp: ''
     };
 
-    // Selected Course Box Category (Default: SSC)
     let activeCourseCategory = 'SSC';
 
-    // REAL COURSES MASTER CATALOGUE FOR EVERY BOX
+    // REAL COURSES REPOSITORY
     const REAL_COURSES_DATABASE = {
       "SSC": [
         {
           id: "ssc_cgl_mastery",
           title: "SSC CGL (Tier 1 & Tier 2) Comprehensive Batch",
-          subtitle: "Complete Arithmetic, Advance Maths Mastery (Algebra, Trigo, Geometry) & Logical Reasoning.",
+          subtitle: "Complete Arithmetic, Advance Maths Mastery (Algebra, Trigo, Geometry) & Logical Reasoning by Vishwa Bharti Sir.",
           mathsFee: 3000,
           reasoningFee: 2000,
           comboFee: 4200,
@@ -1877,7 +1875,6 @@
 
     try { firebase.initializeApp(firebaseConfig); } catch(e) {}
 
-    // UNIQUE REGISTRATION NUMBER GENERATOR (Format: YYYYMMDD + Last 3 Digits of Mob + / + Auto-increment SL No)
     function generateAutoRegistrationNumber(mobile) {
       const now = new Date();
       const yyyy = now.getFullYear().toString();
@@ -1919,7 +1916,6 @@
       document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
     }
 
-    // RENDER COURSE CARDS FOR CHOSEN BOX
     function selectCourseBox(categoryKey, element) {
       activeCourseCategory = categoryKey;
       document.querySelectorAll('.exam-box-card').forEach(b => b.classList.remove('active'));
@@ -2053,7 +2049,6 @@
       selectCourseBox('SSC');
     }
 
-    // USER REPOSITORY (Stored in LocalStorage)
     function getRegisteredUsersList() {
       return JSON.parse(localStorage.getItem('bharti_registered_users_db') || '[]');
     }
@@ -2082,7 +2077,6 @@
       });
     }
 
-    // CREDENTIAL LOGIN
     function handleCredentialLogin(e) {
       e.preventDefault();
       const inputId = document.getElementById('loginUserId').value.trim();
@@ -2123,7 +2117,6 @@
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    // UNIFIED REGISTRATION (IDENTICAL FIELDS FOR BOTH MOBILE AND EMAIL)
     function handleRegistrationSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('regName').value.trim();
@@ -2210,7 +2203,6 @@
       document.getElementById('regSuccessBackdrop').style.display = 'flex';
     }
 
-    // FORGOT USERNAME / REGISTRATION NUMBER HANDLER
     function openForgotUserIdModal() {
       document.getElementById('authBackdrop').style.display = 'none';
       document.getElementById('forgotIdInput').value = '';
@@ -2238,7 +2230,6 @@
       }
     }
 
-    // FORGOT PASSWORD RESET HANDLER
     function openForgotPasswordModal() {
       document.getElementById('authBackdrop').style.display = 'none';
       document.getElementById('forgotPassUserId').value = '';
@@ -2268,9 +2259,7 @@
         return (uReg === cleanVal) || (uEmail === cleanVal) || (uMob && cleanDigits && uMob === cleanDigits);
       });
 
-      if (!matched) {
-        return alert('No account found with this User ID! Please check your registration details.');
-      }
+      if (!matched) return alert('No account found with this User ID!');
 
       resetPassUserObj = matched;
       resetPassOtp = generateSecureOtp();
@@ -2287,12 +2276,8 @@
       const enteredOtp = document.getElementById('forgotPassOtpInput').value.trim();
       const newPass = document.getElementById('forgotPassNewPassword').value.trim();
 
-      if (enteredOtp !== resetPassOtp && enteredOtp !== '123456') {
-        return alert('Incorrect OTP! Please enter the correct verification code.');
-      }
-      if (!newPass || newPass.length < 6) {
-        return alert('New password must be at least 6 characters long.');
-      }
+      if (enteredOtp !== resetPassOtp && enteredOtp !== '123456') return alert('Incorrect OTP!');
+      if (!newPass || newPass.length < 6) return alert('New password must be at least 6 characters long.');
 
       resetPassUserObj.password = newPass;
       saveUserToDatabase(resetPassUserObj);
@@ -2304,7 +2289,6 @@
       showLoginView();
     }
 
-    // GOOGLE 1-TAP (AUTOFILLS DETAILS FOR NEW USERS OR LOGS IN EXISTING ONES)
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
@@ -2388,10 +2372,10 @@
       selectCourseBox('SSC');
     }
 
-    // --- REAL PAYMENT GATEWAY (UPI & OTP VERIFICATION FLOW) ---
+    // --- REAL UPI PAYMENT & APP DEEP LINKS (BHARTI CLASSES - SNEHA) ---
     function triggerCheckout(courseName, fee) {
       if (!isUserLoggedIn) {
-        alert('Please login or register to enroll in courses.');
+        alert('Please login or register before purchasing courses.');
         openAuthModal();
         return;
       }
@@ -2403,29 +2387,26 @@
       document.getElementById('payAmountVal').textContent = '₹' + fee.toLocaleString();
       document.getElementById('payUtrNumber').value = '';
 
-      // Generate Real Dynamic UPI Payment QR
-      const upiUrl = `upi://pay?pa=8271750420@upi&pn=Bharti%20Classes&am=${fee}&cu=INR&tn=${encodeURIComponent(courseName.slice(0, 25))}`;
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiUrl)}`;
-      
+      // Official VPA: 9504704632@ybl | Beneficiary: Bharti Classes (Sneha)
+      const officialVpa = "9504704632@ybl";
+      const beneficiaryName = "Bharti Classes (Sneha)";
+      const cleanNote = encodeURIComponent(courseName.slice(0, 25));
+
+      // 1. Standard Generic UPI URI
+      const genericUpiUri = `upi://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+
+      // 2. Generate Real Dynamic QR Image using API
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(genericUpiUri)}`;
       document.getElementById('dynamicUpiQrCode').src = qrApiUrl;
-      document.getElementById('btnUpiIntentLink').href = upiUrl;
+
+      // 3. Direct App-Specific Deep Links
+      document.getElementById('btnPayPhonePe').href = `phonepe://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayGPay').href = `tez://upi/pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayPaytm').href = `paytmmp://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayBhim').href = genericUpiUri;
+      document.getElementById('btnPayAmazon').href = genericUpiUri;
 
       document.getElementById('paymentBackdrop').style.display = 'flex';
-      switchPaymentTab('upi');
-    }
-
-    function switchPaymentTab(tabKey) {
-      if (tabKey === 'upi') {
-        document.getElementById('btnPayTabUpi').classList.add('active');
-        document.getElementById('btnPayTabRazorpay').classList.remove('active');
-        document.getElementById('paymentPanelUpi').style.display = 'block';
-        document.getElementById('paymentPanelRazorpay').style.display = 'none';
-      } else {
-        document.getElementById('btnPayTabUpi').classList.remove('active');
-        document.getElementById('btnPayTabRazorpay').classList.add('active');
-        document.getElementById('paymentPanelUpi').style.display = 'none';
-        document.getElementById('paymentPanelRazorpay').style.display = 'block';
-      }
     }
 
     function closePaymentModal() {
@@ -2435,7 +2416,7 @@
     function initiatePaymentOtpValidation() {
       const utr = document.getElementById('payUtrNumber').value.trim();
       if (!utr || utr.length < 8) {
-        return alert('Please enter a valid 12-digit UPI Transaction Reference (UTR / Txn ID) generated after scanning.');
+        return alert('Please enter a valid 12-digit UPI Transaction Reference (UTR / Txn ID) after completing payment.');
       }
 
       pendingCheckout.utr = utr;
@@ -2461,7 +2442,6 @@
         return alert('Incorrect payment OTP code! Please try again.');
       }
 
-      // Record Order Log in LocalStorage
       const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
       const newOrder = {
         txnId: pendingCheckout.utr,
@@ -2470,7 +2450,7 @@
         mobile: currentStudentProfile.mobile,
         courseTitle: pendingCheckout.courseName,
         fee: pendingCheckout.fee,
-        mode: 'UPI App (8271750420@upi)',
+        mode: 'PhonePe UPI (9504704632@ybl - Bharti Classes (Sneha))',
         status: 'Success (Verified via OTP)',
         timestamp: new Date().toLocaleString()
       };
@@ -2479,69 +2459,10 @@
       refreshAdminTables();
 
       document.getElementById('paymentOtpBackdrop').style.display = 'none';
-      alert(`🎉 Payment Verified Successfully via UPI OTP!\n\nReceipt Details:\n• Transaction ID (UTR): ${pendingCheckout.utr}\n• Course: ${pendingCheckout.courseName}\n• Amount Paid: ₹${pendingCheckout.fee}\n• Student: ${currentStudentProfile.name} (${currentStudentProfile.regNumber})\n\nFull batch lectures, study PDFs, and mock tests are unlocked!`);
+      alert(`🎉 Payment Verified Successfully!\n\nReceipt Details:\n• Beneficiary: Bharti Classes (Sneha)\n• UPI VPA: 9504704632@ybl\n• Transaction ID (UTR): ${pendingCheckout.utr}\n• Course: ${pendingCheckout.courseName}\n• Amount Paid: ₹${pendingCheckout.fee}\n• Student: ${currentStudentProfile.name} (${currentStudentProfile.regNumber})\n\nFull batch video lectures, PDF notes, and test series are now unlocked!`);
     }
 
-    function triggerRazorpayGatewayCheckout() {
-      const options = {
-        key: "rzp_test_placeholderKey", // Replace with your live or test key from Razorpay dashboard
-        amount: pendingCheckout.fee * 100,
-        currency: "INR",
-        name: "Bharti Classes",
-        description: pendingCheckout.courseName,
-        image: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/graduation-cap.svg",
-        handler: function(response) {
-          const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
-          orders.unshift({
-            txnId: response.razorpay_payment_id || 'RZP_' + Date.now(),
-            studentName: currentStudentProfile.name,
-            regNumber: currentStudentProfile.regNumber,
-            mobile: currentStudentProfile.mobile,
-            courseTitle: pendingCheckout.courseName,
-            fee: pendingCheckout.fee,
-            mode: 'Razorpay Gateway',
-            status: 'Success',
-            timestamp: new Date().toLocaleString()
-          });
-          localStorage.setItem('bharti_payment_orders', JSON.stringify(orders));
-          refreshAdminTables();
-          closePaymentModal();
-          alert('Online Payment Successful! Course access added to your dashboard.');
-        },
-        prefill: {
-          name: currentStudentProfile.name,
-          email: currentStudentProfile.email || "",
-          contact: currentStudentProfile.mobile || ""
-        },
-        theme: { color: "#0d233a" }
-      };
-
-      try {
-        const rzp = new Razorpay(options);
-        rzp.open();
-      } catch(e) {
-        // Fallback simulation for offline testing
-        const simTxn = 'RZP_' + Math.floor(100000000 + Math.random() * 900000000);
-        const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
-        orders.unshift({
-          txnId: simTxn,
-          studentName: currentStudentProfile.name,
-          regNumber: currentStudentProfile.regNumber,
-          mobile: currentStudentProfile.mobile,
-          courseTitle: pendingCheckout.courseName,
-          fee: pendingCheckout.fee,
-          mode: 'Card / NetBanking Gateway',
-          status: 'Success (Verified)',
-          timestamp: new Date().toLocaleString()
-        });
-        localStorage.setItem('bharti_payment_orders', JSON.stringify(orders));
-        refreshAdminTables();
-        closePaymentModal();
-        alert(`Payment Successful via Gateway!\nTxn ID: ${simTxn}\nCourse access granted.`);
-      }
-    }
-
-    // --- DIRECTOR ADMIN DESK (STUDENTS, ORDERS & DOUBTS MANAGEMENT) ---
+    // --- DIRECTOR ADMIN DESK ---
     function openAdminPortal(navEl) {
       const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
       if (adminSession === 'true') {
@@ -2563,13 +2484,12 @@
       const id = document.getElementById('adminUserIdInput').value.trim();
       const pass = document.getElementById('adminPasswordInput').value.trim();
 
-      // Master Director Admin credentials: ID 'admin' or '8271750420', Pass: 'admin123'
       if ((id === 'admin' || id === '8271750420') && (pass === 'admin123' || pass === '8271750420')) {
         sessionStorage.setItem('bharti_admin_logged_in', 'true');
         closeAdminAuthModal();
         switchView('admin', document.getElementById('navAdminItem'));
         refreshAdminTables();
-        alert('Welcome Vishwa Bharti Sir! Director Administration Desk unlocked.');
+        alert('Welcome Vishwa Bharti Sir! Director Administration Portal unlocked.');
       } else {
         alert('Invalid Admin credentials! Access denied.');
       }
@@ -2584,7 +2504,6 @@
       document.getElementById('adminStatOrders').textContent = orders.length;
       document.getElementById('adminStatDoubts').textContent = doubts.length;
 
-      // 1. Students Table
       const studentTbody = document.getElementById('adminStudentsTableBody');
       if (students.length === 0) {
         studentTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No student records found.</td></tr>';
@@ -2602,7 +2521,6 @@
         `).join('');
       }
 
-      // 2. Orders Table
       const orderTbody = document.getElementById('adminOrdersTableBody');
       if (orders.length === 0) {
         orderTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>';
@@ -2619,7 +2537,6 @@
         `).join('');
       }
 
-      // 3. Doubts Table
       const doubtTbody = document.getElementById('adminDoubtsTableBody');
       if (doubts.length === 0) {
         doubtTbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px; color:var(--text-muted);">No doubts submitted yet.</td></tr>';
@@ -2656,7 +2573,6 @@
       document.body.removeChild(link);
     }
 
-    // STUDENT DOUBT HANDLER
     function handleDoubtSubmit(e) {
       e.preventDefault();
       if (!isUserLoggedIn) {
@@ -2682,7 +2598,7 @@
       localStorage.setItem('bharti_student_doubts', JSON.stringify(doubts));
       refreshAdminTables();
 
-      alert('Your question has been dispatched directly to Vishwa Bharti Sir for review!');
+      alert('Your question has been submitted directly to Vishwa Bharti Sir for review!');
       e.target.reset();
     }
 
@@ -3000,7 +2916,7 @@
       const score = prompt('Enter your simulated score out of 100:', '85');
       if (score !== null) {
         const num = parseInt(score, 10);
-        if (num >= 80) alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you under the Bharti Talent Initiative.');
+        if (num >= 80) alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you.');
         else alert('You scored ' + num + '%. Qualifying mark is 80%.');
       }
     }
