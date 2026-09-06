@@ -716,6 +716,17 @@
     .quiz-option input { margin-right:8px; }
     .quiz-question { padding:14px; border:1px solid var(--border); border-radius:8px; margin-bottom:12px; background:#fff; }
     .quiz-result { padding:14px; border-radius:8px; background:#ecfdf5; border:1px solid #a7f3d0; margin-top:14px; }
+    .quiz-review { margin-top:14px; }
+    .quiz-review-item { padding:14px; border:1px solid var(--border); border-radius:8px; margin-bottom:10px; background:#fff; }
+    .quiz-review-item.correct { border-left:5px solid #16a34a; }
+    .quiz-review-item.incorrect { border-left:5px solid #dc2626; }
+    .quiz-review-item.unanswered { border-left:5px solid #d97706; }
+    .quiz-review-badge { display:inline-block; padding:3px 8px; border-radius:999px; font-size:.72rem; font-weight:700; margin-bottom:7px; }
+    .quiz-leaderboard { margin-top:14px; padding:14px; border:1px solid #bfdbfe; background:#eff6ff; border-radius:8px; }
+    .quiz-leaderboard strong { color:#1d4ed8; }
+    .pdf-viewer-wrap { background:#111827; border-radius:8px; overflow:hidden; margin-top:10px; }
+    .pdf-viewer-wrap iframe { width:100%; height:65vh; min-height:480px; border:0; background:#fff; }
+    .recaptcha-box { display:flex; justify-content:center; margin:10px 0; min-height:78px; }
     .locked-note { background:#fff7ed; border:1px solid #fed7aa; color:#9a3412; padding:10px; border-radius:6px; }
   </style>
 </head>
@@ -1529,6 +1540,24 @@
     </div>
   </div>
 
+  <!-- IN-APP PDF VIEWER -->
+  <div class="modal-backdrop" id="pdfViewerModal">
+    <div class="modal-box" style="max-width:1000px; width:96%;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+        <div>
+          <h3 id="pdfViewerTitle" style="color:var(--primary);">Course PDF</h3>
+          <div style="font-size:.75rem;color:var(--text-muted);">The PDF is displayed inside Bharti Classes.</div>
+        </div>
+        <button class="btn btn-outline" onclick="closePdfViewer()">Close</button>
+      </div>
+      <div class="pdf-viewer-wrap"><iframe id="pdfViewerFrame" title="Course PDF Viewer"></iframe></div>
+      <div class="material-actions">
+        <a id="pdfDownloadBtn" class="btn btn-secondary" href="#" download><i class="fas fa-download"></i> Download PDF</a>
+        <a id="pdfOpenNativeBtn" class="btn btn-outline" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Open in Browser</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ONLINE CBT TEST MODAL -->
   <div class="modal-backdrop" id="quizModal">
     <div class="modal-box" style="max-width:820px;">
@@ -1542,6 +1571,8 @@
       <div id="quizContainer" style="margin-top:16px;"></div>
       <button id="submitQuizBtn" class="btn btn-secondary btn-block" style="margin-top:12px; padding:11px;" onclick="submitSscCglQuiz()">Submit Test</button>
       <div id="quizResult" style="display:none;"></div>
+      <div id="quizLeaderboard" style="display:none;"></div>
+      <div id="quizReview" class="quiz-review" style="display:none;"></div>
     </div>
   </div>
 
@@ -1613,6 +1644,7 @@
         <input type="text" id="txtEnteredOtp" maxlength="6" placeholder="• • • • • •" style="font-size: 1.6rem; letter-spacing: 8px; text-align: center; font-weight: 700; width: 220px; margin: 0 auto;" />
       </div>
 
+      <div id="recaptcha-container" class="recaptcha-box"></div>
       <div style="font-size: 0.82rem; color: var(--text-muted); margin: 12px 0;">
         Didn't receive code? <a href="javascript:void(0)" onclick="resendOtpCode()" style="color:var(--primary); font-weight:700;">Resend OTP</a>
       </div>
@@ -1644,6 +1676,8 @@
   <!-- Firebase Compatibility Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
 
   <script>
     // System Roles: 'guest' | 'student' | 'admin'
@@ -1671,6 +1705,10 @@
     };
 
     let activeCourseCategory = 'SSC';
+    let registrationConfirmationResult = null;
+    let registrationRecaptchaVerifier = null;
+    let firebaseDb = null;
+    let firebaseFunctions = null;
 
     // Firebase Configuration
     const firebaseConfig = {
@@ -1682,7 +1720,13 @@
       appId: "1:320350203929:web:9f25da9a804cd02db8ba88"
     };
 
-    try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+    try {
+      firebase.initializeApp(firebaseConfig);
+      firebaseDb = firebase.firestore();
+      firebaseFunctions = firebase.app().functions('asia-south1');
+    } catch(e) {
+      console.warn('Firebase initialization warning:', e);
+    }
 
     function generateAutoRegistrationNumber(mobile) {
       const now = new Date();
@@ -2203,11 +2247,34 @@
     }
 
     function generateSecureOtp() {
-      return Math.floor(100000 + Math.random() * 900000).toString();
+      const arr = new Uint32Array(1);
+      if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(arr);
+      return String(100000 + (arr[0] % 900000));
     }
 
-    function handleRegistrationSubmit(e) {
-      e.preventDefault();
+    function resetRegistrationRecaptcha() {
+      try {
+        if (registrationRecaptchaVerifier) {
+          registrationRecaptchaVerifier.clear();
+          registrationRecaptchaVerifier = null;
+        }
+      } catch (e) {}
+      const box = document.getElementById('recaptcha-container');
+      if (box) box.innerHTML = '';
+    }
+
+    function createRegistrationRecaptcha() {
+      if (!window.firebase || !firebase.auth) throw new Error('Firebase Authentication is not available.');
+      resetRegistrationRecaptcha();
+      registrationRecaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        size: 'normal',
+        callback: function() {},
+        'expired-callback': function() { alert('reCAPTCHA expired. Please complete it again.'); }
+      });
+      return registrationRecaptchaVerifier.render();
+    }
+
+    async function sendRealRegistrationOtp() {
       const name = document.getElementById('regName').value.trim();
       const mob = document.getElementById('regMobile').value.trim();
       const email = document.getElementById('regEmail').value.trim();
@@ -2217,13 +2284,14 @@
       const channel = document.getElementById('regOtpChannel').value;
 
       if (!name) return alert('Please enter student full name.');
-      if (mob.length !== 10) return alert('Please enter a valid 10-digit mobile number.');
+      if (!/^\d{10}$/.test(mob)) return alert('Please enter a valid 10-digit Indian mobile number.');
       if (!email) return alert('Please enter a valid email address.');
       if (!pass || pass.length < 6) return alert('Password must be at least 6 characters.');
+      if (channel !== 'mobile') return alert('For secure production verification, please select Mobile Number (SMS OTP). Email OTP is not simulated by this version.');
 
       const existing = findExistingUser(mob, email);
       if (existing) {
-        alert(`This Mobile Number (${mob}) or Email (${email}) is ALREADY REGISTERED with Registration No: ${existing.regNumber}!\n\nClick OK to switch to Login.`);
+        alert(`This Mobile Number (${mob}) or Email (${email}) is already registered with Registration No: ${existing.regNumber}. Please use Login.`);
         document.getElementById('loginUserId').value = existing.regNumber || mob || email;
         showLoginView();
         return;
@@ -2233,69 +2301,111 @@
       const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExam"]:checked'));
       if (checkedBoxes.length === 0) return alert('Please select at least one target exam from the sub-category boxes in Step 2.');
 
+      if (!firebase.auth) return alert('Firebase Authentication is not available. Please check the Firebase setup.');
+
       pendingProfileData = {
-        name: name,
-        mobile: mob,
-        email: email,
-        age: age,
-        qualification: qual,
-        password: pass,
-        categories: Array.from(selectedCategories),
-        exams: checkedBoxes.map(cb => cb.value),
-        enrolledCourses: []
+        name, mobile: mob, email, age, qualification: qual, password: pass,
+        categories: Array.from(selectedCategories), exams: checkedBoxes.map(cb => cb.value), enrolledCourses: []
       };
+      activeOtpChannel = 'mobile';
+      activeOtpTarget = '+91' + mob;
 
-      activeOtpChannel = channel;
-      activeOtpTarget = channel === 'mobile' ? "+91 " + mob : email;
-      serverGeneratedOtp = generateSecureOtp();
-
-      document.getElementById('authBackdrop').style.display = 'none';
-      document.getElementById('otpModalTitle').innerHTML = channel === 'mobile' ? '<i class="fas fa-mobile-alt"></i> Mobile OTP Verification' : '<i class="fas fa-envelope-open-text"></i> Email OTP Verification';
-      document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit real OTP verification code has been dispatched to <strong>${activeOtpTarget}</strong>.`;
-      document.getElementById('txtEnteredOtp').value = '';
-      document.getElementById('otpVerifyBackdrop').style.display = 'flex';
-
-      const channelName = channel === 'mobile' ? 'SMS Gateway' : 'Mail Server';
-      alert(`[${channelName} Dispatch] Real Registration OTP verification code for ${activeOtpTarget} is: ${serverGeneratedOtp}`);
+      try {
+        await createRegistrationRecaptcha();
+        const appVerifier = registrationRecaptchaVerifier;
+        registrationConfirmationResult = await firebase.auth().signInWithPhoneNumber(activeOtpTarget, appVerifier);
+        document.getElementById('authBackdrop').style.display = 'none';
+        document.getElementById('otpModalTitle').innerHTML = '<i class="fas fa-mobile-alt"></i> Real SMS OTP Verification';
+        document.getElementById('otpModalSubtitle').innerHTML = `A real Firebase verification code has been sent by SMS to <strong>${activeOtpTarget}</strong>. Enter it below to complete registration.`;
+        document.getElementById('txtEnteredOtp').value = '';
+        document.getElementById('otpVerifyBackdrop').style.display = 'flex';
+      } catch (error) {
+        console.error(error);
+        resetRegistrationRecaptcha();
+        alert('Unable to send SMS OTP. ' + (error.message || 'Please check Firebase Phone Authentication, authorized domains, reCAPTCHA and SMS settings.'));
+      }
     }
 
-    function resendOtpCode() {
-      serverGeneratedOtp = generateSecureOtp();
-      alert(`[Resent OTP] New verification code dispatched to ${activeOtpTarget} is: ${serverGeneratedOtp}`);
+    function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      sendRealRegistrationOtp();
+    }
+
+    async function resendOtpCode() {
+      if (!pendingProfileData || !activeOtpTarget) return alert('Please restart registration.');
+      try {
+        await createRegistrationRecaptcha();
+        registrationConfirmationResult = await firebase.auth().signInWithPhoneNumber(activeOtpTarget, registrationRecaptchaVerifier);
+        alert('A new real SMS OTP has been sent.');
+      } catch (error) {
+        resetRegistrationRecaptcha();
+        alert('Unable to resend OTP. ' + (error.message || 'Please try again later.'));
+      }
     }
 
     function closeOtpModal() {
       document.getElementById('otpVerifyBackdrop').style.display = 'none';
+      resetRegistrationRecaptcha();
       document.getElementById('authBackdrop').style.display = 'flex';
     }
 
-    function confirmAndValidateOtp() {
-      const enteredCode = document.getElementById('txtEnteredOtp').value.trim();
-      if (enteredCode.length !== 6) return alert('Please enter the 6-digit OTP.');
-      
-      if (enteredCode !== serverGeneratedOtp) {
-        return alert('Incorrect OTP! Please enter the exact verification code dispatched to your handset/inbox.');
-      }
-
-      const mobNumber = pendingProfileData.mobile || '000';
-      const registrationNumber = generateAutoRegistrationNumber(mobNumber);
-
-      currentStudentProfile = {
-        ...pendingProfileData,
-        regNumber: registrationNumber,
-        verifiedAt: new Date().toISOString(),
-        enrolledCourses: []
+    async function saveVerifiedProfileToFirestore(profile, uid) {
+      if (!firebaseDb || !uid) return;
+      const safeProfile = {
+        uid,
+        name: profile.name || '',
+        mobile: profile.mobile || '',
+        email: profile.email || '',
+        age: profile.age || '',
+        qualification: profile.qualification || '',
+        categories: profile.categories || [],
+        exams: profile.exams || [],
+        regNumber: profile.regNumber || '',
+        verifiedAt: profile.verifiedAt || new Date().toISOString(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
+      await firebaseDb.collection('users').doc(uid).set(safeProfile, { merge: true });
+    }
 
-      currentUserRole = 'student';
-      saveUserToDatabase(currentStudentProfile);
-      localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+    async function confirmAndValidateOtp() {
+      const enteredCode = document.getElementById('txtEnteredOtp').value.trim();
+      if (!/^\d{6}$/.test(enteredCode)) return alert('Please enter the 6-digit OTP.');
+      if (!registrationConfirmationResult) return alert('No active OTP request. Please request a new OTP.');
 
-      completeLoginUi();
-      document.getElementById('otpVerifyBackdrop').style.display = 'none';
-      document.getElementById('displayRegNumber').textContent = registrationNumber;
-      document.getElementById('displayRegMeta').textContent = `Candidate: ${currentStudentProfile.name} | Target: ${(currentStudentProfile.exams || []).slice(0, 2).join(', ')}`;
-      document.getElementById('regSuccessBackdrop').style.display = 'flex';
+      try {
+        const result = await registrationConfirmationResult.confirm(enteredCode);
+        const firebaseUser = result.user;
+        const mobNumber = pendingProfileData.mobile || '';
+        const uidSuffix = (firebaseUser.uid || '').replace(/[^a-zA-Z0-9]/g, '').slice(-8).toUpperCase() || String(Date.now()).slice(-8);
+        const now = new Date();
+        const datePart = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+        const registrationNumber = `${datePart}${String(mobNumber).slice(-3)}/${uidSuffix}`;
+
+        currentStudentProfile = {
+          ...pendingProfileData,
+          regNumber: registrationNumber,
+          firebaseUid: firebaseUser.uid,
+          phoneVerified: true,
+          verifiedAt: new Date().toISOString(),
+          enrolledCourses: []
+        };
+
+        currentUserRole = 'student';
+        saveUserToDatabase(currentStudentProfile);
+        localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+        await saveVerifiedProfileToFirestore(currentStudentProfile, firebaseUser.uid);
+
+        completeLoginUi();
+        document.getElementById('otpVerifyBackdrop').style.display = 'none';
+        resetRegistrationRecaptcha();
+        document.getElementById('displayRegNumber').textContent = registrationNumber;
+        document.getElementById('displayRegMeta').textContent = `Candidate: ${currentStudentProfile.name} | Mobile verified by Firebase SMS OTP`;
+        document.getElementById('regSuccessBackdrop').style.display = 'flex';
+        registrationConfirmationResult = null;
+      } catch (error) {
+        console.error(error);
+        alert('Incorrect or expired OTP. ' + (error.message || 'Please request a new code.'));
+      }
     }
 
     // --- STEP 1: PRE-TRANSACTION OTP AUTHORIZATION ---
@@ -2476,12 +2586,12 @@
           <strong><i class="fas fa-file-pdf" style="color:#dc2626;"></i> ${material.notesTitle}</strong>
           <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">${material.notesDescription}</div>
           <div class="material-actions">
-            <a class="btn btn-primary" href="${material.notesFile}" target="_blank" rel="noopener">
+            <button class="btn btn-primary" onclick="openPdfViewer('${material.notesFile}', '${material.notesTitle.replace(/'/g, "\'")}')">
               <i class="fas fa-file-pdf"></i> Open PDF in App
-            </a>
-            <a class="btn btn-outline" href="${material.notesFile}" download>
+            </button>
+            <button class="btn btn-outline" onclick="downloadPdfFile('${material.notesFile}', '${material.notesTitle.replace(/'/g, "\'")}')">
               <i class="fas fa-download"></i> Download PDF
-            </a>
+            </button>
           </div>
         </div>
 
@@ -2498,6 +2608,48 @@
         <div style="font-size:0.72rem;color:var(--text-muted);margin:6px 2px 16px;">
           <i class="fas fa-lock"></i> Access is shown only after an active enrollment for this course is detected.
         </div>`;
+    }
+
+    function getMaterialAbsoluteUrl(relativePath) {
+      const clean = String(relativePath || '').replace(/^\.\//, '');
+      return new URL(clean, window.location.href).href;
+    }
+
+    function openPdfViewer(relativePath, title) {
+      const url = getMaterialAbsoluteUrl(relativePath);
+      document.getElementById('pdfViewerTitle').textContent = title || 'Course PDF';
+      document.getElementById('pdfViewerFrame').src = url + '#toolbar=1&navpanes=0&view=FitH';
+      document.getElementById('pdfDownloadBtn').href = url;
+      document.getElementById('pdfDownloadBtn').setAttribute('download', (title || 'Bharti_Classes_Notes') + '.pdf');
+      document.getElementById('pdfOpenNativeBtn').href = url;
+      document.getElementById('pdfViewerModal').style.display = 'flex';
+    }
+
+    async function downloadPdfFile(relativePath, title) {
+      const url = getMaterialAbsoluteUrl(relativePath);
+      try {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const blob = await response.blob();
+        if (blob.type && blob.type !== 'application/pdf') console.warn('PDF response MIME type:', blob.type);
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = (title || 'Bharti_Classes_Notes').replace(/[^a-z0-9._-]+/gi, '_') + '.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+      } catch (error) {
+        console.error('PDF download failed:', error);
+        alert('The PDF could not be downloaded automatically. Please use "Open in Browser" in the PDF viewer and then use the browser Download button.');
+        openPdfViewer(relativePath, title);
+      }
+    }
+
+    function closePdfViewer() {
+      document.getElementById('pdfViewerModal').style.display = 'none';
+      document.getElementById('pdfViewerFrame').src = 'about:blank';
     }
 
     const SSC_CGL_QUIZ = [
@@ -2531,37 +2683,129 @@
     ];
 
     let quizSubmitted = false;
+    let lastQuizAnswers = [];
+
+    const SSC_CGL_EXPLANATIONS = [
+      'Let the numbers be a and b. a+b=32 and a³+b³=9728. Using (a+b)³=a³+b³+3ab(a+b), ab=240. Then (a-b)²=32²−4(240)=64, so |a-b|=8. Hence |a³-b³|=|a-b|(a²+ab+b²)=8(544+240)=6272.',
+      'Divide x²−8x−1=0 by x: x−1/x=8. Squaring gives x²+1/x²−2=64, hence x²+1/x²=66.',
+      'x²+1/x²=6. Therefore (x²−1/x²)²=36−4=32, so x²−1/x²=−4√2 because 0<x<1. Multiply by 6: x⁴−1/x⁴=−24√2.',
+      '7 cot P=24 means cot P=24/7. Take opposite:adjacent=7:24, so hypotenuse=25. Therefore sin P=7/25.',
+      'Use (sec A+tan A)(sec A−tan A)=1. If sec A+tan A=5, then sec A−tan A=1/5. Hence sec A=13/5 and tan A=12/5. Therefore sin A=tan A/sec A=12/13.',
+      'Since A+B=90°, tan B=cot A. From sin A=3/5, cos A=4/5, so cot A=4/3. Therefore tan B=4/3.',
+      'Second person covers 1/4 of the distance in 3 times the time. Speed ratio=(d/t):((d/4)/(3t))=12:1.',
+      'Let the distance be d. Time difference is d/4−d/6=d/12=0.5 hour, so d=6 km.',
+      'Relative speed=11−6=5 km/h. Initial gap=1.15 km, so catch time=1.15/5=0.23 h. Thief travels 6×0.23=1.38 km=1380 m.',
+      'Relative speed in the same direction=125−17=108 km/h=30 m/s. Time=252/30=8.4 s.',
+      'Total distance to cross=108+148=256 m. Speed=128 km/h=35.555... m/s. Time=256/35.555...=7.2 s.',
+      'Relative speed=70−34=36 km/h=10 m/s. In 25 s, combined length=10×25=250 m.',
+      'Let upstream speed=u and downstream speed=v. 20/u+44/v=8 and 15/u+22/v=5. Solving gives u=5 and v=11. Still-water speed=(5+11)/2=8 km/h.',
+      '15 minutes is 25% less than upstream time, so upstream time=20 minutes. Downstream speed=16/(15/60)=64 km/h and upstream speed=16/(20/60)=48 km/h. Still-water speed=(64+48)/2=56 km/h.',
+      'Let downstream speed=d and upstream speed=u. From 60/d+40/u=12.5 and 84/d+63/u=18.9, we get d=13.333... and u=5. Still-water speed=(13.333...+5)/2≈9.17 km/h, nearest km/h=9.',
+      'Ashok and Anil rates are 1/8 and 1/12, total=5/24. In 4 days they do 5/6 of the work, so Amar does 1/6. Amar gets 4500×1/6=₹750.',
+      'Tara does 10/15=2/3 of the work in 10 days. Remaining=1/3. Sara does 1/18 per day, so she needs 6 days.',
+      'Total work=40×30=1200 man-days. With 30 men, days=1200/30=40.',
+      'To keep expenditure constant, new consumption/old consumption=100/181. Reduction=1−100/181=81/181≈44.75%.',
+      'If Sam is 19% less than Peter, Sam=81% of Peter. Peter is 19/81×100≈23.46% more than Sam.',
+      'Take original income=100 and savings=20. New income=125 and savings=21 (5% increase). New savings percentage=21/125×100=16.8%.',
+      'CP of 28 oranges=SP of 24 oranges. Thus SP/CP=28/24=7/6. Profit=1/6=16 2/3%.',
+      'Let CP of 25 g be ₹100. CP of 20 g=₹80. A 15% loss on ₹100 gives SP=₹85. Effective profit on the actual 20 g cost is (85−80)/80×100=6.25%.',
+      'At 10% profit SP=1.10 CP. At 15% profit SP=1.15 CP. Difference=0.05 CP=₹20, so CP=₹400.',
+      '₹54,000 is 80% of list price. List price=54,000/0.8=₹67,500.',
+      'After 25% discount, 75% remains; after another 12%, 88% remains. Thus final=0.75×0.88×list=0.66×list. List=792/0.66=₹1,200.',
+      'Three successive 10% discounts leave 90%^3 of marked price. 55,000×0.9×0.9×0.9=₹40,095.'
+    ];
+
     function startSscCglQuiz() {
       closeClassroomModal();
       quizSubmitted = false;
+      lastQuizAnswers = [];
       document.getElementById('quizResult').style.display = 'none';
+      document.getElementById('quizLeaderboard').style.display = 'none';
+      document.getElementById('quizReview').style.display = 'none';
       document.getElementById('submitQuizBtn').style.display = 'block';
       document.getElementById('quizModal').style.display = 'flex';
       document.getElementById('quizContainer').innerHTML = SSC_CGL_QUIZ.map((item, i) => `
-        <div class="quiz-question">
+        <div class="quiz-question" id="quizQuestion${i}">
           <div style="font-weight:700;line-height:1.5;">${i+1}. ${item.q}</div>
           ${item.o.map((op,j)=>`<label class="quiz-option"><input type="radio" name="sscCglQ${i}" value="${j}"> <strong>${String.fromCharCode(65+j)}.</strong> ${op}</label>`).join('')}
         </div>`).join('');
       window.scrollTo(0,0);
     }
 
-    function submitSscCglQuiz() {
-      if (quizSubmitted) return;
-      let correct=0, wrong=0, unanswered=0;
-      SSC_CGL_QUIZ.forEach((item,i)=>{
+    function collectQuizAnswers() {
+      return SSC_CGL_QUIZ.map((item,i)=>{
         const selected=document.querySelector(`input[name="sscCglQ${i}"]:checked`);
-        if (!selected) unanswered++;
-        else if (Number(selected.value)===item.a) correct++;
+        return selected ? Number(selected.value) : null;
+      });
+    }
+
+    function calculateQuizLocally(answers) {
+      let correct=0, wrong=0, unanswered=0;
+      answers.forEach((selected,i)=>{
+        if (selected === null) unanswered++;
+        else if (selected === SSC_CGL_QUIZ[i].a) correct++;
         else wrong++;
       });
-      const score = correct*2 - wrong*0.5;
-      const max = SSC_CGL_QUIZ.length*2;
+      return { correct, wrong, unanswered, score: correct*2 - wrong*0.5, max: SSC_CGL_QUIZ.length*2 };
+    }
+
+    function renderQuizReview(answers) {
+      const review = document.getElementById('quizReview');
+      review.style.display = 'block';
+      review.innerHTML = `<h4 style="color:var(--primary);margin-bottom:10px;">Detailed Answer Review</h4>` + SSC_CGL_QUIZ.map((item,i)=>{
+        const selected=answers[i];
+        const isCorrect=selected===item.a;
+        const isUnanswered=selected===null;
+        const cls=isUnanswered?'unanswered':(isCorrect?'correct':'incorrect');
+        const badge=isUnanswered?'Not Attempted':(isCorrect?'Correct':'Incorrect');
+        const badgeBg=isUnanswered?'#fef3c7':(isCorrect?'#dcfce7':'#fee2e2');
+        const badgeColor=isUnanswered?'#92400e':(isCorrect?'#166534':'#991b1b');
+        return `<div class="quiz-review-item ${cls}">
+          <span class="quiz-review-badge" style="background:${badgeBg};color:${badgeColor};">${badge}</span>
+          <div style="font-weight:700;line-height:1.5;">Q${i+1}. ${item.q}</div>
+          <div style="margin-top:7px;font-size:.86rem;">
+            <div><strong>Your answer:</strong> ${selected===null?'Not attempted':String.fromCharCode(65+selected)+'. '+item.o[selected]}</div>
+            <div><strong>Correct answer:</strong> ${String.fromCharCode(65+item.a)}. ${item.o[item.a]}</div>
+          </div>
+          <div style="margin-top:8px;padding:9px;background:#f8fafc;border-radius:6px;font-size:.82rem;line-height:1.55;"><strong>Solution:</strong> ${SSC_CGL_EXPLANATIONS[i]}</div>
+        </div>`;
+      }).join('');
+    }
+
+    async function submitSscCglQuiz() {
+      if (quizSubmitted) return;
+      const answers = collectQuizAnswers();
+      const localResult = calculateQuizLocally(answers);
+      lastQuizAnswers = answers;
       quizSubmitted = true;
       document.getElementById('submitQuizBtn').style.display='none';
+
       const result=document.getElementById('quizResult');
       result.style.display='block';
       result.className='quiz-result';
-      result.innerHTML=`<strong>Test Submitted</strong><br>Correct: ${correct} | Wrong: ${wrong} | Unanswered: ${unanswered}<br><strong>Score: ${score} / ${max}</strong><br><span style="font-size:0.8rem;color:var(--text-muted);">Answer key follows the supplied MCQ document, except Question 6 is evaluated mathematically as B (4/3).</span>`;
+      result.innerHTML=`<strong>Test Submitted</strong><br>Correct: ${localResult.correct} | Wrong: ${localResult.wrong} | Unanswered: ${localResult.unanswered}<br><strong>Score: ${localResult.score} / ${localResult.max}</strong><br><span style="font-size:.8rem;color:var(--text-muted);">Detailed solutions are shown below.</span>`;
+      renderQuizReview(answers);
+
+      const leaderboard = document.getElementById('quizLeaderboard');
+      leaderboard.style.display='block';
+      leaderboard.innerHTML='<div class="quiz-leaderboard"><strong>Ranking</strong><br><span style="font-size:.82rem;">Submitting your result to the secure test server…</span></div>';
+
+      try {
+        if (!firebaseFunctions || !firebase.auth().currentUser) {
+          throw new Error('For the official ranking, please use a Firebase-verified student account. Existing legacy accounts can take the test, but their score will not be added to the public ranking until mobile verification is completed.');
+        }
+        const submitQuiz = firebaseFunctions.httpsCallable('submitSscCglQuiz');
+        const response = await submitQuiz({ quizId:'ssc_cgl_27', answers });
+        const data = response.data || {};
+        leaderboard.innerHTML=`<div class="quiz-leaderboard"><strong>Official Ranking</strong><br>
+          <span style="font-size:1.05rem;font-weight:800;">Your Rank: ${data.rank || '—'}</span><br>
+          <span style="font-size:.82rem;">Students participated: <strong>${data.participants || 0}</strong> &nbsp; | &nbsp; Score: <strong>${data.score}</strong> / ${data.max || 54}</strong></span><br>
+          <span style="font-size:.74rem;color:var(--text-muted);">Ranking is based on score; earlier submission wins ties.</span>
+        </div>`;
+      } catch (error) {
+        console.warn('Official ranking unavailable:', error);
+        leaderboard.innerHTML=`<div class="quiz-leaderboard" style="background:#fff7ed;border-color:#fed7aa;"><strong style="color:#9a3412;">Ranking setup required</strong><br><span style="font-size:.8rem;">Your test and detailed solutions are complete. Official ranking will appear after Firebase Authentication + the secure quiz function are deployed. This prevents students from changing their own scores.</span></div>`;
+      }
     }
 
     function closeQuizModal() {
@@ -3358,6 +3602,28 @@
       renderSidebarMenu();
       checkAndTriggerReminderNotification();
       loadDayTasks();
+    }
+
+    async function restoreFirebaseStudentProfile(firebaseUser) {
+      if (!firebaseUser || !firebaseDb) return;
+      try {
+        const snap = await firebaseDb.collection('users').doc(firebaseUser.uid).get();
+        if (snap.exists) {
+          const remote = snap.data();
+          const local = currentStudentProfile || {};
+          currentStudentProfile = { ...local, ...remote, firebaseUid: firebaseUser.uid, phoneVerified: true };
+          if (!currentStudentProfile.enrolledCourses) currentStudentProfile.enrolledCourses = [];
+          localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+          currentUserRole = 'student';
+          completeLoginUi();
+        }
+      } catch (e) { console.warn('Could not restore Firebase student profile:', e); }
+    }
+
+    if (window.firebase && firebase.auth) {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) restoreFirebaseStudentProfile(user);
+      });
     }
 
     window.addEventListener('DOMContentLoaded', () => {
