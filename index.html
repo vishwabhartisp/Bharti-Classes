@@ -599,7 +599,7 @@
     .auth-help-links { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.78rem; }
     .auth-help-links a { color: #2563eb; text-decoration: none; cursor: pointer; font-weight: 600; }
 
-    /* Admin Dashboard */
+    /* Admin Dashboard & Management */
     .admin-stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -653,7 +653,7 @@
     }
     table.admin-table tr:hover { background: #f8fafc; }
 
-    /* UPI Payment QR & Apps */
+    /* UPI PAYMENT MODAL & DIRECT APP BUTTONS */
     .upi-qr-box {
       background: #f8fafc;
       border: 1px solid var(--border);
@@ -698,116 +698,6 @@
     .btn-bhim { background: #ecfdf5; color: #00796b; border-color: #a7f3d0; }
     .btn-amazon { background: #fff7ed; color: #ea580c; border-color: #ffedd5; }
 
-    /* --- CBT TEST & VIDEO MODAL STYLES --- */
-    .video-modal-box {
-      background: #000;
-      width: 820px;
-      max-width: 95%;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-    }
-    .video-wrapper {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-      height: 0;
-      background: #000;
-    }
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      border: none;
-    }
-
-    /* CBT Interface */
-    .cbt-modal-box {
-      background: #fff;
-      width: 960px;
-      max-width: 96%;
-      height: 92vh;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .cbt-header {
-      background: var(--primary);
-      color: #fff;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cbt-body {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-    }
-    .cbt-question-pane {
-      flex: 2.2;
-      padding: 24px;
-      overflow-y: auto;
-      border-right: 1px solid var(--border);
-    }
-    .cbt-palette-pane {
-      flex: 1;
-      padding: 16px;
-      background: #f8fafc;
-      overflow-y: auto;
-    }
-    .cbt-palette-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .cbt-q-btn {
-      padding: 8px 4px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: #fff;
-      cursor: pointer;
-      text-align: center;
-    }
-    .cbt-q-btn.answered { background: #10b981; color: #fff; border-color: #10b981; }
-    .cbt-q-btn.current { border-color: var(--secondary); box-shadow: 0 0 0 2px var(--secondary); }
-    .cbt-footer {
-      padding: 12px 20px;
-      background: #f8fafc;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cbt-option-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      background: #fff;
-      transition: all 0.15s;
-    }
-    .cbt-option-label:hover { background: #f1f5f9; }
-    .cbt-option-label.selected { border-color: var(--secondary); background: #fff1f2; font-weight: 600; }
-
-    .cbt-solution-box {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 12px 16px;
-      margin-top: 14px;
-      font-size: 0.86rem;
-      color: #334155;
-      line-height: 1.6;
-    }
-
     @media (max-width: 860px) {
       aside { position: absolute; height: 100vh; left: -280px; }
       aside.open { left: 0; }
@@ -815,8 +705,6 @@
       .in-app-search { width: 100%; }
       header.topbar { padding: 0 14px; }
       .page-title { display: none; }
-      .cbt-body { flex-direction: column; }
-      .cbt-palette-pane { max-height: 180px; border-top: 1px solid var(--border); }
     }
   </style>
 </head>
@@ -831,7 +719,7 @@
       </div>
     </div>
 
-    <!-- Role-based Sidebar Menu (Transforms for Student vs Director Admin) -->
+    <!-- Dynamic Menu that automatically transforms for Student vs Director Admin -->
     <ul class="sidebar-menu" id="sidebarMenuContainer"></ul>
 
     <div class="sidebar-footer">
@@ -889,12 +777,12 @@
       <!-- VIEW 1: COURSES & ADMISSIONS WITH INTERACTIVE BOX INTERFACE -->
       <div id="view-courses" class="view-panel active">
         
-        <!-- Active Enrolled Batches Panel (Shown to Enrolled Students) -->
+        <!-- Active Enrolled Batches Panel (Shown to Logged in Users) -->
         <div class="my-enrolled-container" id="myEnrolledPanel">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
             <div>
               <h3 style="color:#065f46; font-size:1.05rem;"><i class="fas fa-check-circle"></i> My Enrolled Batches (Active 365 Days Access)</h3>
-              <p style="color:#047857; font-size:0.82rem;">Access your purchased video lectures, formula notes, and computer-based test series.</p>
+              <p style="color:#047857; font-size:0.82rem;">Access your purchased video lectures, formula notes, and test series.</p>
             </div>
             <span class="exam-pill" style="background:#10b981; color:#fff; font-size:0.75rem;" id="lblEnrolledCountBadge">0 Batches Active</span>
           </div>
@@ -907,16 +795,46 @@
             <span>Select Competitive Examination Category:</span>
           </div>
           <div class="exam-box-grid">
-            <div class="exam-box-card active" onclick="selectCourseBox('SSC', this)"><i class="fas fa-graduation-cap"></i><span>SSC</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('Bank', this)"><i class="fas fa-university"></i><span>Bank</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('Railway', this)"><i class="fas fa-train"></i><span>Railway</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('UPSC', this)"><i class="fas fa-landmark"></i><span>UPSC</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('BPSC', this)"><i class="fas fa-book-reader"></i><span>BPSC</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('JPSC', this)"><i class="fas fa-pencil-ruler"></i><span>JPSC</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('Bihar SSC', this)"><i class="fas fa-file-alt"></i><span>Bihar SSC</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('Bihar SI', this)"><i class="fas fa-shield-alt"></i><span>Bihar SI</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('Bihar Constable', this)"><i class="fas fa-user-shield"></i><span>Bihar Constable</span></div>
-            <div class="exam-box-card" onclick="selectCourseBox('Delhi Police', this)"><i class="fas fa-id-badge"></i><span>Delhi Police</span></div>
+            <div class="exam-box-card active" onclick="selectCourseBox('SSC', this)">
+              <i class="fas fa-graduation-cap"></i>
+              <span>SSC</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('Bank', this)">
+              <i class="fas fa-university"></i>
+              <span>Bank</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('Railway', this)">
+              <i class="fas fa-train"></i>
+              <span>Railway</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('UPSC', this)">
+              <i class="fas fa-landmark"></i>
+              <span>UPSC</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('BPSC', this)">
+              <i class="fas fa-book-reader"></i>
+              <span>BPSC</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('JPSC', this)">
+              <i class="fas fa-pencil-ruler"></i>
+              <span>JPSC</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('Bihar SSC', this)">
+              <i class="fas fa-file-alt"></i>
+              <span>Bihar SSC</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('Bihar SI', this)">
+              <i class="fas fa-shield-alt"></i>
+              <span>Bihar SI</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('Bihar Constable', this)">
+              <i class="fas fa-user-shield"></i>
+              <span>Bihar Constable</span>
+            </div>
+            <div class="exam-box-card" onclick="selectCourseBox('Delhi Police', this)">
+              <i class="fas fa-id-badge"></i>
+              <span>Delhi Police</span>
+            </div>
           </div>
         </div>
 
@@ -930,6 +848,7 @@
           </button>
         </div>
 
+        <!-- Dynamic Course Cards Downward Container -->
         <h3 id="selectedCategoryHeading" style="margin-bottom:14px; color:var(--primary); font-size:1.1rem; border-left:4px solid var(--secondary); padding-left:10px;">
           Courses for SSC Examinations
         </h3>
@@ -1064,7 +983,7 @@
             <div class="card" style="margin:0; border: 1px solid var(--border);">
               <h4>SSC CGL (Tier 1 & 2)</h4>
               <p style="font-size:0.8rem; color:var(--text-muted); margin: 5px 0 10px;">2018 - 2024 Solved Papers</p>
-              <button class="btn btn-outline btn-block" onclick="startInteractiveCbtTest()"><i class="fas fa-laptop-code"></i> Launch CBT Mock Test</button>
+              <button class="btn btn-outline btn-block" onclick="alert('Downloading SSC PYQ Archive...')"><i class="fas fa-download"></i> Papers + Solutions</button>
             </div>
             <div class="card" style="margin:0; border: 1px solid var(--border);">
               <h4>IBPS & SBI Bank PO/Clerk</h4>
@@ -1185,7 +1104,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
             <div>
               <h2 style="color:var(--primary);"><i class="fas fa-chart-line"></i> Director's Executive Analytics</h2>
-              <p style="color:var(--text-muted); font-size:0.86rem; margin-top:4px;">Real-time administrative ledger of candidate enrollments, UTR approvals, and revenue.</p>
+              <p style="color:var(--text-muted); font-size:0.86rem; margin-top:4px;">Comprehensive real-time overview of enrolled students, fee collections, and active academic batches.</p>
             </div>
             <button class="btn btn-outline" onclick="exportStudentsToCsv()"><i class="fas fa-file-excel"></i> Export Student Registry (CSV)</button>
           </div>
@@ -1603,119 +1522,30 @@
       <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;">
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
-            <strong style="font-size:0.88rem; display:block;">Advance Maths Masterclass (Vishwa Bharti Sir)</strong>
-            <span style="font-size:0.76rem; color:var(--text-muted);">Watch full live recording inside app</span>
+            <strong style="font-size:0.88rem; display:block;">Advance Maths Masterclass Playlist</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Algebra, Trigonometry, Geometry, Mensuration by Bharti Sir</span>
           </div>
-          <button class="btn btn-primary" style="padding:6px 12px; font-size:0.82rem;" onclick="openInAppVideoLecture('QfbEXBMf_pY', 'Advance Maths Masterclass - Bharti Sir')">
-            <i class="fas fa-play"></i> Watch Lecture
-          </button>
+          <button class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="alert('Opening unlisted live video lectures repository...')"><i class="fas fa-play"></i> Watch Lectures</button>
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
-            <strong style="font-size:0.88rem; display:block;">Class Formula Sheets & Weekly Quiz PDF</strong>
-            <span style="font-size:0.76rem; color:var(--text-muted);">Complete printable compendium & formulas</span>
+            <strong style="font-size:0.88rem; display:block;">Class Formula Sheets & Step-Skipping PDFs</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Complete printable high-speed calculation notes</span>
           </div>
-          <button class="btn btn-outline" style="padding:6px 12px; font-size:0.82rem;" onclick="downloadAttachedPdfBooklet()">
-            <i class="fas fa-download"></i> Download PDF
-          </button>
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.8rem;" onclick="alert('Downloading Bharti Classes formula vault PDF...')"><i class="fas fa-download"></i> Download PDF</button>
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
-            <strong style="font-size:0.88rem; display:block;">SSC CGL 27-Question PYQ Mock Test</strong>
-            <span style="font-size:0.76rem; color:var(--text-muted);">3 questions per chapter | Tier-I 2023 Real CBT Format</span>
+            <strong style="font-size:0.88rem; display:block;">CBT Mock Test Series & Solutions</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Exam standard full-length computer-based practice sets</span>
           </div>
-          <button class="btn btn-outline" style="padding:6px 12px; font-size:0.82rem;" onclick="startInteractiveCbtTest()">
-            <i class="fas fa-pen-alt"></i> Start Test
-          </button>
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.8rem;" onclick="switchView('practice'); closeClassroomModal();"><i class="fas fa-pen-alt"></i> Start Test</button>
         </div>
       </div>
 
       <button class="btn btn-outline btn-block" onclick="closeClassroomModal()">Close Classroom</button>
-    </div>
-  </div>
-
-  <!-- IN-APP LECTURE VIDEO PLAYER MODAL -->
-  <div class="modal-backdrop" id="videoLectureModal">
-    <div class="video-modal-box">
-      <div style="background:var(--primary); color:#fff; padding:12px 18px; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.9rem; font-weight:700;"><i class="fas fa-play-circle" style="color:var(--secondary);"></i> <span id="videoModalTitle">Advance Maths Masterclass - Bharti Sir</span></span>
-        <button onclick="closeVideoModal()" style="background:none; border:none; color:#fff; font-size:1.1rem; cursor:pointer;"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="video-wrapper">
-        <iframe id="inAppYoutubePlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-
-  <!-- IN-APP COMPUTER BASED TEST (CBT) MODAL (SSC CGL 27 QUESTIONS PYQ) -->
-  <div class="modal-backdrop" id="cbtTestModal">
-    <div class="cbt-modal-box">
-      <div class="cbt-header">
-        <div>
-          <strong style="font-size:1rem;">SSC CGL Mathematics Tier-I (2023 PYQ Test)</strong>
-          <span style="font-size:0.75rem; color:#cbd5e1; display:block;">27 Questions | +2.0 Correct, -0.5 Negative Marking</span>
-        </div>
-        <div style="display:flex; align-items:center; gap:15px;">
-          <span style="background:rgba(255,255,255,0.15); padding:4px 10px; border-radius:4px; font-weight:700; font-size:0.88rem;">
-            <i class="fas fa-stopwatch"></i> <span id="cbtTimerDisplay">30:00</span>
-          </span>
-          <button onclick="submitCbtTestConfirm()" class="btn btn-secondary" style="padding:4px 12px; font-size:0.8rem;">Submit Test</button>
-        </div>
-      </div>
-
-      <div class="cbt-body">
-        <div class="cbt-question-pane">
-          <div style="display:flex; justify-content:space-between; font-size:0.82rem; color:var(--text-muted); margin-bottom:10px;">
-            <span id="cbtCurrentCategory">Topic: Algebra</span>
-            <span id="cbtQuestionNumberBadge">Question 1 of 27</span>
-          </div>
-
-          <h3 id="cbtQuestionText" style="font-size:1rem; line-height:1.5; margin-bottom:16px; color:var(--primary);"></h3>
-
-          <div id="cbtOptionsContainer"></div>
-        </div>
-
-        <div class="cbt-palette-pane">
-          <span style="font-size:0.8rem; font-weight:700; color:var(--primary);">Question Palette</span>
-          <div class="cbt-palette-grid" id="cbtPaletteButtonsContainer"></div>
-        </div>
-      </div>
-
-      <div class="cbt-footer">
-        <button class="btn btn-outline" onclick="prevCbtQuestion()" id="btnCbtPrev"><i class="fas fa-arrow-left"></i> Previous</button>
-        <div>
-          <button class="btn btn-outline" onclick="clearCbtResponse()" style="margin-right:8px;">Clear Response</button>
-          <button class="btn btn-primary" onclick="nextCbtQuestion()" id="btnCbtNext">Save & Next <i class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CBT TEST RESULT SUMMARY MODAL -->
-  <div class="modal-backdrop" id="cbtResultModal">
-    <div class="modal-box" style="text-align:center;">
-      <div style="font-size:2.4rem; color:var(--success); margin-bottom:6px;"><i class="fas fa-trophy"></i></div>
-      <h3 style="color:var(--primary); margin-bottom:4px;">Test Performance Report</h3>
-      <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:14px;">SSC CGL Mathematics MCQ Practice Test (Tier-I 2023 Standards)</p>
-
-      <div class="perf-scoreboard" style="margin-bottom:14px;">
-        <div class="perf-card">
-          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Score</span>
-          <div style="font-size:1.3rem; font-weight:800; color:var(--secondary);" id="cbtFinalScoreDisplay">0 / 54</div>
-        </div>
-        <div class="perf-card">
-          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Accuracy</span>
-          <div style="font-size:1.3rem; font-weight:800; color:#059669;" id="cbtAccuracyDisplay">0%</div>
-        </div>
-        <div class="perf-card">
-          <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Attempted</span>
-          <div style="font-size:1.3rem; font-weight:800; color:var(--primary);" id="cbtAttemptedDisplay">0 / 27</div>
-        </div>
-      </div>
-
-      <button class="btn btn-primary btn-block" onclick="closeCbtResultModal()">Review Solutions & Back to Dashboard</button>
     </div>
   </div>
 
@@ -1815,7 +1645,12 @@
     </div>
   </div>
 
+  <!-- Firebase Compatibility Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
   <script>
+    // System Roles: 'guest' | 'student' | 'admin'
     let currentUserRole = 'guest';
     let isUserLoggedIn = false;
     let activeLang = 'en';
@@ -1841,49 +1676,118 @@
 
     let activeCourseCategory = 'SSC';
 
-    // CBT Engine State
-    let cbtCurrentIndex = 0;
-    let cbtUserResponses = {};
-    let cbtTimerInterval = null;
-    let cbtTimeRemaining = 1800;
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7ITxaiU2Ot_b6ucuyJ3Zb3uB5uv-wZw8",
+      authDomain: "bharti-classes-a54fb.firebaseapp.com",
+      projectId: "bharti-classes-a54fb",
+      storageBucket: "bharti-classes-a54fb.appspot.com",
+      messagingSenderId: "320350203929",
+      appId: "1:320350203929:web:9f25da9a804cd02db8ba88"
+    };
 
-    // SSC CGL Tier-I 2023 27-Question Interactive Test Bank
-    const SSC_CGL_27_PYQS = [
-      { q: "The sum of the cubes of two natural numbers is 9728, while their sum is 32. What is the positive difference between their cubes?", options: ["6272", "6144", "6276", "6320"], ans: 0, cat: "ALGEBRA", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3", sol: "Let numbers be a and b. a³ + b³ = 9728, a + b = 32. Using identity (a+b)³ = a³ + b³ + 3ab(a+b), we find ab and then difference." },
-      { q: "If x² − 8x − 1 = 0, find the value of x² + 1/x².", options: ["62", "64", "66", "68"], ans: 2, cat: "ALGEBRA", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1", sol: "Divide by x: x - 1/x = 8. Square both sides: (x - 1/x)² = 64 => x² + 1/x² - 2 = 64 => 66." },
-      { q: "If x² + 1/x² = 6 and 0 < x < 1, find x⁴ − 1/x⁴.", options: ["24√2", "−24√2", "−12√10", "12√10"], ans: 1, cat: "ALGEBRA", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1", sol: "Since 0 < x < 1, x - 1/x is negative. (x - 1/x)² = x² + 1/x² - 2 = 4 => x - 1/x = -2." },
-      { q: "If 7 cot P = 24, then find sin P.", options: ["24/25", "7/24", "25/7", "7/25"], ans: 3, cat: "TRIGONOMETRY", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3", sol: "cot P = 24/7 = Base/Perpendicular. Hypotenuse = √(24² + 7²) = 25. sin P = Perpendicular/Hypotenuse = 7/25." },
-      { q: "If sec A + tan A = 5, then sin A is equal to:", options: ["5/13", "12/13", "13/12", "3/5"], ans: 1, cat: "TRIGONOMETRY", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2", sol: "sec A - tan A = 1/5 = 0.2. Adding gives 2 sec A = 5.2 => sec A = 13/5 => cos A = 5/13 => sin A = 12/13." },
-      { q: "If A + B = 90° and sin A = 3/5, what is tan B?", options: ["3/4", "4/3", "5/3", "5/4"], ans: 1, cat: "TRIGONOMETRY", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1", sol: "A + B = 90° => B = 90° - A. tan B = tan(90° - A) = cot A = cos A / sin A = (4/5) / (3/5) = 4/3." },
-      { q: "A certain distance is covered by one person at a certain speed. Another person covers 25% of that distance in triple the time. What is the ratio of the first person's speed to the second person's speed?", options: ["1 : 6", "1 : 12", "6 : 1", "12 : 1"], ans: 3, cat: "TIME, SPEED AND DISTANCE", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2", sol: "Speed ratio = (D1/T1) / (D2/T2) = (1 / 1) / (0.25 / 3) = 1 / (1/12) = 12 : 1." },
-      { q: "Two motorists start together. One travels at 4 km/h and the other at 6 km/h. If the slower motorist arrives half an hour later, what distance did they travel?", options: ["8 km", "5 km", "6 km", "4 km"], ans: 2, cat: "TIME, SPEED AND DISTANCE", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1", sol: "Let distance be d. d/4 - d/6 = 0.5 => d/12 = 0.5 => d = 6 km." },
-      { q: "A thief is 1150 m away from the police. The thief runs at 6 km/h and the police chases him at 11 km/h. How far will the thief run before being caught?", options: ["1485 m", "1380 m", "1125 m", "1280 m"], ans: 1, cat: "TIME, SPEED AND DISTANCE", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2", sol: "Relative speed = 11 - 6 = 5 km/h = 25/9 m/s. Time to catch = 1150 / (5 * 5/18) = 828s. Thief distance = 6 * 5/18 * 828 = 1380 m." },
-      { q: "A 252 m long train runs at 125 km/h. A man runs in the same direction at 17 km/h. How long will the train take to pass the man?", options: ["7.6 s", "8 s", "8.4 s", "6.4 s"], ans: 2, cat: "TRAIN", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3", sol: "Relative speed = 125 - 17 = 108 km/h = 30 m/s. Time = 252 / 30 = 8.4 seconds." },
-      { q: "Rajdhani Express is 108 m long and runs at 128 km/h. It crosses a stationary train of length 148 m. What time is required?", options: ["8 s", "7.5 s", "9 s", "7.2 s"], ans: 3, cat: "TRAIN", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 3", sol: "Total distance = 108 + 148 = 256 m. Speed = 128 * 5/18 m/s. Time = 256 / (128 * 5/18) = 7.2 seconds." },
-      { q: "A train travelling at 70 km/h crosses another train travelling in the same direction at 34 km/h in 25 seconds. What is the combined length of the trains?", options: ["325 m", "225 m", "250 m", "500 m"], ans: 2, cat: "TRAIN", pyq: "SSC CGL 2023 Tier-I", sol: "Relative speed = 70 - 34 = 36 km/h = 10 m/s. Combined length = 10 * 25 = 250 m." },
-      { q: "A boat covers 20 km upstream and 44 km downstream in 8 hours. In 5 hours it covers 15 km upstream and 22 km downstream. Find its speed in still water.", options: ["6 km/h", "10 km/h", "8 km/h", "7 km/h"], ans: 2, cat: "BOAT AND STREAM", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1", sol: "Solving linear equations for upstream speed u = 5 km/h and downstream speed v = 11 km/h. Still water speed = (11 + 5)/2 = 8 km/h." },
-      { q: "A man rows 16 km downstream in 15 minutes, which is 25% less time than he takes upstream for the same distance. How many kilometres can he row in one hour in still water?", options: ["56 km", "60 km", "58 km", "54 km"], ans: 0, cat: "BOAT AND STREAM", pyq: "SSC CGL Tier-I, 14 July 2023, Shift 4", sol: "Downstream speed v = 64 km/h. Upstream time = 15 / 0.75 = 20 mins => Upstream speed u = 48 km/h. Still water speed = 56 km/h." },
-      { q: "A boat can go 60 km downstream and 40 km upstream in 12 h 30 min. It can go 84 km downstream and 63 km upstream in 18 h 54 min. Find its speed in still water, to the nearest km/h.", options: ["7 km/h", "8 km/h", "9 km/h", "10 km/h"], ans: 2, cat: "BOAT AND STREAM", pyq: "SSC CGL Tier-I, 20 July 2023, Shift 1", sol: "By substitution, downstream v = 12 km/h, upstream u = 6 km/h. Still water speed = 9 km/h." },
-      { q: "Ashok can complete a work in 8 days and Anil in 12 days. With Amar's assistance, they finish it in 4 days for ₹4500. What is Amar's share?", options: ["₹1500", "₹750", "₹2250", "₹2500"], ans: 1, cat: "TIME AND WORK", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1", sol: "Ashok's 1-day work = 1/8, Anil = 1/12, Together = 5/24. Amar's 1-day work = 1/4 - 5/24 = 1/24. Ratio = 3:2:1. Amar's share = 1/6 * 4500 = ₹750." },
-      { q: "Sara can finish a work in 18 days and Tara in 15 days. Tara works for 10 days and leaves. In how many days can Sara finish the remaining work?", options: ["6 days", "7 days", "8 days", "5 days"], ans: 0, cat: "TIME AND WORK", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3", sol: "Tara's 10 days work = 10/15 = 2/3. Remaining work = 1/3. Sara takes 1/3 * 18 = 6 days." },
-      { q: "40 men can complete a work in 30 days. If 10 men leave, how many days will the remaining men take to complete the same work?", options: ["40", "35", "45", "50"], ans: 0, cat: "TIME AND WORK", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3", sol: "M1D1 = M2D2 => 40 * 30 = 30 * D2 => D2 = 40 days." },
-      { q: "The price of petrol rises by 81%. By what percentage should consumption be reduced so that expenditure remains unchanged? (Correct to two decimals.)", options: ["44.75%", "45.25%", "42.50%", "46.00%"], ans: 0, cat: "PERCENTAGE", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1", sol: "Reduction % = [81 / (100 + 81)] * 100 = 8100 / 181 = 44.75%." },
-      { q: "Sam's marks are 19% less than Peter's. By what percentage are Peter's marks more than Sam's? (Correct to two decimals.)", options: ["28.64%", "22.25%", "21.50%", "23.46%"], ans: 3, cat: "PERCENTAGE", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 2", sol: "More % = [19 / (100 - 19)] * 100 = 1900 / 81 = 23.46%." },
-      { q: "Ravi initially saved 20% of his monthly income. His income rises by 25% and his nominal savings rise by 5%. What percentage of his present income does he save?", options: ["25%", "20%", "15%", "16.8%"], ans: 3, cat: "PERCENTAGE", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1", sol: "Let income = 100, saving = 20. New income = 125, new saving = 21. Percentage = 21 / 125 * 100 = 16.8%." },
-      { q: "The cost price of 28 oranges equals the selling price of 24 oranges. What is the profit percentage?", options: ["16 2/3%", "16 1/3%", "18 2/3%", "18 1/3%"], ans: 0, cat: "PROFIT AND LOSS", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3", sol: "Profit % = [(28 - 24) / 24] * 100 = 4/24 * 100 = 16 2/3%." },
-      { q: "A dishonest dealer sells at 15% loss on cost price but uses 20 g instead of 25 g. What is his effective profit/loss percentage?", options: ["6.25% profit", "6.50% profit", "7.55% loss", "5.25% loss"], ans: 0, cat: "PROFIT AND LOSS", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2", sol: "Net multiplier = (85/100) * (25/20) = 2125/2000 = 1.0625 => 6.25% profit." },
-      { q: "Sita sells a whiteboard marker set at 10% profit. If sold for ₹20 more, she would earn 15% profit. What is its cost price?", options: ["₹300", "₹350", "₹450", "₹400"], ans: 3, cat: "PROFIT AND LOSS", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 3", sol: "(15% - 10%) of CP = ₹20 => 5% of CP = 20 => CP = ₹400." },
-      { q: "A laptop is sold for ₹54,000 after a discount of 20%. What is its list price?", options: ["₹69,500", "₹67,500", "₹70,000", "₹64,800"], ans: 1, cat: "DISCOUNT", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2", sol: "0.80 * List = 54000 => List = 54000 / 0.80 = ₹67,500." },
-      { q: "A radio gets an initial discount of 25% and then an additional 12% discount on the discounted price. If the final selling price is ₹792, what is the labelled price?", options: ["₹1980", "₹2330", "₹1320", "₹1200"], ans: 3, cat: "DISCOUNT", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1", sol: "Marked * 0.75 * 0.88 = 792 => Marked * 0.66 = 792 => Marked = ₹1,200." },
-      { q: "Three successive discounts of 10% are offered on a washing machine marked at ₹55,000. Find the final selling price.", options: ["₹40,095", "₹44,000", "₹40,000", "₹42,095"], ans: 0, cat: "DISCOUNT", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 4", sol: "SP = 55000 * 0.9 * 0.9 * 0.9 = ₹40,095." }
+    try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+
+    function generateAutoRegistrationNumber(mobile) {
+      const now = new Date();
+      const yyyy = now.getFullYear().toString();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+
+      let last3 = '000';
+      if (mobile && mobile.length >= 3) {
+        last3 = String(mobile).replace(/\D/g, '').slice(-3);
+      }
+
+      let currentCounter = parseInt(localStorage.getItem('bharti_reg_serial_counter') || '0', 10);
+      currentCounter += 1;
+      localStorage.setItem('bharti_reg_serial_counter', currentCounter.toString());
+
+      return `${yyyy}${mm}${dd}${last3}/${currentCounter}`;
+    }
+
+    const motivationalQuotes = [
+      { hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।", en: "Arise, awake, and stop not till the goal is reached.", author: "स्वामी विवेकानन्द (Swami Vivekananda)" },
+      { hi: "सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।", en: "Dreams are not what you see in sleep, dreams are those that do not let you sleep.", author: "डॉ. ए.पी.जे. अब्दुल कलाम (Dr. A.P.J. Abdul Kalam)" },
+      { hi: "शिक्षा वह शेरनी का दूध है जो पिएगा वह दहाड़ेगा।", en: "Education is the milk of a lioness; whoever drinks it will roar.", author: "डॉ. बी.आर. अम्बेडकर (Dr. B.R. Ambedkar)" },
+      { hi: "जिंदगी तो सिर्फ अपने दम पर जी जाती है, दूसरों के कंधों पर तो सिर्फ जनाजे उठाए जाते हैं।", en: "Life is lived on one's own strength; on others' shoulders, only funerals are carried.", author: "शहीद भगत सिंह (Shaheed Bhagat Singh)" },
+      { hi: "कठिन परिश्रम का कोई विकल्प नहीं होता। सफलता उसी को मिलती है जो निरंतर संघर्ष करता है।", en: "There is no substitute for hard work. Success comes to those who persevere continuously.", author: "सरदार वल्लभभाई पटेल (Sardar Vallabhbhai Patel)" },
+      { hi: "जिस व्यक्ति ने कभी गलती नहीं की, उसने कभी कुछ नया करने की कोशिश नहीं की।", en: "A person who never made a mistake never tried anything new.", author: "अल्बर्ट आइंस्टीन (Albert Einstein)" },
+      { hi: "शिक्षा सबसे शक्तिशाली हथियार है जिससे आप पूरी दुनिया बदल सकते हैं।", en: "Education is the most powerful weapon which you can use to change the world.", author: "नेल्सन मंडेला (Nelson Mandela)" },
+      { hi: "मुसीबतों से डरकर भागना कायरता है, उनका डटकर मुकाबला करना ही विजेता की पहचान है।", en: "Running away from problems is cowardice; facing them head-on is the mark of a champion.", author: "आचार्य चाणक्य (Acharya Chanakya)" }
     ];
 
-    // DYNAMIC ROLE-BASED SIDEBAR MENU
+    function updateDailyQuote() {
+      const now = new Date();
+      const offsetMs = 4 * 60 * 60 * 1000;
+      const adjustedTime = new Date(now.getTime() - offsetMs);
+      const dayIndex = Math.floor(adjustedTime.getTime() / (24 * 60 * 60 * 1000));
+      const quote = motivationalQuotes[Math.abs(dayIndex) % motivationalQuotes.length];
+
+      document.getElementById('quoteTextHi').textContent = '“' + quote.hi + '”';
+      document.getElementById('quoteTextEn').textContent = '"' + quote.en + '"';
+      document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
+    }
+
+    // REAL COURSES MASTER DATA
+    const REAL_COURSES_DATABASE = {
+      "SSC": [
+        { id: "ssc_cgl_mastery", title: "SSC CGL (Tier 1 & Tier 2) Comprehensive Batch", subtitle: "Complete Arithmetic, Advance Maths Mastery (Algebra, Trigo, Geometry) & Logical Reasoning by Vishwa Bharti Sir.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "ssc cgl maths reasoning advance combo", highlight: true },
+        { id: "ssc_chsl_mts", title: "SSC CHSL & MTS Foundation Batch", subtitle: "Targeted High-Speed Arithmetic Calculation Shortcuts & Non-Verbal Reasoning Drills.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "ssc chsl mts 10+2 havaldar", highlight: false },
+        { id: "ssc_cpo_gd", title: "SSC CPO & GD Constable Special Batch", subtitle: "Speed mathematics drills, elementary arithmetic, and quantitative reasoning.", mathsFee: 2200, reasoningFee: 1600, comboFee: 3200, tags: "ssc cpo gd constable capf", highlight: false }
+      ],
+      "Bank": [
+        { id: "bank_po_clerk", title: "Banking Foundation Batch (IBPS & SBI PO/Clerk)", subtitle: "Specialized High-Speed Data Interpretation (DI), Caselets & Critical Logical Puzzles.", mathsFee: 2500, reasoningFee: 2000, comboFee: 3700, tags: "bank ibps sbi po clerk", highlight: true },
+        { id: "bank_rrb_gramin", title: "IBPS RRB Gramin Bank Officer & Office Assistant", subtitle: "Calculation speed techniques, quadratic equations, and banking reasoning ability.", mathsFee: 2200, reasoningFee: 1800, comboFee: 3200, tags: "bank rrb gramin scale 1 assistant", highlight: false }
+      ],
+      "Railway": [
+        { id: "rrb_ntpc_super", title: "Railway RRB NTPC (Graduate & Undergrad) Super Batch", subtitle: "Vishwa Bharti Sir's signature step-skipping formula shortcuts and speed drills.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "railway rrb ntpc station master", highlight: true },
+        { id: "rrb_groupd_alp", title: "RRB Group D, ALP & Technician Math & Reasoning", subtitle: "Complete General Science calculation, basic math fundamentals & analytical ability.", mathsFee: 2200, reasoningFee: 1600, comboFee: 3000, tags: "railway alp group d technician", highlight: false }
+      ],
+      "UPSC": [
+        { id: "upsc_csat", title: "UPSC Civil Services CSAT (Paper-II) Aptitude", subtitle: "Quantitative Aptitude, Logical Reasoning, Number Systems & Data Sufficiency for IAS/IPS.", mathsFee: 3500, reasoningFee: 2500, comboFee: 4999, tags: "upsc csat civil services ias ips", highlight: true },
+        { id: "upsc_cds_nda", title: "UPSC CDS Exam (Elementary Mathematics Special)", subtitle: "Rigorous Algebra, Trigonometry, Geometry, Mensuration & Statistics by Bharti Sir.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "upsc cds nda defence ima ota", highlight: false }
+      ],
+      "BPSC": [
+        { id: "bpsc_cce_aptitude", title: "BPSC Combined Competitive Exam (CSAT & Mental Ability)", subtitle: "High-scoring mathematics questions, mental reasoning, and quantitative patterns for BPSC Prelims.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "bpsc cce prelims sdm dsp bihar", highlight: true },
+        { id: "bpsc_tre_teacher", title: "BPSC TRE (Teacher Recruitment) Mathematics Special", subtitle: "Full syllabus coverage of Primary, Middle, and Secondary school math pedagogy & problem solving.", mathsFee: 2400, reasoningFee: 1600, comboFee: 3200, tags: "bpsc tre teacher shikshak bihar", highlight: false }
+      ],
+      "JPSC": [
+        { id: "jpsc_cce_csat", title: "JPSC Combined Civil Services Aptitude & Reasoning", subtitle: "Comprehensive numerical ability, reasoning puzzles, and CSAT pattern coverage for Jharkhand PSC.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "jpsc jharkhand civil services", highlight: true }
+      ],
+      "Bihar SSC": [
+        { id: "bssc_inter_level", title: "Bihar SSC (BSSC Inter Level) Complete Batch", subtitle: "Specialized for 10+2 vacancies: Speed arithmetic, mental logic, number series & geometry.", mathsFee: 2500, reasoningFee: 2000, comboFee: 3700, tags: "bihar ssc bssc inter level clerk", highlight: true },
+        { id: "bssc_cgl_graduate", title: "Bihar SSC CGL (4th Graduate Level) Officer Batch", subtitle: "Advanced level mathematics shortcuts, data interpretation, and reasoning mastery.", mathsFee: 2800, reasoningFee: 2000, comboFee: 4000, tags: "bssc cgl sachivalaya sahayak bihar", highlight: false }
+      ],
+      "Bihar SI": [
+        { id: "bihar_si_daroga", title: "Bihar Police Sub-Inspector (Daroga) Mains Special", subtitle: "High-scoring Arithmetic, Geometry, Mensuration & Mental Ability test series for Bihar Daroga.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "bihar si daroga bihar police bpssc", highlight: true }
+      ],
+      "Bihar Constable": [
+        { id: "bihar_police_constable", title: "Bihar Police Constable Written Exam Batch", subtitle: "Matriculation standard general mathematics, numerical aptitude & logical reasoning drills.", mathsFee: 2000, reasoningFee: 1500, comboFee: 2800, tags: "bihar constable csbc sipahi", highlight: true }
+      ],
+      "Delhi Police": [
+        { id: "delhi_police_constable", title: "Delhi Police Executive Constable & Head Constable", subtitle: "SSC-pattern numerical ability, fast calculation shortcuts, and non-verbal reasoning.", mathsFee: 2200, reasoningFee: 1800, comboFee: 3200, tags: "delhi police constable hc ssc", highlight: true },
+        { id: "delhi_police_si", title: "Delhi Police Sub-Inspector (SSC CPO Special)", subtitle: "Full advance maths and reasoning syllabus for Delhi Police Sub-Inspector recruitment.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "delhi police si cpo sub-inspector", highlight: false }
+      ]
+    };
+
+    const SUB_EXAMS_DATABASE = {
+      "UPSC": [ "Civil Services Examination", "Indian Forest Service Examination", "Engineering Services Examination", "Combined Defence Services Examination", "National Defence Academy & Naval Academy Examination", "Combined Medical Services Examination", "Central Armed Police Forces (Assistant Commandants) Examination", "Combined Geo-Scientist Examination", "Indian Economic Service Examination", "Indian Statistical Service Examination", "CISF Assistant Commandant Examination", "Combined Section Officers' Grade-B Examination", "Combined Stenographers' Grade-B/Grade-I Examination" ],
+      "State PCS": [ "Andhra Pradesh Public Service Commission (APPSC) Group 1", "Arunachal Pradesh Public Service Commission (APPSC) Combined Competitive Examination", "Assam Public Service Commission (APSC) Combined Competitive Examination", "Bihar Public Service Commission (BPSC) Combined Competitive Examination", "Chhattisgarh Public Service Commission (CGPSC) State Service Examination", "Goa Public Service Commission (GPSC) Civil Services Examination", "Gujarat Public Service Commission (GPSC) Class 1 & 2 Examination", "Haryana Public Service Commission (HPSC) HCS Examination", "Himachal Pradesh Public Service Commission (HPPSC) Administrative Service Examination", "Jharkhand Public Service Commission (JPSC) Combined Civil Services Examination", "Jammu & Kashmir Public Service Commission (JKPSC) Combined Competitive Examination", "Karnataka Public Service Commission (KPSC) Gazetted Probationers Examination", "Kerala Public Service Commission (KPSC) Administrative Service Examination", "Madhya Pradesh Public Service Commission (MPPSC) State Service Examination", "Maharashtra Public Service Commission (MPSC) State Services Examination", "Manipur Public Service Commission (MPSC) Civil Services Examination", "Meghalaya Public Service Commission (MPSC) Civil Services Examination", "Mizoram Public Service Commission (MPSC) Civil Services Examination", "Nagaland Public Service Commission (NPSC) Combined Competitive Examination", "Odisha Public Service Commission (OPSC) Civil Services Examination", "Punjab Public Service Commission (PPSC) State Civil Services Examination", "Rajasthan Public Service Commission (RPSC) RAS Examination", "Sikkim Public Service Commission (SPSC) Services Examination", "Tamil Nadu Public Service Commission (TNPSC) Group I Examination", "Telangana Public Service Commission (TGPSC) Group I Examination", "Tripura Public Service Commission (TPSC) Combined Competitive Examination", "Uttar Pradesh Public Service Commission (UPPSC) PCS Examination", "Uttarakhand Public Service Commission (UKPSC) Combined State Civil/Upper Subordinate Services Examination", "West Bengal Public Service Commission (WBPSC) WBCS Examination" ],
+      "SSC": [ "Combined Graduate Level Examination", "Combined Higher Secondary Level Examination", "Multi-Tasking Staff Examination", "General Duty Constable Examination", "Sub-Inspector in Delhi Police and CAPFs Examination", "Junior Engineer Examination", "Stenographer Grade C & Grade D Examination", "Junior Hindi Translator Examination", "Selection Post Examination", "Combined Hindi Translators Examination" ],
+      "State SSC": [ "Bihar Staff Selection Commission (BSSC) Combined Graduate Level Examination", "BSSC Inter Level Examination", "BSSC Stenographer Examination", "Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) PET", "UPSSSC Junior Assistant Examination", "UPSSSC Lekhpal Examination", "UPSSSC VDO Examination", "Rajasthan Staff Selection Board (RSSB) CET Graduate Level Examination", "Rajasthan Staff Selection Board (RSSB) CET Senior Secondary Level Examination", "Rajasthan Patwari Examination", "Rajasthan VDO Examination", "Madhya Pradesh ESB Group 2 Examination", "Madhya Pradesh ESB Group 4 Examination", "Madhya Pradesh ESB Group 5 Examination", "Haryana Staff Selection Commission (HSSC) CET", "HSSC Group C Examination", "HSSC Group D Examination", "Odisha Staff Selection Commission (OSSC) CGL Examination", "OSSC CHSL Examination", "Jharkhand Staff Selection Commission (JSSC) CGL Examination", "JSSC Inter Level Examination", "Maharashtra Group B Examination", "Maharashtra Group C Examination", "Gujarat Subordinate Services Examination", "Punjab Subordinate Services Selection Board (PSSSB) Clerk Examination", "Uttarakhand Subordinate Service Selection Commission (UKSSSC) Graduate Level Examination", "UKSSSC Intermediate Level Examination", "West Bengal Clerkship Examination" ],
+      "Police Exams": [ "SSC General Duty Constable Examination", "SSC Sub-Inspector Examination", "UPSC Central Armed Police Forces Examination", "Delhi Police Constable Examination", "Delhi Police Head Constable Examination", "Bihar Police Constable Examination", "Bihar Police Sub-Inspector Examination", "Bihar Police Driver Constable Examination", "Uttar Pradesh Police Constable Examination", "Uttar Pradesh Police Sub-Inspector Examination", "Rajasthan Police Constable Examination", "Rajasthan Police Sub-Inspector Examination", "Madhya Pradesh Police Constable Examination", "Madhya Pradesh Police Sub-Inspector Examination", "Maharashtra Police Constable Examination", "Maharashtra Police Sub-Inspector Examination", "Haryana Police Constable Examination", "Haryana Police Sub-Inspector Examination", "Punjab Police Constable Examination", "Punjab Police Sub-Inspector Examination", "Gujarat Police Constable Examination", "Gujarat Police Sub-Inspector Examination", "West Bengal Police Constable Examination", "West Bengal Police Sub-Inspector Examination", "Jharkhand Police Constable Examination", "Jharkhand Police Sub-Inspector Examination", "Odisha Police Constable Examination", "Odisha Police Sub-Inspector Examination", "Chhattisgarh Police Constable Examination", "Chhattisgarh Police Sub-Inspector Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination" ],
+      "Bank Exams": [ "IBPS Probationary Officer/Management Trainee Examination", "IBPS Clerk Examination", "IBPS Specialist Officer Examination", "IBPS RRB Office Assistant Examination", "IBPS RRB Officer Scale I Examination", "IBPS RRB Officer Scale II Examination", "IBPS RRB Officer Scale III Examination", "SBI Probationary Officer Examination", "SBI Clerk Examination", "SBI Circle Based Officer Examination", "SBI Specialist Cadre Officer Examination", "RBI Grade B Examination", "RBI Assistant Examination", "NABARD Grade A Examination", "NABARD Grade B Examination", "NABARD Development Assistant Examination", "SEBI Grade A Examination", "LIC Assistant Administrative Officer Examination", "LIC Assistant Examination", "LIC Apprentice Development Officer Examination", "ECGC Probationary Officer Examination", "SIDBI Grade A Examination", "PFRDA Grade A Examination", "NIACL Administrative Officer Examination", "NIACL Assistant Examination", "NICL Administrative Officer Examination" ],
+      "Railway": [ "RRB NTPC Graduate Level Examination", "RRB NTPC Undergraduate Level Examination", "RRB Group D Examination", "RRB Assistant Loco Pilot Examination", "RRB Technician Examination", "RRB Junior Engineer Examination", "RRB Paramedical Examination", "RRB Ministerial & Isolated Categories Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination" ]
+    };
+
+    // DYNAMIC ROLE-BASED SIDEBAR MENU GENERATOR
     function renderSidebarMenu() {
       const container = document.getElementById('sidebarMenuContainer');
       container.innerHTML = '';
 
       if (currentUserRole === 'admin') {
+        // --- ADMINISTRATOR SPECIFIC INTERFACES ---
         container.innerHTML = `
           <li class="menu-header">Director Management</li>
           <li>
@@ -1925,6 +1829,7 @@
           </li>
         `;
       } else {
+        // --- STUDENT & GUEST INTERFACES ---
         container.innerHTML = `
           <li class="menu-header" id="txtMenuAcademics">Academic Portals</li>
           <li>
@@ -1990,6 +1895,7 @@
       }
     }
 
+    // CHECK ACTIVE 365-DAY ENROLLMENT
     function getActiveEnrollment(courseTitle) {
       if (!currentStudentProfile || !currentStudentProfile.enrolledCourses) return null;
       const now = new Date();
@@ -2207,6 +2113,7 @@
       document.getElementById('authBackdrop').style.display = 'none';
     }
 
+    // LOGOUT (SUPPORTS BOTH ADMIN & STUDENT ROLES)
     function logoutUser() {
       const isDirector = currentUserRole === 'admin';
       const promptMsg = isDirector ? 'Are you sure you want to log out of Director Admin Desk?' : 'Are you sure you want to log out of Bharti Classes?';
@@ -2262,6 +2169,7 @@
       });
     }
 
+    // DUAL-CHANNEL CREDENTIAL LOGIN (DIRECTOR ADMIN OR STUDENT)
     function handleCredentialLogin(e) {
       e.preventDefault();
       const inputId = document.getElementById('loginUserId').value.trim();
@@ -2269,12 +2177,14 @@
 
       if (!inputId || !inputPass) return alert('Please enter both User ID and Password.');
 
+      // Check for Director Administrator Credentials
       if ((inputId === 'admin' || inputId === '8271750420') && (inputPass === 'admin123' || inputPass === '8271750420')) {
         loginAsAdmin();
         closeAuthModal();
         return;
       }
 
+      // Check Student Credentials in Local DB
       const users = getRegisteredUsersList();
       const cleanId = inputId.toLowerCase();
       const cleanDigits = inputId.replace(/\D/g, '').slice(-10);
@@ -2298,6 +2208,10 @@
       } else {
         alert('Invalid User ID or Password! Please verify your registered credentials.');
       }
+    }
+
+    function generateSecureOtp() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
     function handleRegistrationSubmit(e) {
@@ -2717,6 +2631,7 @@
       const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
       const doubts = JSON.parse(localStorage.getItem('bharti_student_doubts') || '[]');
 
+      // Calculate Revenue
       const totalRev = orders.reduce((sum, o) => sum + (Number(o.fee) || 0), 0);
 
       document.getElementById('adminStatStudents').textContent = students.length;
@@ -2724,8 +2639,10 @@
       document.getElementById('adminStatOrders').textContent = orders.length;
       document.getElementById('adminStatDoubts').textContent = doubts.length;
 
+      // 1. Students Table
       renderAdminStudentsTable(students);
 
+      // 2. Orders Table
       const orderTbody = document.getElementById('adminOrdersTableBody');
       if (orders.length === 0) {
         orderTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>';
@@ -2743,6 +2660,7 @@
         `).join('');
       }
 
+      // 3. Doubts Table
       const doubtTbody = document.getElementById('adminDoubtsTableBody');
       if (doubts.length === 0) {
         doubtTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No student doubts currently pending.</td></tr>';
@@ -2763,6 +2681,7 @@
         `).join('');
       }
 
+      // 4. Admin Courses Table
       renderAdminCoursesTable();
     }
 
@@ -3226,6 +3145,48 @@
       document.getElementById('appSidebar').classList.toggle('open');
     }
 
+    function runScholarshipExam() {
+      if (!isUserLoggedIn) {
+        alert('Please register or log in before attempting the Scholarship Exam.');
+        return openAuthModal();
+      }
+      const score = prompt('Enter your simulated score out of 100:', '85');
+      if (score !== null) {
+        const num = parseInt(score, 10);
+        if (num >= 80) alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you under the Bharti Talent Initiative.');
+        else alert('You scored ' + num + '%. Qualifying mark is 80%.');
+      }
+    }
+
+    function loadDrills(tier) {
+      const box = document.getElementById('drillBox');
+      box.innerHTML = '<div style="font-weight:bold; margin-bottom:8px; text-transform:uppercase; color:var(--secondary);">' + tier + ' Level Drill Active</div>' +
+        '<ol style="padding-left:20px; line-height:1.8;">' +
+        '<li>Advance Maths Drill: If x + 1/x = 3, find the value of x^4 + 1/x^4.</li>' +
+        '<li>Reasoning: Statement & Assumptions / Syllogisms drill question set loaded.</li>' +
+        '<li>Speed Test: 23 additional questions loaded for ' + tier + ' difficulty.</li>' +
+        '</ol>';
+    }
+
+    function dispatchBotMessage() {
+      const input = document.getElementById('botInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const box = document.getElementById('chatDialogue');
+      box.innerHTML += '<p style="margin-top:8px;"><strong>You:</strong> ' + val + '</p>';
+      input.value = '';
+
+      setTimeout(() => {
+        let reply = "For admission inquiries, batch timings, and Advance Maths guidance, speak directly with Vishwa Bharti Sir on <strong>8271750420</strong>.";
+        const lower = val.toLowerCase();
+        if (lower.includes('bssc') || lower.includes('bihar ssc')) reply = "For Bihar SSC (Inter & Graduate Level), our batch covers complete General Mathematics and Analytical Reasoning.";
+        else if (lower.includes('police') || lower.includes('si') || lower.includes('daroga')) reply = "Bihar SI (Daroga) and Police Constable batches focus on high-scoring Arithmetic and Mental Ability test series.";
+        else if (lower.includes('ssc') || lower.includes('cgl')) reply = "SSC CGL / CHSL batches cover complete Advance Maths (Algebra, Trigonometry, Geometry, Coordinate) and Reasoning.";
+        box.innerHTML += '<p style="margin-top:8px; color:var(--primary);"><strong>Bharti Desk:</strong> ' + reply + '</p>';
+        box.scrollTop = box.scrollHeight;
+      }, 400);
+    }
+
     function toggleBilingual() {
       if (activeLang === 'en') {
         activeLang = 'hi';
@@ -3265,16 +3226,19 @@
       loadDayTasks();
     }
 
+    // SESSION INITIALIZATION ON APP LOAD
     window.addEventListener('DOMContentLoaded', () => {
       updateDailyQuote();
       document.getElementById('plannerDateInput').value = getTodayDateString();
 
+      // Check if Director Admin was logged in
       const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
       if (adminSession === 'true') {
         loginAsAdmin();
         return;
       }
 
+      // Check if Student was logged in
       const savedStudent = localStorage.getItem('bharti_student');
       if (savedStudent) {
         try {
