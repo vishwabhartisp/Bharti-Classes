@@ -698,153 +698,6 @@
     .btn-bhim { background: #ecfdf5; color: #00796b; border-color: #a7f3d0; }
     .btn-amazon { background: #fff7ed; color: #ea580c; border-color: #ffedd5; }
 
-    /* IN-APP VIDEO LECTURE PLAYER MODAL */
-    .video-modal-box {
-      background: #000;
-      color: #fff;
-      width: 820px;
-      max-width: 96%;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-      position: relative;
-    }
-    .video-responsive-wrapper {
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-      height: 0;
-      overflow: hidden;
-      background: #000;
-    }
-    .video-responsive-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    /* IN-APP CBT TEST MODAL INTERFACE */
-    .cbt-modal-box {
-      background: #fff;
-      width: 960px;
-      max-width: 98%;
-      height: 92vh;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-    }
-    .cbt-header {
-      background: var(--primary);
-      color: #fff;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
-    .cbt-timer {
-      background: #dc2626;
-      color: #fff;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .cbt-body {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-    .cbt-question-pane {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      border-right: 1px solid var(--border);
-    }
-    .cbt-palette-pane {
-      width: 280px;
-      background: #f8fafc;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .cbt-palette-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-    }
-    .cbt-q-num {
-      width: 38px;
-      height: 38px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: #fff;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-    }
-    .cbt-q-num.current { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
-    .cbt-q-num.answered { background: #10b981; color: #fff; border-color: #10b981; }
-    .cbt-q-num.marked { background: #f59e0b; color: #fff; border-color: #f59e0b; }
-    .cbt-option-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      font-size: 0.92rem;
-      transition: all 0.15s;
-    }
-    .cbt-option-item:hover { background: #f1f5f9; border-color: #cbd5e1; }
-    .cbt-option-item.selected { background: #eff6ff; border-color: #3b82f6; font-weight: 600; color: #1e40af; }
-    .cbt-option-item input[type="radio"] { width: 18px; height: 18px; accent-color: var(--primary); }
-
-    /* IN-APP DOCUMENT / PDF VIEWER MODAL */
-    .pdf-viewer-modal-box {
-      background: #fff;
-      width: 900px;
-      max-width: 96%;
-      height: 90vh;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .pdf-viewer-header {
-      background: #0d233a;
-      color: #fff;
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
-    .pdf-content-body {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      line-height: 1.7;
-      font-size: 0.92rem;
-      color: #334155;
-      background: #f8fafc;
-    }
-
     @media (max-width: 860px) {
       aside { position: absolute; height: 100vh; left: -280px; }
       aside.open { left: 0; }
@@ -852,8 +705,6 @@
       .in-app-search { width: 100%; }
       header.topbar { padding: 0 14px; }
       .page-title { display: none; }
-      .cbt-body { flex-direction: column; }
-      .cbt-palette-pane { width: 100%; height: 180px; }
     }
   </style>
 </head>
@@ -868,7 +719,7 @@
       </div>
     </div>
 
-    <!-- Dynamic Menu: Auto-switches for Student vs Director Admin -->
+    <!-- Dynamic Menu that automatically transforms for Student vs Director Admin -->
     <ul class="sidebar-menu" id="sidebarMenuContainer"></ul>
 
     <div class="sidebar-footer">
@@ -926,12 +777,12 @@
       <!-- VIEW 1: COURSES & ADMISSIONS WITH INTERACTIVE BOX INTERFACE -->
       <div id="view-courses" class="view-panel active">
         
-        <!-- Active Enrolled Batches Panel (Shown to Enrolled Students) -->
+        <!-- Active Enrolled Batches Panel (Shown to Logged in Users) -->
         <div class="my-enrolled-container" id="myEnrolledPanel">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
             <div>
               <h3 style="color:#065f46; font-size:1.05rem;"><i class="fas fa-check-circle"></i> My Enrolled Batches (Active 365 Days Access)</h3>
-              <p style="color:#047857; font-size:0.82rem;">Access your lectures, study notes, and test series directly.</p>
+              <p style="color:#047857; font-size:0.82rem;">Access your purchased video lectures, formula notes, and test series.</p>
             </div>
             <span class="exam-pill" style="background:#10b981; color:#fff; font-size:0.75rem;" id="lblEnrolledCountBadge">0 Batches Active</span>
           </div>
@@ -1611,7 +1462,6 @@
             <span style="background:#5f259f; color:#fff; padding:3px 8px; border-radius:4px; font-size:0.76rem; font-weight:700;">PhonePe Accepted Here</span>
           </div>
 
-          <!-- Dynamic Barcode QR encoded with Official VPA: 9504704632@ybl & Beneficiary: Bharti Classes (Sneha) -->
           <img id="dynamicUpiQrCode" class="upi-qr-image" src="" alt="Bharti Classes Sneha PhonePe Barcode QR" />
           
           <div style="font-size:0.86rem; font-weight:800; color:var(--primary);">
@@ -1672,155 +1522,30 @@
       <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;">
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
-            <strong style="font-size:0.88rem; display:block;">Advance Maths Masterclass (YouTube Live Video)</strong>
-            <span style="font-size:0.76rem; color:var(--text-muted);">Algebra & Surds Radical Simplification by Bharti Sir</span>
+            <strong style="font-size:0.88rem; display:block;">Advance Maths Masterclass Playlist</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Algebra, Trigonometry, Geometry, Mensuration by Bharti Sir</span>
           </div>
-          <button class="btn btn-primary" style="padding:5px 12px; font-size:0.8rem;" onclick="openVideoLecturePlayer()">
-            <i class="fas fa-play"></i> Watch in App
-          </button>
+          <button class="btn btn-primary" style="padding:4px 10px; font-size:0.8rem;" onclick="alert('Opening unlisted live video lectures repository...')"><i class="fas fa-play"></i> Watch Lectures</button>
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
-            <strong style="font-size:0.88rem; display:block;">Current Affairs Weekly Quiz & PYQ Notes</strong>
-            <span style="font-size:0.76rem; color:var(--text-muted);">Weekly One-Liner (31 Aug – 06 Sep 2026) + PYQ Formula Notes</span>
+            <strong style="font-size:0.88rem; display:block;">Class Formula Sheets & Step-Skipping PDFs</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Complete printable high-speed calculation notes</span>
           </div>
-          <div style="display:flex; gap:6px;">
-            <button class="btn btn-outline" style="padding:5px 10px; font-size:0.8rem;" onclick="openPdfViewerModal()">
-              <i class="fas fa-eye"></i> View
-            </button>
-            <button class="btn btn-primary" style="padding:5px 10px; font-size:0.8rem;" onclick="downloadCoursePdfFile()">
-              <i class="fas fa-download"></i> Download
-            </button>
-          </div>
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.8rem;" onclick="alert('Downloading Bharti Classes formula vault PDF...')"><i class="fas fa-download"></i> Download PDF</button>
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
-            <strong style="font-size:0.88rem; display:block;">SSC CGL Maths PYQ CBT Mock Test (27 MCQs)</strong>
-            <span style="font-size:0.76rem; color:var(--text-muted);">3 Questions per chapter | +2 Marks, −0.5 Negative | 30 Mins</span>
+            <strong style="font-size:0.88rem; display:block;">CBT Mock Test Series & Solutions</strong>
+            <span style="font-size:0.76rem; color:var(--text-muted);">Exam standard full-length computer-based practice sets</span>
           </div>
-          <button class="btn btn-secondary" style="padding:5px 12px; font-size:0.8rem;" onclick="startInteractiveCbtTest()">
-            <i class="fas fa-pen-alt"></i> Start Test
-          </button>
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.8rem;" onclick="switchView('practice'); closeClassroomModal();"><i class="fas fa-pen-alt"></i> Start Test</button>
         </div>
       </div>
 
       <button class="btn btn-outline btn-block" onclick="closeClassroomModal()">Close Classroom</button>
-    </div>
-  </div>
-
-  <!-- IN-APP EMBEDDED YOUTUBE VIDEO LECTURE PLAYER MODAL -->
-  <div class="modal-backdrop" id="videoLectureModal">
-    <div class="video-modal-box">
-      <div style="padding:12px 18px; display:flex; justify-content:space-between; align-items:center; background:#0d233a;">
-        <span style="font-size:0.92rem; font-weight:700; color:#fff;">
-          <i class="fas fa-chalkboard-teacher" style="color:var(--accent);"></i> Bharti Sir - Live Advance Mathematics Lecture
-        </span>
-        <button style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;" onclick="closeVideoLecturePlayer()">&times;</button>
-      </div>
-      <div class="video-responsive-wrapper">
-        <!-- Strictly embeds inside app: cannot redirect outside -->
-        <iframe id="inAppYouTubeIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-      </div>
-      <div style="padding:12px 18px; background:#1e293b; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:0.8rem; color:#94a3b8;">Playing inside Bharti Classes Portal | Speed: 1.0x - 2.0x available in player controls</span>
-        <button class="btn btn-outline" style="color:#fff; border-color:#475569; padding:4px 10px; font-size:0.78rem;" onclick="closeVideoLecturePlayer()">Close Video</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- IN-APP DOCUMENT / PDF VIEWER MODAL -->
-  <div class="modal-backdrop" id="pdfViewerModal">
-    <div class="pdf-viewer-modal-box">
-      <div class="pdf-viewer-header">
-        <div>
-          <h3 style="font-size:1.05rem;"><i class="fas fa-file-pdf" style="color:var(--secondary);"></i> Weekly Quiz & One Liner Current Affairs (31-08-2026 to 06-09-2026)</h3>
-          <span style="font-size:0.75rem; color:#94a3b8;">Bharti Classes Academic Materials | Special Reference Compilation</span>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-secondary" style="padding:5px 12px; font-size:0.82rem;" onclick="downloadCoursePdfFile()"><i class="fas fa-download"></i> Download Document</button>
-          <button class="btn btn-outline" style="color:#fff; border-color:#475569; padding:5px 12px; font-size:0.82rem;" onclick="closePdfViewerModal()">&times; Close</button>
-        </div>
-      </div>
-      <div class="pdf-content-body" id="pdfContentContainer"></div>
-    </div>
-  </div>
-
-  <!-- IN-APP FULL CBT MOCK TEST MODAL (27 MCQs - +2 / -0.5 MARKS - 30 MINS) -->
-  <div class="modal-backdrop" id="cbtTestModal">
-    <div class="cbt-modal-box">
-      <div class="cbt-header">
-        <div>
-          <h3 style="font-size:1.05rem;"><i class="fas fa-laptop-code"></i> SSC CGL Mathematics – Previous Year Questions CBT Mock</h3>
-          <span style="font-size:0.75rem; color:#cbd5e1;">27 Questions | 9 Chapters | Correct: +2 Marks | Negative: −0.5 Marks</span>
-        </div>
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div class="cbt-timer" id="cbtTimerDisplay"><i class="fas fa-stopwatch"></i> 30:00</div>
-          <button class="btn btn-secondary" style="padding:5px 14px; font-size:0.84rem;" onclick="submitCbtTestConfirm()">Submit Test</button>
-        </div>
-      </div>
-
-      <div class="cbt-body">
-        <div class="cbt-question-pane">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <span class="exam-pill" id="cbtChapterBadge" style="background:#e0f2fe; color:#0369a1; font-size:0.8rem;">Chapter: Algebra</span>
-            <span style="font-size:0.82rem; color:var(--text-muted); font-weight:600;" id="cbtQuestionTracker">Question 1 of 27</span>
-          </div>
-
-          <div style="font-size:1.05rem; font-weight:600; color:var(--primary); line-height:1.6; margin-bottom:18px;" id="cbtQuestionText">
-            The sum of the cubes of two natural numbers is 9728, while their sum is 32. What is the positive difference between their cubes?
-          </div>
-
-          <div id="cbtOptionsList"></div>
-
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:25px; pt-3; border-top:1px solid var(--border);">
-            <button class="btn btn-outline" id="btnCbtPrev" onclick="navCbtQuestion(-1)"><i class="fas fa-arrow-left"></i> Previous</button>
-            <div style="display:flex; gap:8px;">
-              <button class="btn btn-outline" style="color:#d97706; border-color:#fcd34d;" onclick="markForReviewCbt()"><i class="fas fa-bookmark"></i> Mark for Review</button>
-              <button class="btn btn-primary" id="btnCbtNext" onclick="navCbtQuestion(1)">Next <i class="fas fa-arrow-right"></i></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="cbt-palette-pane">
-          <h4 style="font-size:0.86rem; color:var(--primary); font-weight:700;">Question Palette</h4>
-          <div style="display:flex; gap:8px; font-size:0.72rem; flex-wrap:wrap; margin-bottom:6px;">
-            <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; background:#10b981; border-radius:2px;"></span> Answered</span>
-            <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; background:#f59e0b; border-radius:2px;"></span> Marked</span>
-            <span style="display:flex; align-items:center; gap:4px;"><span style="width:10px; height:10px; background:#fff; border:1px solid #cbd5e1; border-radius:2px;"></span> Unanswered</span>
-          </div>
-          <div class="cbt-palette-grid" id="cbtPaletteContainer"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CBT TEST RESULT SCORECARD MODAL -->
-  <div class="modal-backdrop" id="cbtResultModal">
-    <div class="modal-box" style="text-align:center; max-width:620px;">
-      <div style="font-size:2.8rem; color:#10b981; margin-bottom:8px;"><i class="fas fa-award"></i></div>
-      <h3 style="color:var(--primary); margin-bottom:4px;">CBT Test Evaluation Complete!</h3>
-      <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:16px;">SSC CGL Mathematics Previous Year Exam (Tier-I Pattern)</p>
-
-      <div class="perf-scoreboard" style="margin-bottom:18px;">
-        <div class="perf-card">
-          <span style="font-size:0.74rem; font-weight:700; color:var(--text-muted);">Total Score</span>
-          <div style="font-size:1.6rem; font-weight:800; color:var(--primary);" id="resTotalScore">0 / 54</div>
-        </div>
-        <div class="perf-card">
-          <span style="font-size:0.74rem; font-weight:700; color:var(--text-muted);">Accuracy</span>
-          <div style="font-size:1.4rem; font-weight:800; color:#059669;" id="resAccuracy">0%</div>
-        </div>
-        <div class="perf-card">
-          <span style="font-size:0.74rem; font-weight:700; color:var(--text-muted);">Correct / Incorrect</span>
-          <div style="font-size:1.2rem; font-weight:700; color:#334155; margin-top:4px;" id="resCorrectWrong">0 / 0</div>
-        </div>
-      </div>
-
-      <div style="max-height:220px; overflow-y:auto; text-align:left; background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:16px; font-size:0.82rem;" id="resAnswerReviewContainer"></div>
-
-      <button class="btn btn-primary btn-block" onclick="closeCbtResultModal()">Close Result & Return to Dashboard</button>
     </div>
   </div>
 
@@ -1920,284 +1645,1600 @@
     </div>
   </div>
 
+  <!-- Firebase Compatibility Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
   <script>
-    // 27 MCQs from Word Document: SSC CGL Mathematics – Previous Year Questions (3 Questions per Chapter)
-    const CBT_TEST_QUESTIONS = [
-      { id: 1, chapter: "Algebra", q: "The sum of the cubes of two natural numbers is 9728, while their sum is 32. What is the positive difference between their cubes?", options: ["A. 6272", "B. 6144", "C. 6276", "D. 6320"], ans: "A", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3" },
-      { id: 2, chapter: "Algebra", q: "If x² − 8x − 1 = 0, find the value of x² + 1/x².", options: ["A. 62", "B. 64", "C. 66", "D. 68"], ans: "C", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1" },
-      { id: 3, chapter: "Algebra", q: "If x² + 1/x² = 6 and 0 < x < 1, find x⁴ − 1/x⁴.", options: ["A. 24√2", "B. −24√2", "C. −12√10", "D. 12√10"], ans: "B", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1" },
-      { id: 4, chapter: "Trigonometry", q: "If 7 cot P = 24, then find sin P.", options: ["A. 24/25", "B. 7/24", "C. 25/7", "D. 7/25"], ans: "D", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3" },
-      { id: 5, chapter: "Trigonometry", q: "If sec A + tan A = 5, then sin A is equal to:", options: ["A. 5/13", "B. 12/13", "C. 13/12", "D. 3/5"], ans: "B", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2" },
-      { id: 6, chapter: "Trigonometry", q: "If A + B = 90° and sin A = 3/5, what is tan B?", options: ["A. 3/4", "B. 4/3", "C. 5/3", "D. 5/4"], ans: "C", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1" },
-      { id: 7, chapter: "Time, Speed and Distance", q: "A certain distance is covered by one person at a certain speed. Another person covers 25% of that distance in triple the time. What is the ratio of the first person's speed to the second person's speed?", options: ["A. 1 : 6", "B. 1 : 12", "C. 6 : 1", "D. 12 : 1"], ans: "D", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2" },
-      { id: 8, chapter: "Time, Speed and Distance", q: "Two motorists start together. One travels at 4 km/h and the other at 6 km/h. If the slower motorist arrives half an hour later, what distance did they travel?", options: ["A. 8 km", "B. 5 km", "C. 6 km", "D. 4 km"], ans: "C", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1" },
-      { id: 9, chapter: "Time, Speed and Distance", q: "A thief is 1150 m away from the police. The thief runs at 6 km/h and the police chases him at 11 km/h. How far will the thief run before being caught?", options: ["A. 1485 m", "B. 1380 m", "C. 1125 m", "D. 1280 m"], ans: "B", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2" },
-      { id: 10, chapter: "Train", q: "A 252 m long train runs at 125 km/h. A man runs in the same direction at 17 km/h. How long will the train take to pass the man?", options: ["A. 7.6 s", "B. 8 s", "C. 8.4 s", "D. 6.4 s"], ans: "C", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3" },
-      { id: 11, chapter: "Train", q: "Rajdhani Express is 108 m long and runs at 128 km/h. It crosses a stationary train of length 148 m. What time is required?", options: ["A. 8 s", "B. 7.5 s", "C. 9 s", "D. 7.2 s"], ans: "D", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 3" },
-      { id: 12, chapter: "Train", q: "A train travelling at 70 km/h crosses another train travelling in the same direction at 34 km/h in 25 seconds. What is the combined length of the trains?", options: ["A. 325 m", "B. 225 m", "C. 250 m", "D. 500 m"], ans: "C", pyq: "SSC CGL 2023 Tier-I" },
-      { id: 13, chapter: "Boat and Stream", q: "A boat covers 20 km upstream and 44 km downstream in 8 hours. In 5 hours it covers 15 km upstream and 22 km downstream. Find its speed in still water.", options: ["A. 6 km/h", "B. 10 km/h", "C. 8 km/h", "D. 7 km/h"], ans: "C", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1" },
-      { id: 14, chapter: "Boat and Stream", q: "A man rows 16 km downstream in 15 minutes, which is 25% less time than he takes upstream for the same distance. How many kilometres can he row in one hour in still water?", options: ["A. 56 km", "B. 60 km", "C. 58 km", "D. 54 km"], ans: "A", pyq: "SSC CGL Tier-I, 14 July 2023, Shift 4" },
-      { id: 15, chapter: "Boat and Stream", q: "A boat can go 60 km downstream and 40 km upstream in 12 h 30 min. It can go 84 km downstream and 63 km upstream in 18 h 54 min. Find its speed in still water, to the nearest km/h.", options: ["A. 7 km/h", "B. 8 km/h", "C. 9 km/h", "D. 10 km/h"], ans: "C", pyq: "SSC CGL Tier-I, 20 July 2023, Shift 1" },
-      { id: 16, chapter: "Time and Work", q: "Ashok can complete a work in 8 days and Anil in 12 days. With Amar's assistance, they finish it in 4 days for ₹4500. What is Amar's share?", options: ["A. ₹1500", "B. ₹750", "C. ₹2250", "D. ₹2500"], ans: "B", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1" },
-      { id: 17, chapter: "Time and Work", q: "Sara can finish a work in 18 days and Tara in 15 days. Tara works for 10 days and leaves. In how many days can Sara finish the remaining work?", options: ["A. 6 days", "B. 7 days", "C. 8 days", "D. 5 days"], ans: "A", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3" },
-      { id: 18, chapter: "Time and Work", q: "40 men can complete a work in 30 days. If 10 men leave, how many days will the remaining men take to complete the same work?", options: ["A. 40", "B. 35", "C. 45", "D. 50"], ans: "A", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3" },
-      { id: 19, chapter: "Percentage", q: "The price of petrol rises by 81%. By what percentage should consumption be reduced so that expenditure remains unchanged? (Correct to two decimals.)", options: ["A. 44.75%", "B. 45.25%", "C. 42.50%", "D. 46.00%"], ans: "A", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1" },
-      { id: 20, chapter: "Percentage", q: "Sam's marks are 19% less than Peter's. By what percentage are Peter's marks more than Sam's? (Correct to two decimals.)", options: ["A. 28.64%", "B. 22.25%", "C. 21.50%", "D. 23.46%"], ans: "D", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 2" },
-      { id: 21, chapter: "Percentage", q: "Ravi initially saved 20% of his monthly income. His income rises by 25% and his nominal savings rise by 5%. What percentage of his present income does he save?", options: ["A. 25%", "B. 20%", "C. 15%", "D. 16.8%"], ans: "D", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1" },
-      { id: 22, chapter: "Profit and Loss", q: "The cost price of 28 oranges equals the selling price of 24 oranges. What is the profit percentage?", options: ["A. 16 2/3%", "B. 16 1/3%", "C. 18 2/3%", "D. 18 1/3%"], ans: "A", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3" },
-      { id: 23, chapter: "Profit and Loss", q: "A dishonest dealer sells at 15% loss on cost price but uses 20 g instead of 25 g. What is his effective profit/loss percentage?", options: ["A. 6.25% profit", "B. 6.50% profit", "C. 7.55% loss", "D. 5.25% loss"], ans: "A", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2" },
-      { id: 24, chapter: "Profit and Loss", q: "Sita sells a whiteboard marker set at 10% profit. If sold for ₹20 more, she would earn 15% profit. What is its cost price?", options: ["A. ₹300", "B. ₹350", "C. ₹450", "D. ₹400"], ans: "D", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 3" },
-      { id: 25, chapter: "Discount", q: "A laptop is sold for ₹54,000 after a discount of 20%. What is its list price?", options: ["A. ₹69,500", "B. ₹67,500", "C. ₹70,000", "D. ₹64,800"], ans: "B", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 2" },
-      { id: 26, chapter: "Discount", q: "A radio gets an initial discount of 25% and then an additional 12% discount on the discounted price. If the final selling price is ₹792, what is the labelled price?", options: ["A. ₹1980", "B. ₹2330", "C. ₹1320", "D. ₹1200"], ans: "D", pyq: "SSC CGL Tier-I, 27 July 2023, Shift 1" },
-      { id: 27, chapter: "Discount", q: "Three successive discounts of 10% are offered on a washing machine marked at ₹55,000. Find the final selling price.", options: ["A. ₹40,095", "B. ₹44,000", "C. ₹40,000", "D. ₹42,095"], ans: "A", pyq: "SSC CGL Tier-I, 26 July 2023, Shift 4" }
+    // System Roles: 'guest' | 'student' | 'admin'
+    let currentUserRole = 'guest';
+    let isUserLoggedIn = false;
+    let activeLang = 'en';
+    let currentStudentProfile = null;
+
+    let activeScheduleMode = 'daily';
+    let selectedWeeklyDays = new Set([0, 1, 2, 3, 4, 5, 6]);
+
+    let activeOtpChannel = 'mobile';
+    let activeOtpTarget = '';
+    let serverGeneratedOtp = '';
+    let pendingProfileData = null;
+
+    let resetPassUserObj = null;
+    let resetPassOtp = '';
+
+    let pendingCheckout = {
+      courseName: '',
+      fee: 0,
+      utr: '',
+      prePayOtp: ''
+    };
+
+    let activeCourseCategory = 'SSC';
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7ITxaiU2Ot_b6ucuyJ3Zb3uB5uv-wZw8",
+      authDomain: "bharti-classes-a54fb.firebaseapp.com",
+      projectId: "bharti-classes-a54fb",
+      storageBucket: "bharti-classes-a54fb.appspot.com",
+      messagingSenderId: "320350203929",
+      appId: "1:320350203929:web:9f25da9a804cd02db8ba88"
+    };
+
+    try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+
+    function generateAutoRegistrationNumber(mobile) {
+      const now = new Date();
+      const yyyy = now.getFullYear().toString();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+
+      let last3 = '000';
+      if (mobile && mobile.length >= 3) {
+        last3 = String(mobile).replace(/\D/g, '').slice(-3);
+      }
+
+      let currentCounter = parseInt(localStorage.getItem('bharti_reg_serial_counter') || '0', 10);
+      currentCounter += 1;
+      localStorage.setItem('bharti_reg_serial_counter', currentCounter.toString());
+
+      return `${yyyy}${mm}${dd}${last3}/${currentCounter}`;
+    }
+
+    const motivationalQuotes = [
+      { hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।", en: "Arise, awake, and stop not till the goal is reached.", author: "स्वामी विवेकानन्द (Swami Vivekananda)" },
+      { hi: "सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।", en: "Dreams are not what you see in sleep, dreams are those that do not let you sleep.", author: "डॉ. ए.पी.जे. अब्दुल कलाम (Dr. A.P.J. Abdul Kalam)" },
+      { hi: "शिक्षा वह शेरनी का दूध है जो पिएगा वह दहाड़ेगा।", en: "Education is the milk of a lioness; whoever drinks it will roar.", author: "डॉ. बी.आर. अम्बेडकर (Dr. B.R. Ambedkar)" },
+      { hi: "जिंदगी तो सिर्फ अपने दम पर जी जाती है, दूसरों के कंधों पर तो सिर्फ जनाजे उठाए जाते हैं।", en: "Life is lived on one's own strength; on others' shoulders, only funerals are carried.", author: "शहीद भगत सिंह (Shaheed Bhagat Singh)" },
+      { hi: "कठिन परिश्रम का कोई विकल्प नहीं होता। सफलता उसी को मिलती है जो निरंतर संघर्ष करता है।", en: "There is no substitute for hard work. Success comes to those who persevere continuously.", author: "सरदार वल्लभभाई पटेल (Sardar Vallabhbhai Patel)" },
+      { hi: "जिस व्यक्ति ने कभी गलती नहीं की, उसने कभी कुछ नया करने की कोशिश नहीं की।", en: "A person who never made a mistake never tried anything new.", author: "अल्बर्ट आइंस्टीन (Albert Einstein)" },
+      { hi: "शिक्षा सबसे शक्तिशाली हथियार है जिससे आप पूरी दुनिया बदल सकते हैं।", en: "Education is the most powerful weapon which you can use to change the world.", author: "नेल्सन मंडेला (Nelson Mandela)" },
+      { hi: "मुसीबतों से डरकर भागना कायरता है, उनका डटकर मुकाबला करना ही विजेता की पहचान है।", en: "Running away from problems is cowardice; facing them head-on is the mark of a champion.", author: "आचार्य चाणक्य (Acharya Chanakya)" }
     ];
 
-    // CBT Engine State
-    let cbtActiveIdx = 0;
-    let cbtUserAnswers = {}; // { 1: 'A', 2: 'C' }
-    let cbtMarkedStatus = {}; // { 3: true }
-    let cbtTimerInterval = null;
-    let cbtSecondsRemaining = 30 * 60; // 30 Mins
+    function updateDailyQuote() {
+      const now = new Date();
+      const offsetMs = 4 * 60 * 60 * 1000;
+      const adjustedTime = new Date(now.getTime() - offsetMs);
+      const dayIndex = Math.floor(adjustedTime.getTime() / (24 * 60 * 60 * 1000));
+      const quote = motivationalQuotes[Math.abs(dayIndex) % motivationalQuotes.length];
 
-    // IN-APP VIDEO PLAYER (EMBEDDED YOUTUBE LIVE LECTURE)
-    function openVideoLecturePlayer() {
-      // User's verified YouTube lecture ID: QfbEXBMf_pY
-      const embedUrl = "https://www.youtube.com/embed/QfbEXBMf_pY?autoplay=1&rel=0&modestbranding=1";
-      document.getElementById('inAppYouTubeIframe').src = embedUrl;
-      document.getElementById('videoLectureModal').style.display = 'flex';
+      document.getElementById('quoteTextHi').textContent = '“' + quote.hi + '”';
+      document.getElementById('quoteTextEn').textContent = '"' + quote.en + '"';
+      document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
     }
 
-    function closeVideoLecturePlayer() {
-      document.getElementById('inAppYouTubeIframe').src = ""; // Stop audio/video
-      document.getElementById('videoLectureModal').style.display = 'none';
+    // REAL COURSES MASTER DATA
+    const REAL_COURSES_DATABASE = {
+      "SSC": [
+        { id: "ssc_cgl_mastery", title: "SSC CGL (Tier 1 & Tier 2) Comprehensive Batch", subtitle: "Complete Arithmetic, Advance Maths Mastery (Algebra, Trigo, Geometry) & Logical Reasoning by Vishwa Bharti Sir.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "ssc cgl maths reasoning advance combo", highlight: true },
+        { id: "ssc_chsl_mts", title: "SSC CHSL & MTS Foundation Batch", subtitle: "Targeted High-Speed Arithmetic Calculation Shortcuts & Non-Verbal Reasoning Drills.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "ssc chsl mts 10+2 havaldar", highlight: false },
+        { id: "ssc_cpo_gd", title: "SSC CPO & GD Constable Special Batch", subtitle: "Speed mathematics drills, elementary arithmetic, and quantitative reasoning.", mathsFee: 2200, reasoningFee: 1600, comboFee: 3200, tags: "ssc cpo gd constable capf", highlight: false }
+      ],
+      "Bank": [
+        { id: "bank_po_clerk", title: "Banking Foundation Batch (IBPS & SBI PO/Clerk)", subtitle: "Specialized High-Speed Data Interpretation (DI), Caselets & Critical Logical Puzzles.", mathsFee: 2500, reasoningFee: 2000, comboFee: 3700, tags: "bank ibps sbi po clerk", highlight: true },
+        { id: "bank_rrb_gramin", title: "IBPS RRB Gramin Bank Officer & Office Assistant", subtitle: "Calculation speed techniques, quadratic equations, and banking reasoning ability.", mathsFee: 2200, reasoningFee: 1800, comboFee: 3200, tags: "bank rrb gramin scale 1 assistant", highlight: false }
+      ],
+      "Railway": [
+        { id: "rrb_ntpc_super", title: "Railway RRB NTPC (Graduate & Undergrad) Super Batch", subtitle: "Vishwa Bharti Sir's signature step-skipping formula shortcuts and speed drills.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "railway rrb ntpc station master", highlight: true },
+        { id: "rrb_groupd_alp", title: "RRB Group D, ALP & Technician Math & Reasoning", subtitle: "Complete General Science calculation, basic math fundamentals & analytical ability.", mathsFee: 2200, reasoningFee: 1600, comboFee: 3000, tags: "railway alp group d technician", highlight: false }
+      ],
+      "UPSC": [
+        { id: "upsc_csat", title: "UPSC Civil Services CSAT (Paper-II) Aptitude", subtitle: "Quantitative Aptitude, Logical Reasoning, Number Systems & Data Sufficiency for IAS/IPS.", mathsFee: 3500, reasoningFee: 2500, comboFee: 4999, tags: "upsc csat civil services ias ips", highlight: true },
+        { id: "upsc_cds_nda", title: "UPSC CDS Exam (Elementary Mathematics Special)", subtitle: "Rigorous Algebra, Trigonometry, Geometry, Mensuration & Statistics by Bharti Sir.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "upsc cds nda defence ima ota", highlight: false }
+      ],
+      "BPSC": [
+        { id: "bpsc_cce_aptitude", title: "BPSC Combined Competitive Exam (CSAT & Mental Ability)", subtitle: "High-scoring mathematics questions, mental reasoning, and quantitative patterns for BPSC Prelims.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "bpsc cce prelims sdm dsp bihar", highlight: true },
+        { id: "bpsc_tre_teacher", title: "BPSC TRE (Teacher Recruitment) Mathematics Special", subtitle: "Full syllabus coverage of Primary, Middle, and Secondary school math pedagogy & problem solving.", mathsFee: 2400, reasoningFee: 1600, comboFee: 3200, tags: "bpsc tre teacher shikshak bihar", highlight: false }
+      ],
+      "JPSC": [
+        { id: "jpsc_cce_csat", title: "JPSC Combined Civil Services Aptitude & Reasoning", subtitle: "Comprehensive numerical ability, reasoning puzzles, and CSAT pattern coverage for Jharkhand PSC.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "jpsc jharkhand civil services", highlight: true }
+      ],
+      "Bihar SSC": [
+        { id: "bssc_inter_level", title: "Bihar SSC (BSSC Inter Level) Complete Batch", subtitle: "Specialized for 10+2 vacancies: Speed arithmetic, mental logic, number series & geometry.", mathsFee: 2500, reasoningFee: 2000, comboFee: 3700, tags: "bihar ssc bssc inter level clerk", highlight: true },
+        { id: "bssc_cgl_graduate", title: "Bihar SSC CGL (4th Graduate Level) Officer Batch", subtitle: "Advanced level mathematics shortcuts, data interpretation, and reasoning mastery.", mathsFee: 2800, reasoningFee: 2000, comboFee: 4000, tags: "bssc cgl sachivalaya sahayak bihar", highlight: false }
+      ],
+      "Bihar SI": [
+        { id: "bihar_si_daroga", title: "Bihar Police Sub-Inspector (Daroga) Mains Special", subtitle: "High-scoring Arithmetic, Geometry, Mensuration & Mental Ability test series for Bihar Daroga.", mathsFee: 2500, reasoningFee: 1800, comboFee: 3500, tags: "bihar si daroga bihar police bpssc", highlight: true }
+      ],
+      "Bihar Constable": [
+        { id: "bihar_police_constable", title: "Bihar Police Constable Written Exam Batch", subtitle: "Matriculation standard general mathematics, numerical aptitude & logical reasoning drills.", mathsFee: 2000, reasoningFee: 1500, comboFee: 2800, tags: "bihar constable csbc sipahi", highlight: true }
+      ],
+      "Delhi Police": [
+        { id: "delhi_police_constable", title: "Delhi Police Executive Constable & Head Constable", subtitle: "SSC-pattern numerical ability, fast calculation shortcuts, and non-verbal reasoning.", mathsFee: 2200, reasoningFee: 1800, comboFee: 3200, tags: "delhi police constable hc ssc", highlight: true },
+        { id: "delhi_police_si", title: "Delhi Police Sub-Inspector (SSC CPO Special)", subtitle: "Full advance maths and reasoning syllabus for Delhi Police Sub-Inspector recruitment.", mathsFee: 3000, reasoningFee: 2000, comboFee: 4200, tags: "delhi police si cpo sub-inspector", highlight: false }
+      ]
+    };
+
+    const SUB_EXAMS_DATABASE = {
+      "UPSC": [ "Civil Services Examination", "Indian Forest Service Examination", "Engineering Services Examination", "Combined Defence Services Examination", "National Defence Academy & Naval Academy Examination", "Combined Medical Services Examination", "Central Armed Police Forces (Assistant Commandants) Examination", "Combined Geo-Scientist Examination", "Indian Economic Service Examination", "Indian Statistical Service Examination", "CISF Assistant Commandant Examination", "Combined Section Officers' Grade-B Examination", "Combined Stenographers' Grade-B/Grade-I Examination" ],
+      "State PCS": [ "Andhra Pradesh Public Service Commission (APPSC) Group 1", "Arunachal Pradesh Public Service Commission (APPSC) Combined Competitive Examination", "Assam Public Service Commission (APSC) Combined Competitive Examination", "Bihar Public Service Commission (BPSC) Combined Competitive Examination", "Chhattisgarh Public Service Commission (CGPSC) State Service Examination", "Goa Public Service Commission (GPSC) Civil Services Examination", "Gujarat Public Service Commission (GPSC) Class 1 & 2 Examination", "Haryana Public Service Commission (HPSC) HCS Examination", "Himachal Pradesh Public Service Commission (HPPSC) Administrative Service Examination", "Jharkhand Public Service Commission (JPSC) Combined Civil Services Examination", "Jammu & Kashmir Public Service Commission (JKPSC) Combined Competitive Examination", "Karnataka Public Service Commission (KPSC) Gazetted Probationers Examination", "Kerala Public Service Commission (KPSC) Administrative Service Examination", "Madhya Pradesh Public Service Commission (MPPSC) State Service Examination", "Maharashtra Public Service Commission (MPSC) State Services Examination", "Manipur Public Service Commission (MPSC) Civil Services Examination", "Meghalaya Public Service Commission (MPSC) Civil Services Examination", "Mizoram Public Service Commission (MPSC) Civil Services Examination", "Nagaland Public Service Commission (NPSC) Combined Competitive Examination", "Odisha Public Service Commission (OPSC) Civil Services Examination", "Punjab Public Service Commission (PPSC) State Civil Services Examination", "Rajasthan Public Service Commission (RPSC) RAS Examination", "Sikkim Public Service Commission (SPSC) Services Examination", "Tamil Nadu Public Service Commission (TNPSC) Group I Examination", "Telangana Public Service Commission (TGPSC) Group I Examination", "Tripura Public Service Commission (TPSC) Combined Competitive Examination", "Uttar Pradesh Public Service Commission (UPPSC) PCS Examination", "Uttarakhand Public Service Commission (UKPSC) Combined State Civil/Upper Subordinate Services Examination", "West Bengal Public Service Commission (WBPSC) WBCS Examination" ],
+      "SSC": [ "Combined Graduate Level Examination", "Combined Higher Secondary Level Examination", "Multi-Tasking Staff Examination", "General Duty Constable Examination", "Sub-Inspector in Delhi Police and CAPFs Examination", "Junior Engineer Examination", "Stenographer Grade C & Grade D Examination", "Junior Hindi Translator Examination", "Selection Post Examination", "Combined Hindi Translators Examination" ],
+      "State SSC": [ "Bihar Staff Selection Commission (BSSC) Combined Graduate Level Examination", "BSSC Inter Level Examination", "BSSC Stenographer Examination", "Uttar Pradesh Subordinate Services Selection Commission (UPSSSC) PET", "UPSSSC Junior Assistant Examination", "UPSSSC Lekhpal Examination", "UPSSSC VDO Examination", "Rajasthan Staff Selection Board (RSSB) CET Graduate Level Examination", "Rajasthan Staff Selection Board (RSSB) CET Senior Secondary Level Examination", "Rajasthan Patwari Examination", "Rajasthan VDO Examination", "Madhya Pradesh ESB Group 2 Examination", "Madhya Pradesh ESB Group 4 Examination", "Madhya Pradesh ESB Group 5 Examination", "Haryana Staff Selection Commission (HSSC) CET", "HSSC Group C Examination", "HSSC Group D Examination", "Odisha Staff Selection Commission (OSSC) CGL Examination", "OSSC CHSL Examination", "Jharkhand Staff Selection Commission (JSSC) CGL Examination", "JSSC Inter Level Examination", "Maharashtra Group B Examination", "Maharashtra Group C Examination", "Gujarat Subordinate Services Examination", "Punjab Subordinate Services Selection Board (PSSSB) Clerk Examination", "Uttarakhand Subordinate Service Selection Commission (UKSSSC) Graduate Level Examination", "UKSSSC Intermediate Level Examination", "West Bengal Clerkship Examination" ],
+      "Police Exams": [ "SSC General Duty Constable Examination", "SSC Sub-Inspector Examination", "UPSC Central Armed Police Forces Examination", "Delhi Police Constable Examination", "Delhi Police Head Constable Examination", "Bihar Police Constable Examination", "Bihar Police Sub-Inspector Examination", "Bihar Police Driver Constable Examination", "Uttar Pradesh Police Constable Examination", "Uttar Pradesh Police Sub-Inspector Examination", "Rajasthan Police Constable Examination", "Rajasthan Police Sub-Inspector Examination", "Madhya Pradesh Police Constable Examination", "Madhya Pradesh Police Sub-Inspector Examination", "Maharashtra Police Constable Examination", "Maharashtra Police Sub-Inspector Examination", "Haryana Police Constable Examination", "Haryana Police Sub-Inspector Examination", "Punjab Police Constable Examination", "Punjab Police Sub-Inspector Examination", "Gujarat Police Constable Examination", "Gujarat Police Sub-Inspector Examination", "West Bengal Police Constable Examination", "West Bengal Police Sub-Inspector Examination", "Jharkhand Police Constable Examination", "Jharkhand Police Sub-Inspector Examination", "Odisha Police Constable Examination", "Odisha Police Sub-Inspector Examination", "Chhattisgarh Police Constable Examination", "Chhattisgarh Police Sub-Inspector Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination" ],
+      "Bank Exams": [ "IBPS Probationary Officer/Management Trainee Examination", "IBPS Clerk Examination", "IBPS Specialist Officer Examination", "IBPS RRB Office Assistant Examination", "IBPS RRB Officer Scale I Examination", "IBPS RRB Officer Scale II Examination", "IBPS RRB Officer Scale III Examination", "SBI Probationary Officer Examination", "SBI Clerk Examination", "SBI Circle Based Officer Examination", "SBI Specialist Cadre Officer Examination", "RBI Grade B Examination", "RBI Assistant Examination", "NABARD Grade A Examination", "NABARD Grade B Examination", "NABARD Development Assistant Examination", "SEBI Grade A Examination", "LIC Assistant Administrative Officer Examination", "LIC Assistant Examination", "LIC Apprentice Development Officer Examination", "ECGC Probationary Officer Examination", "SIDBI Grade A Examination", "PFRDA Grade A Examination", "NIACL Administrative Officer Examination", "NIACL Assistant Examination", "NICL Administrative Officer Examination" ],
+      "Railway": [ "RRB NTPC Graduate Level Examination", "RRB NTPC Undergraduate Level Examination", "RRB Group D Examination", "RRB Assistant Loco Pilot Examination", "RRB Technician Examination", "RRB Junior Engineer Examination", "RRB Paramedical Examination", "RRB Ministerial & Isolated Categories Examination", "RPF Constable Examination", "RPF Sub-Inspector Examination" ]
+    };
+
+    // DYNAMIC ROLE-BASED SIDEBAR MENU GENERATOR
+    function renderSidebarMenu() {
+      const container = document.getElementById('sidebarMenuContainer');
+      container.innerHTML = '';
+
+      if (currentUserRole === 'admin') {
+        // --- ADMINISTRATOR SPECIFIC INTERFACES ---
+        container.innerHTML = `
+          <li class="menu-header">Director Management</li>
+          <li>
+            <a class="nav-item active" onclick="switchView('admin-overview', this)">
+              <i class="fas fa-chart-line"></i> <span>Dashboard & Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-students', this)">
+              <i class="fas fa-user-graduate"></i> <span>Student Directory</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-orders', this)">
+              <i class="fas fa-receipt"></i> <span>Admissions & Fee Logs</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-courses', this)">
+              <i class="fas fa-tags"></i> <span>Course & Fee Manager</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('admin-doubts', this)">
+              <i class="fas fa-headset"></i> <span>Doubt Resolution Desk</span>
+            </a>
+          </li>
+
+          <li class="menu-header">Academic Controls</li>
+          <li>
+            <a class="nav-item" onclick="exportStudentsToCsv()">
+              <i class="fas fa-file-csv"></i> <span>Export Students (CSV)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('courses', this)">
+              <i class="fas fa-eye"></i> <span>Preview Student Store</span>
+            </a>
+          </li>
+        `;
+      } else {
+        // --- STUDENT & GUEST INTERFACES ---
+        container.innerHTML = `
+          <li class="menu-header" id="txtMenuAcademics">Academic Portals</li>
+          <li>
+            <a class="nav-item active" onclick="switchView('courses', this)">
+              <i class="fas fa-layer-group"></i> <span id="navCourses">Courses & Fees</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('planner', this)">
+              <i class="fas fa-calendar-check"></i> <span id="navPlanner">Daily Target & My Plan</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('scholarship', this)">
+              <i class="fas fa-award"></i> <span id="navScholarship">Free Scholarship Test</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('pyq', this)">
+              <i class="fas fa-file-invoice"></i> <span id="navPyq">PYQ Vault & Solutions</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('practice', this)">
+              <i class="fas fa-dumbbell"></i> <span id="navPractice">Practice Drills (Sets)</span>
+            </a>
+          </li>
+
+          <li class="menu-header" id="txtMenuSupport">Student Desk</li>
+          <li>
+            <a class="nav-item" onclick="switchView('doubt', this)">
+              <i class="fas fa-camera-retro"></i> <span id="navDoubt">Raise a Doubt</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('assistant', this)">
+              <i class="fas fa-robot"></i> <span id="navAssistant">May I Help You? (AI)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('mentor', this)">
+              <i class="fas fa-user-tie"></i> <span id="navMentor">About Vishwa Sir</span>
+            </a>
+          </li>
+
+          <li class="menu-header" id="txtMenuAdmin">Administration</li>
+          <li>
+            <a class="nav-item" onclick="openAdminPortal(this)" id="navAdminItem" style="color:var(--accent);">
+              <i class="fas fa-user-shield"></i> <span id="navAdmin">Admin Portal (Director)</span>
+            </a>
+          </li>
+        `;
+      }
     }
 
-    // IN-APP PDF / DOCUMENT VIEWER (Attached Current Affairs One-Liner 31-08-2026 to 06-09-2026)
-    function openPdfViewerModal() {
-      const body = document.getElementById('pdfContentContainer');
-      body.innerHTML = `
-        <div style="background:#fff; padding:20px; border-radius:8px; border:1px solid #cbd5e1; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
-          <div style="border-bottom:2px solid var(--primary); padding-bottom:10px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <h2 style="color:var(--primary); font-size:1.25rem;">WEEKLY ONE-LINER & QUIZ COMPILATION</h2>
-              <span style="font-size:0.84rem; font-weight:700; color:var(--secondary);">Period: 31-08-2026 to 06-09-2026 | Bharti Classes Knowledge Vault</span>
-            </div>
-            <span class="exam-pill" style="background:#dcfce7; color:#15803d; font-size:0.8rem;">Verified PYQ & Current Affairs</span>
+    function handleUserPillClick() {
+      if (currentUserRole === 'admin') {
+        switchView('admin-overview');
+      } else if (isUserLoggedIn) {
+        alert(`Student Session Details:\n\nName: ${currentStudentProfile.name}\nRegistration Number: ${currentStudentProfile.regNumber}\nMobile: ${currentStudentProfile.mobile}\nActive Batches: ${(currentStudentProfile.enrolledCourses || []).length}`);
+      } else {
+        openAuthModal();
+      }
+    }
+
+    // CHECK ACTIVE 365-DAY ENROLLMENT
+    function getActiveEnrollment(courseTitle) {
+      if (!currentStudentProfile || !currentStudentProfile.enrolledCourses) return null;
+      const now = new Date();
+      return currentStudentProfile.enrolledCourses.find(c => {
+        const isMatch = (c.courseTitle === courseTitle) || 
+                        (courseTitle.includes('CGL') && c.courseTitle.includes('CGL')) ||
+                        (courseTitle.includes('Maths + Reasoning') && c.courseTitle.includes('Combo'));
+        const isValid = new Date(c.expiryDate) > now;
+        return isMatch && isValid;
+      });
+    }
+
+    function calculateDaysRemaining(expiryDateStr) {
+      const diff = new Date(expiryDateStr) - new Date();
+      return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    }
+
+    function selectCourseBox(categoryKey, element) {
+      activeCourseCategory = categoryKey;
+      document.querySelectorAll('.exam-box-card').forEach(b => b.classList.remove('active'));
+      if (element) element.classList.add('active');
+
+      const heading = document.getElementById('selectedCategoryHeading');
+      heading.textContent = `Courses for ${categoryKey} Examinations`;
+
+      const container = document.getElementById('courseGridContainer');
+      const courses = REAL_COURSES_DATABASE[categoryKey] || [];
+
+      if (courses.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="grid-column: 1 / -1; text-align:center; padding:30px;">
+            <i class="fas fa-clock fa-2x" style="color:var(--accent); margin-bottom:10px;"></i>
+            <h4 style="color:var(--primary);">Dedicated batches for ${categoryKey} are launching soon!</h4>
+            <p style="color:var(--text-muted); font-size:0.86rem; margin-top:6px;">Check our SSC CGL or Railway foundation batches to master Advance Mathematics & Reasoning.</p>
           </div>
+        `;
+        return;
+      }
 
-          <h3 style="color:var(--primary); font-size:1rem; margin:14px 0 8px;">Key Examination Highlights & Current Affairs (One-Liners):</h3>
-          <ol style="padding-left:22px; line-height:1.8;">
-            <li><strong>Public Examination Reform 2.0 (PER 2.0):</strong> End-to-End Secure-by-Design examination security framework covering question creation to result declaration with biometric authentication & digital watermarking.</li>
-            <li><strong>HDFC Bank Leadership Transition:</strong> MD & CEO Sashidhar Jagdishan to retire on 26 October 2026.</li>
-            <li><strong>FIH Men's Hockey World Cup:</strong> Germany won the World Cup title for the second consecutive time (equalling Pakistan with 4 titles) defeating Spain 1-0. Indian Men's Hockey team finished in 8th position.</li>
-            <li><strong>Highest State Honour:</strong> Prime Minister Narendra Modi was conferred Uzbekistan's highest honour <em>'Oliy Darajali Do'stlik'</em> (Highest Order of Friendship) during Tashkent summit.</li>
-            <li><strong>e-Shram Portal:</strong> All registered unorganised workers receive a 12-digit Universal Account Number (UAN) for social security and welfare integration.</li>
-            <li><strong>Defence Procurement:</strong> Indian Army procuring FGM-148 Javelin Anti-Tank Guided Missiles (ATGM) equipped with Imaging Infrared (IIR) Fire-and-Forget technology alongside DRDO's indigenous MPATGM.</li>
-            <li><strong>National Small Industry Day:</strong> Celebrated annually across India on 30 August.</li>
-            <li><strong>ICC Women's Champions Trophy 2027:</strong> Hosting rights officially transferred from Sri Lanka to India.</li>
-            <li><strong>Water Sharing Accord:</strong> Historic Son River inter-state water sharing accord formalized between Bihar and Jharkhand under cooperative federalism.</li>
-            <li><strong>Space Diplomacy:</strong> Turkey joined as the 71st signatory to the Artemis Accords for peaceful lunar and space exploration.</li>
-            <li><strong>Semicon 2.0 Ecosystem:</strong> Government of India allocated ₹1.27 Lakh Crore to build chip fabrication and train 1 Lakh semiconductor engineers.</li>
-            <li><strong>Aviation Leadership:</strong> Air Vice Marshal Shakti Sharma became the first female officer from a non-medical cadre to attain 2-star rank (Assistant Chief of the Air Staff - Education).</li>
-            <li><strong>Digital Payments Record:</strong> Unified Payments Interface (UPI) crossed all-time high of 24.51 Billion monthly transactions worth ₹29.82 Trillion.</li>
-            <li><strong>National Teachers' Day:</strong> Celebrated on 5 September honoring the birth anniversary of Bharat Ratna Dr. Sarvepalli Radhakrishnan.</li>
-          </ol>
+      container.innerHTML = '';
+      courses.forEach(c => {
+        const comboTitle = `${c.title} (Maths + Reasoning Combo)`;
+        const mathsTitle = `${c.title} (Maths Only)`;
+        const reasoningTitle = `${c.title} (Reasoning Only)`;
+
+        const comboEnrollment = getActiveEnrollment(comboTitle);
+        const mathsEnrollment = getActiveEnrollment(mathsTitle);
+        const reasoningEnrollment = getActiveEnrollment(reasoningTitle);
+
+        const isFullyEnrolled = !!comboEnrollment;
+
+        const card = document.createElement('div');
+        card.className = 'card course-card' + (isFullyEnrolled ? ' enrolled-active' : (c.highlight ? ' highlight' : ''));
+        card.setAttribute('data-tags', c.tags);
+
+        let buttonAreaHtml = '';
+
+        if (isFullyEnrolled) {
+          const daysLeft = calculateDaysRemaining(comboEnrollment.expiryDate);
+          buttonAreaHtml = `
+            <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:10px; border-radius:6px; margin-top:14px; text-align:center;">
+              <span style="color:#065f46; font-weight:700; font-size:0.84rem; display:block;"><i class="fas fa-check-circle"></i> Enrolled & Active</span>
+              <span style="font-size:0.76rem; color:#047857;">Valid till: ${new Date(comboEnrollment.expiryDate).toLocaleDateString()} (${daysLeft} days left)</span>
+            </div>
+            <button class="btn btn-secondary btn-block" style="margin-top:8px;" onclick="openClassroomModal('${c.title}', '${comboEnrollment.expiryDate}')">
+              <i class="fas fa-play-circle"></i> Access Lectures, Notes & Tests
+            </button>
+          `;
+        } else {
+          buttonAreaHtml = `
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+              ${mathsEnrollment ? `
+                <button class="btn btn-outline" style="background:#ecfdf5; border-color:#86efac; color:#15803d;" onclick="openClassroomModal('${mathsTitle}', '${mathsEnrollment.expiryDate}')">
+                  <i class="fas fa-check"></i> Maths Enrolled (Valid till ${new Date(mathsEnrollment.expiryDate).toLocaleDateString()})
+                </button>
+              ` : `
+                <button class="btn btn-outline" onclick="triggerCheckout('${mathsTitle}', ${c.mathsFee})">Buy Maths Only (₹${c.mathsFee.toLocaleString()})</button>
+              `}
+
+              ${reasoningEnrollment ? `
+                <button class="btn btn-outline" style="background:#ecfdf5; border-color:#86efac; color:#15803d;" onclick="openClassroomModal('${reasoningTitle}', '${reasoningEnrollment.expiryDate}')">
+                  <i class="fas fa-check"></i> Reasoning Enrolled (Valid till ${new Date(reasoningEnrollment.expiryDate).toLocaleDateString()})
+                </button>
+              ` : `
+                <button class="btn btn-outline" onclick="triggerCheckout('${reasoningTitle}', ${c.reasoningFee})">Buy Reasoning Only (₹${c.reasoningFee.toLocaleString()})</button>
+              `}
+
+              <button class="btn btn-secondary" onclick="triggerCheckout('${comboTitle}', ${c.comboFee})">
+                <i class="fas fa-bolt"></i> Enroll in Combo Batch (₹${c.comboFee.toLocaleString()}) - 365 Days
+              </button>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          ${isFullyEnrolled ? '<span class="badge-enrolled-status"><i class="fas fa-user-check"></i> ENROLLED</span>' : '<span class="badge-discount">SAVE ₹800 (COMBO)</span>'}
+          <div>
+            <h3>${c.title}</h3>
+            <div class="badge-exam-tags">
+              <span class="exam-pill">${categoryKey}</span>
+              <span class="exam-pill">365 Days Validity</span>
+              <span class="exam-pill">Live + VOD</span>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin:6px 0 12px;">${c.subtitle}</p>
+            <div class="pricing-table-row"><span>Mathematics Only:</span> <strong>₹${c.mathsFee.toLocaleString()}</strong></div>
+            <div class="pricing-table-row"><span>Reasoning Ability Only:</span> <strong>₹${c.reasoningFee.toLocaleString()}</strong></div>
+            <div class="pricing-table-row" style="color:var(--secondary); font-weight:700;">
+              <span>Complete Combo Pack:</span>
+              <span><del style="color:#888; font-weight:normal;">₹${(c.mathsFee + c.reasoningFee).toLocaleString()}</del> ₹${c.comboFee.toLocaleString()}</span>
+            </div>
+          </div>
+          ${buttonAreaHtml}
+        `;
+        container.appendChild(card);
+      });
+
+      renderEnrolledBatchesBanner();
+    }
+
+    function renderEnrolledBatchesBanner() {
+      const panel = document.getElementById('myEnrolledPanel');
+      const grid = document.getElementById('enrolledCoursesListGrid');
+      const badge = document.getElementById('lblEnrolledCountBadge');
+
+      if (!currentStudentProfile || !currentStudentProfile.enrolledCourses || currentStudentProfile.enrolledCourses.length === 0) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      const activeCourses = currentStudentProfile.enrolledCourses.filter(c => new Date(c.expiryDate) > new Date());
+      if (activeCourses.length === 0) {
+        panel.style.display = 'none';
+        return;
+      }
+
+      badge.textContent = `${activeCourses.length} Active Batch(es)`;
+      grid.innerHTML = activeCourses.map(c => `
+        <div style="background:#fff; border:1px solid #a7f3d0; border-radius:6px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:var(--primary); font-size:0.88rem; display:block;">${c.courseTitle}</strong>
+            <span style="font-size:0.75rem; color:#059669;"><i class="fas fa-calendar-check"></i> Valid till: ${new Date(c.expiryDate).toLocaleDateString()} (${calculateDaysRemaining(c.expiryDate)} days left)</span>
+          </div>
+          <button class="btn btn-primary" style="padding:5px 12px; font-size:0.8rem;" onclick="openClassroomModal('${c.courseTitle}', '${c.expiryDate}')">
+            <i class="fas fa-play"></i> Open Classroom
+          </button>
         </div>
-      `;
-      document.getElementById('pdfViewerModal').style.display = 'flex';
+      `).join('');
+
+      panel.style.display = 'block';
     }
 
-    function closePdfViewerModal() {
-      document.getElementById('pdfViewerModal').style.display = 'none';
+    const selectedCategories = new Set();
+    function toggleExamCategory(categoryName, isChecked) {
+      if (isChecked) selectedCategories.add(categoryName);
+      else selectedCategories.delete(categoryName);
+      renderSubCategories();
     }
 
-    function downloadCoursePdfFile() {
-      let content = "BHARTI CLASSES - ACADEMIC REPOSITORY & NOTES\n";
-      content += "Weekly One-Liner & Quiz Compilation (31-08-2026 to 06-09-2026)\n";
-      content += "Special Reference for SSC CGL, BSSC, Railway & State Examinations\n";
-      content += "Director: Vishwa Bharti Sir | Contact: 8271750420\n";
-      content += "================================================================\n\n";
-      content += "1. PER 2.0 Framework: Designed for Secure-by-Design examination systems with end-to-end auditability.\n";
-      content += "2. HDFC Bank MD & CEO Sashidhar Jagdishan will retire on 26 October 2026.\n";
-      content += "3. Germany won the FIH Men's Hockey World Cup 2026 (4th World Cup Title) defeating Spain 1-0.\n";
-      content += "4. PM Narendra Modi conferred Uzbekistan's highest honour 'Oliy Darajali Do'stlik'.\n";
-      content += "5. e-Shram Portal: 12-digit UAN card provided to workers in the unorganised sector.\n";
-      content += "6. Indian Army procuring US-made FGM-148 Javelin Anti-Tank Guided Missiles.\n";
-      content += "7. National Small Industry Day observed on 30 August.\n";
-      content += "8. ICC Women's Champions Trophy 2027 hosting shifted from Sri Lanka to India.\n";
-      content += "9. Bihar and Jharkhand signed historic Son River water sharing agreement.\n";
-      content += "10. Semicon 2.0: ₹1.27 Lakh Crore allocated for chip manufacturing and talent development.\n";
-      content += "11. Air Vice Marshal Shakti Sharma became the 1st female officer from a non-medical branch to achieve 2-star rank.\n";
-      content += "12. UPI set a new milestone of 24.51 Billion transactions in August 2026.\n";
-      content += "13. Teacher's Day celebrated across India on 5 September.\n\n";
-      content += "================================================================\n";
-      content += "Bharti Classes Patna - All Rights Reserved\n";
+    function renderSubCategories() {
+      const container = document.getElementById('dynamicSubCategoriesArea');
+      container.innerHTML = '';
+      if (selectedCategories.size === 0) return;
 
-      const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+      const header = document.createElement('label');
+      header.style.fontWeight = '700';
+      header.style.color = 'var(--primary)';
+      header.style.marginBottom = '6px';
+      header.style.display = 'block';
+      header.textContent = 'Step 2: Select Specific Target Examination(s) under selected categories:';
+      container.appendChild(header);
+
+      selectedCategories.forEach(cat => {
+        const subList = SUB_EXAMS_DATABASE[cat] || [];
+        const box = document.createElement('div');
+        box.className = 'sub-cat-box';
+        let subItemsHtml = subList.map((exam) => `
+          <label class="sub-exam-option">
+            <input type="checkbox" name="subExam" value="${exam}" data-category="${cat}">
+            <span>${exam}</span>
+          </label>
+        `).join('');
+
+        box.innerHTML = `
+          <h4><i class="fas fa-chevron-circle-right" style="color:var(--secondary);"></i> ${cat}</h4>
+          <div class="sub-exams-list">${subItemsHtml}</div>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    function showLoginView() {
+      document.getElementById('loginViewContainer').style.display = 'block';
+      document.getElementById('registerViewContainer').style.display = 'none';
+    }
+
+    function showRegisterView() {
+      document.getElementById('loginViewContainer').style.display = 'none';
+      document.getElementById('registerViewContainer').style.display = 'block';
+    }
+
+    function openAuthModal() {
+      if (currentUserRole === 'admin') {
+        alert('You are currently logged in as Director Admin. To sign in as a student, please log out first.');
+        return;
+      }
+      if (isUserLoggedIn) {
+        alert('You are already logged in as ' + (currentStudentProfile ? currentStudentProfile.name : 'Student'));
+        return;
+      }
+      showLoginView();
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authBackdrop').style.display = 'none';
+    }
+
+    // LOGOUT (SUPPORTS BOTH ADMIN & STUDENT ROLES)
+    function logoutUser() {
+      const isDirector = currentUserRole === 'admin';
+      const promptMsg = isDirector ? 'Are you sure you want to log out of Director Admin Desk?' : 'Are you sure you want to log out of Bharti Classes?';
+      if (!confirm(promptMsg)) return;
+
+      try { firebase.auth().signOut(); } catch(e) {}
+      
+      sessionStorage.removeItem('bharti_admin_logged_in');
+      localStorage.removeItem('bharti_student');
+      
+      currentUserRole = 'guest';
+      isUserLoggedIn = false;
+      currentStudentProfile = null;
+
+      const pill = document.getElementById('userPillBtn');
+      pill.classList.remove('admin-active');
+      document.getElementById('lblUserStatus').textContent = 'Login / Register';
+      document.getElementById('btnLogout').style.display = 'none';
+      document.getElementById('userTargetBar').style.display = 'none';
+      document.getElementById('myEnrolledPanel').style.display = 'none';
+
+      renderSidebarMenu();
+      alert('You have logged out successfully.');
+      switchView('courses');
+      selectCourseBox('SSC');
+    }
+
+    function getRegisteredUsersList() {
+      return JSON.parse(localStorage.getItem('bharti_registered_users_db') || '[]');
+    }
+
+    function saveUserToDatabase(userObj) {
+      const users = getRegisteredUsersList();
+      const existingIdx = users.findIndex(u => u.regNumber === userObj.regNumber || (u.mobile && u.mobile === userObj.mobile) || (u.email && u.email.toLowerCase() === userObj.email.toLowerCase()));
+      if (existingIdx >= 0) {
+        users[existingIdx] = userObj;
+      } else {
+        users.push(userObj);
+      }
+      localStorage.setItem('bharti_registered_users_db', JSON.stringify(users));
+      refreshAdminTables();
+    }
+
+    function findExistingUser(mobile, email) {
+      const users = getRegisteredUsersList();
+      const cleanMob = mobile ? String(mobile).replace(/\D/g, '').slice(-10) : '';
+      const cleanEmail = email ? email.trim().toLowerCase() : '';
+
+      return users.find(u => {
+        const uMob = (u.mobile || '').replace(/\D/g, '').slice(-10);
+        const uEmail = (u.email || '').toLowerCase();
+        return (cleanMob && uMob === cleanMob) || (cleanEmail && uEmail === cleanEmail);
+      });
+    }
+
+    // DUAL-CHANNEL CREDENTIAL LOGIN (DIRECTOR ADMIN OR STUDENT)
+    function handleCredentialLogin(e) {
+      e.preventDefault();
+      const inputId = document.getElementById('loginUserId').value.trim();
+      const inputPass = document.getElementById('loginPassword').value.trim();
+
+      if (!inputId || !inputPass) return alert('Please enter both User ID and Password.');
+
+      // Check for Director Administrator Credentials
+      if ((inputId === 'admin' || inputId === '8271750420') && (inputPass === 'admin123' || inputPass === '8271750420')) {
+        loginAsAdmin();
+        closeAuthModal();
+        return;
+      }
+
+      // Check Student Credentials in Local DB
+      const users = getRegisteredUsersList();
+      const cleanId = inputId.toLowerCase();
+      const cleanDigits = inputId.replace(/\D/g, '').slice(-10);
+
+      const matchedUser = users.find(u => {
+        const uMob = (u.mobile || '').replace(/\D/g, '').slice(-10);
+        const uEmail = (u.email || '').toLowerCase();
+        const uReg = (u.regNumber || '').toLowerCase();
+        const idMatches = (uReg === cleanId) || (uEmail === cleanId) || (uMob && cleanDigits && uMob === cleanDigits);
+        return idMatches && u.password === inputPass;
+      });
+
+      if (matchedUser) {
+        currentUserRole = 'student';
+        currentStudentProfile = matchedUser;
+        localStorage.setItem('bharti_student', JSON.stringify(matchedUser));
+        completeLoginUi();
+        closeAuthModal();
+        alert(`Welcome back, ${matchedUser.name}!\nRegistration Number: ${matchedUser.regNumber || 'Verified User'}`);
+        selectCourseBox(activeCourseCategory);
+      } else {
+        alert('Invalid User ID or Password! Please verify your registered credentials.');
+      }
+    }
+
+    function generateSecureOtp() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const mob = document.getElementById('regMobile').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const age = document.getElementById('regAge').value.trim();
+      const qual = document.getElementById('regClass').value;
+      const pass = document.getElementById('regPassword').value.trim();
+      const channel = document.getElementById('regOtpChannel').value;
+
+      if (!name) return alert('Please enter student full name.');
+      if (mob.length !== 10) return alert('Please enter a valid 10-digit mobile number.');
+      if (!email) return alert('Please enter a valid email address.');
+      if (!pass || pass.length < 6) return alert('Password must be at least 6 characters.');
+
+      const existing = findExistingUser(mob, email);
+      if (existing) {
+        alert(`This Mobile Number (${mob}) or Email (${email}) is ALREADY REGISTERED with Registration No: ${existing.regNumber}!\n\nClick OK to switch to Login.`);
+        document.getElementById('loginUserId').value = existing.regNumber || mob || email;
+        showLoginView();
+        return;
+      }
+
+      if (selectedCategories.size === 0) return alert('Please select at least one Main Category of exam in Step 1.');
+      const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExam"]:checked'));
+      if (checkedBoxes.length === 0) return alert('Please select at least one target exam from the sub-category boxes in Step 2.');
+
+      pendingProfileData = {
+        name: name,
+        mobile: mob,
+        email: email,
+        age: age,
+        qualification: qual,
+        password: pass,
+        categories: Array.from(selectedCategories),
+        exams: checkedBoxes.map(cb => cb.value),
+        enrolledCourses: []
+      };
+
+      activeOtpChannel = channel;
+      activeOtpTarget = channel === 'mobile' ? "+91 " + mob : email;
+      serverGeneratedOtp = generateSecureOtp();
+
+      document.getElementById('authBackdrop').style.display = 'none';
+      document.getElementById('otpModalTitle').innerHTML = channel === 'mobile' ? '<i class="fas fa-mobile-alt"></i> Mobile OTP Verification' : '<i class="fas fa-envelope-open-text"></i> Email OTP Verification';
+      document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit real OTP verification code has been dispatched to <strong>${activeOtpTarget}</strong>.`;
+      document.getElementById('txtEnteredOtp').value = '';
+      document.getElementById('otpVerifyBackdrop').style.display = 'flex';
+
+      const channelName = channel === 'mobile' ? 'SMS Gateway' : 'Mail Server';
+      alert(`[${channelName} Dispatch] Real Registration OTP verification code for ${activeOtpTarget} is: ${serverGeneratedOtp}`);
+    }
+
+    function resendOtpCode() {
+      serverGeneratedOtp = generateSecureOtp();
+      alert(`[Resent OTP] New verification code dispatched to ${activeOtpTarget} is: ${serverGeneratedOtp}`);
+    }
+
+    function closeOtpModal() {
+      document.getElementById('otpVerifyBackdrop').style.display = 'none';
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+
+    function confirmAndValidateOtp() {
+      const enteredCode = document.getElementById('txtEnteredOtp').value.trim();
+      if (enteredCode.length !== 6) return alert('Please enter the 6-digit OTP.');
+      
+      if (enteredCode !== serverGeneratedOtp) {
+        return alert('Incorrect OTP! Please enter the exact verification code dispatched to your handset/inbox.');
+      }
+
+      const mobNumber = pendingProfileData.mobile || '000';
+      const registrationNumber = generateAutoRegistrationNumber(mobNumber);
+
+      currentStudentProfile = {
+        ...pendingProfileData,
+        regNumber: registrationNumber,
+        verifiedAt: new Date().toISOString(),
+        enrolledCourses: []
+      };
+
+      currentUserRole = 'student';
+      saveUserToDatabase(currentStudentProfile);
+      localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+
+      completeLoginUi();
+      document.getElementById('otpVerifyBackdrop').style.display = 'none';
+      document.getElementById('displayRegNumber').textContent = registrationNumber;
+      document.getElementById('displayRegMeta').textContent = `Candidate: ${currentStudentProfile.name} | Target: ${(currentStudentProfile.exams || []).slice(0, 2).join(', ')}`;
+      document.getElementById('regSuccessBackdrop').style.display = 'flex';
+    }
+
+    // --- STEP 1: PRE-TRANSACTION OTP AUTHORIZATION ---
+    function triggerCheckout(courseName, fee) {
+      if (!isUserLoggedIn) {
+        alert('Please login or register before purchasing courses.');
+        openAuthModal();
+        return;
+      }
+
+      const activeEnrollment = getActiveEnrollment(courseName);
+      if (activeEnrollment) {
+        alert(`You are already enrolled in "${courseName}"!\nValid till: ${new Date(activeEnrollment.expiryDate).toLocaleDateString()}`);
+        openClassroomModal(courseName, activeEnrollment.expiryDate);
+        return;
+      }
+
+      pendingCheckout.courseName = courseName;
+      pendingCheckout.fee = fee;
+      pendingCheckout.prePayOtp = generateSecureOtp();
+
+      const targetDest = currentStudentProfile.mobile || currentStudentProfile.email;
+      document.getElementById('prePayOtpSubtitle').innerHTML = `A 6-digit payment authorization OTP has been dispatched to <strong>${targetDest}</strong> to authorize enrollment for <strong>${courseName}</strong> (₹${fee.toLocaleString()}).`;
+      document.getElementById('prePayEnteredOtp').value = '';
+      document.getElementById('prePayOtpBackdrop').style.display = 'flex';
+
+      alert(`[Security OTP Dispatch] Your Pre-Transaction Authorization OTP for ${courseName} (₹${fee}) is: ${pendingCheckout.prePayOtp}`);
+    }
+
+    function resendPrePayOtp() {
+      pendingCheckout.prePayOtp = generateSecureOtp();
+      alert(`[Resent Security OTP] New Authorization OTP is: ${pendingCheckout.prePayOtp}`);
+    }
+
+    function closePrePayOtpModal() {
+      document.getElementById('prePayOtpBackdrop').style.display = 'none';
+    }
+
+    // STEP 2: VERIFY OTP BEFORE PROCEEDING TO PAYMENT GATEWAY
+    function verifyPrePayOtpAndOpenGateway() {
+      const entered = document.getElementById('prePayEnteredOtp').value.trim();
+      if (entered.length !== 6) return alert('Please enter the 6-digit OTP code.');
+      
+      if (entered !== pendingCheckout.prePayOtp) {
+        return alert('Incorrect authorization OTP! Transaction cannot proceed.');
+      }
+
+      document.getElementById('prePayOtpBackdrop').style.display = 'none';
+
+      const fee = pendingCheckout.fee;
+      const courseName = pendingCheckout.courseName;
+
+      document.getElementById('payCourseTitle').textContent = courseName;
+      document.getElementById('payAmountVal').textContent = '₹' + fee.toLocaleString();
+      document.getElementById('payUtrNumber').value = '';
+
+      // Official VPA: 9504704632@ybl | Beneficiary: Bharti Classes (Sneha)
+      const officialVpa = "9504704632@ybl";
+      const beneficiaryName = "Bharti Classes (Sneha)";
+      const cleanNote = encodeURIComponent(courseName.slice(0, 25));
+
+      const genericUpiUri = `upi://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(genericUpiUri)}`;
+      
+      document.getElementById('dynamicUpiQrCode').src = qrApiUrl;
+      document.getElementById('btnPayPhonePe').href = `phonepe://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayGPay').href = `tez://upi/pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayPaytm').href = `paytmmp://pay?pa=${officialVpa}&pn=${encodeURIComponent(beneficiaryName)}&am=${fee}&cu=INR&tn=${cleanNote}`;
+      document.getElementById('btnPayBhim').href = genericUpiUri;
+      document.getElementById('btnPayAmazon').href = genericUpiUri;
+
+      document.getElementById('paymentBackdrop').style.display = 'flex';
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentBackdrop').style.display = 'none';
+    }
+
+    // STEP 3: SUBMIT UTR & SAVE 365-DAY VALID ENROLLMENT
+    function completeFinalEnrollment() {
+      const utr = document.getElementById('payUtrNumber').value.trim();
+      if (!utr || utr.length < 8) {
+        return alert('Please enter your 12-digit UPI Transaction Reference (UTR / Txn ID) after completing payment in PhonePe / UPI App.');
+      }
+
+      const purchaseDate = new Date();
+      const expiryDate = new Date();
+      expiryDate.setDate(purchaseDate.getDate() + 365);
+
+      const enrolledItem = {
+        courseId: 'crs_' + Date.now(),
+        courseTitle: pendingCheckout.courseName,
+        fee: pendingCheckout.fee,
+        utr: utr,
+        purchaseDate: purchaseDate.toISOString(),
+        expiryDate: expiryDate.toISOString()
+      };
+
+      if (!currentStudentProfile.enrolledCourses) {
+        currentStudentProfile.enrolledCourses = [];
+      }
+      currentStudentProfile.enrolledCourses.push(enrolledItem);
+
+      saveUserToDatabase(currentStudentProfile);
+      localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
+
+      const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
+      orders.unshift({
+        txnId: utr,
+        studentName: currentStudentProfile.name,
+        regNumber: currentStudentProfile.regNumber,
+        mobile: currentStudentProfile.mobile,
+        courseTitle: pendingCheckout.courseName,
+        fee: pendingCheckout.fee,
+        mode: 'PhonePe UPI (9504704632@ybl - Sneha)',
+        validity: '365 Days (Till ' + expiryDate.toLocaleDateString() + ')',
+        status: 'Success (Verified)',
+        timestamp: purchaseDate.toLocaleString()
+      });
+      localStorage.setItem('bharti_payment_orders', JSON.stringify(orders));
+      refreshAdminTables();
+
+      document.getElementById('paymentBackdrop').style.display = 'none';
+      selectCourseBox(activeCourseCategory);
+
+      alert(`🎉 Admission Confirmed!\n\n• Course: ${pendingCheckout.courseName}\n• Fee Paid: ₹${pendingCheckout.fee.toLocaleString()}\n• UTR: ${utr}\n• Validity: 365 Days (Active till ${expiryDate.toLocaleDateString()})\n\nBatch access is unlocked in your dashboard!`);
+    }
+
+    function openClassroomModal(courseTitle, expiryDateStr) {
+      document.getElementById('classroomCourseTitle').textContent = courseTitle;
+      document.getElementById('classroomValidityDates').textContent = `Valid till ${new Date(expiryDateStr).toLocaleDateString()} (${calculateDaysRemaining(expiryDateStr)} Days Remaining)`;
+      document.getElementById('classroomModal').style.display = 'flex';
+    }
+
+    function closeClassroomModal() {
+      document.getElementById('classroomModal').style.display = 'none';
+    }
+
+    // FORGOT CREDENTIALS
+    function openForgotUserIdModal() {
+      document.getElementById('authBackdrop').style.display = 'none';
+      document.getElementById('forgotIdInput').value = '';
+      document.getElementById('forgotUserIdModal').style.display = 'flex';
+    }
+
+    function closeForgotUserIdModal() {
+      document.getElementById('forgotUserIdModal').style.display = 'none';
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+
+    function handleForgotUserIdSubmit(e) {
+      e.preventDefault();
+      const val = document.getElementById('forgotIdInput').value.trim();
+      if (!val) return alert('Please enter registered mobile or email.');
+
+      const user = findExistingUser(val, val);
+      if (user) {
+        alert(`Account Found!\n\nCandidate Name: ${user.name}\nOfficial Registration No: ${user.regNumber}\nRegistered Mobile: ${user.mobile}\nRegistered Email: ${user.email}\n\nYou can use your Registration No, Mobile, or Email to log in.`);
+        closeForgotUserIdModal();
+        document.getElementById('loginUserId').value = user.regNumber || user.mobile || user.email;
+        showLoginView();
+      } else {
+        alert('No account found matching this mobile number or email address. Please register as a new student.');
+      }
+    }
+
+    function openForgotPasswordModal() {
+      document.getElementById('authBackdrop').style.display = 'none';
+      document.getElementById('forgotPassUserId').value = '';
+      document.getElementById('forgotPassStep1').style.display = 'block';
+      document.getElementById('forgotPassStep2').style.display = 'none';
+      document.getElementById('forgotPasswordModal').style.display = 'flex';
+    }
+
+    function closeForgotPasswordModal() {
+      document.getElementById('forgotPasswordModal').style.display = 'none';
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+
+    function handleForgotPassRequestOtp(e) {
+      e.preventDefault();
+      const val = document.getElementById('forgotPassUserId').value.trim();
+      if (!val) return alert('Please enter your User ID.');
+
+      const users = getRegisteredUsersList();
+      const cleanVal = val.toLowerCase();
+      const cleanDigits = val.replace(/\D/g, '').slice(-10);
+
+      const matched = users.find(u => {
+        const uMob = (u.mobile || '').replace(/\D/g, '').slice(-10);
+        const uEmail = (u.email || '').toLowerCase();
+        const uReg = (u.regNumber || '').toLowerCase();
+        return (uReg === cleanVal) || (uEmail === cleanVal) || (uMob && cleanDigits && uMob === cleanDigits);
+      });
+
+      if (!matched) return alert('No account found with this User ID!');
+
+      resetPassUserObj = matched;
+      resetPassOtp = generateSecureOtp();
+
+      document.getElementById('forgotPassStep1').style.display = 'none';
+      document.getElementById('forgotPassStep2').style.display = 'block';
+      document.getElementById('forgotPassSubtitle').innerHTML = `Security verification OTP sent for account of <strong>${matched.name}</strong>.`;
+
+      alert(`[Security OTP Dispatch] Your Password Reset OTP for Bharti Classes is: ${resetPassOtp}`);
+    }
+
+    function handleForgotPassResetConfirm(e) {
+      e.preventDefault();
+      const enteredOtp = document.getElementById('forgotPassOtpInput').value.trim();
+      const newPass = document.getElementById('forgotPassNewPassword').value.trim();
+
+      if (enteredOtp !== resetPassOtp) return alert('Incorrect OTP! Please enter the valid code sent.');
+      if (!newPass || newPass.length < 6) return alert('New password must be at least 6 characters long.');
+
+      resetPassUserObj.password = newPass;
+      saveUserToDatabase(resetPassUserObj);
+
+      alert(`Password updated successfully for Registration No: ${resetPassUserObj.regNumber}!\nPlease log in with your new password.`);
+      closeForgotPasswordModal();
+      document.getElementById('loginUserId').value = resetPassUserObj.regNumber || resetPassUserObj.mobile;
+      document.getElementById('loginPassword').value = newPass;
+      showLoginView();
+    }
+
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          const userEmail = user.email || '';
+          const userName = user.displayName || '';
+
+          const existing = findExistingUser('', userEmail);
+          if (existing) {
+            currentUserRole = 'student';
+            currentStudentProfile = existing;
+            localStorage.setItem('bharti_student', JSON.stringify(existing));
+            completeLoginUi();
+            closeAuthModal();
+            showAllExams();
+            selectCourseBox(activeCourseCategory);
+            alert(`Welcome back, ${existing.name}!\nLogged in with Registration ID: ${existing.regNumber}`);
+          } else {
+            showRegisterView();
+            document.getElementById('regName').value = userName;
+            document.getElementById('regEmail').value = userEmail;
+            document.getElementById('regOtpChannel').value = 'email';
+            alert(`Google account (${userEmail}) connected!\n\nPlease complete Mobile Number, Age, Qualification, Password & Target Exams to generate your Registration ID.`);
+          }
+        })
+        .catch((error) => {
+          alert('Google Sign-In Error: ' + error.message);
+        });
+    }
+
+    function completeLoginUi() {
+      isUserLoggedIn = true;
+      const pill = document.getElementById('userPillBtn');
+      pill.classList.remove('admin-active');
+      const regStr = currentStudentProfile.regNumber ? ` (${currentStudentProfile.regNumber})` : '';
+      document.getElementById('lblUserStatus').textContent = `${currentStudentProfile.name}${regStr}`;
+      document.getElementById('btnLogout').style.display = 'inline-flex';
+      renderSidebarMenu();
+      checkAndTriggerReminderNotification();
+      renderEnrolledBatchesBanner();
+    }
+
+    function dismissRegSuccessModal() {
+      document.getElementById('regSuccessBackdrop').style.display = 'none';
+      selectCourseBox(activeCourseCategory);
+    }
+
+    function showAllExams() {
+      document.getElementById('userTargetBar').style.display = 'none';
+      selectCourseBox(activeCourseCategory);
+    }
+
+    // --- DIRECTOR ADMIN DASHBOARD MANAGEMENT ---
+    function loginAsAdmin() {
+      currentUserRole = 'admin';
+      sessionStorage.setItem('bharti_admin_logged_in', 'true');
+      
+      const pill = document.getElementById('userPillBtn');
+      pill.classList.add('admin-active');
+      document.getElementById('lblUserStatus').innerHTML = '<i class="fas fa-user-shield"></i> Director Admin Logged In';
+      document.getElementById('btnLogout').style.display = 'inline-flex';
+
+      renderSidebarMenu();
+      switchView('admin-overview');
+      refreshAdminTables();
+      alert('Welcome Vishwa Bharti Sir! Director Administration Portal Active.');
+    }
+
+    function openAdminPortal(navEl) {
+      if (currentUserRole === 'admin') {
+        switchView('admin-overview', navEl);
+        refreshAdminTables();
+      } else {
+        document.getElementById('adminUserIdInput').value = '';
+        document.getElementById('adminPasswordInput').value = '';
+        document.getElementById('adminAuthModal').style.display = 'flex';
+      }
+    }
+
+    function closeAdminAuthModal() {
+      document.getElementById('adminAuthModal').style.display = 'none';
+    }
+
+    function handleAdminLoginSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('adminUserIdInput').value.trim();
+      const pass = document.getElementById('adminPasswordInput').value.trim();
+
+      if ((id === 'admin' || id === '8271750420') && (pass === 'admin123' || pass === '8271750420')) {
+        closeAdminAuthModal();
+        loginAsAdmin();
+      } else {
+        alert('Invalid Admin credentials! Access denied.');
+      }
+    }
+
+    function refreshAdminTables() {
+      const students = getRegisteredUsersList();
+      const orders = JSON.parse(localStorage.getItem('bharti_payment_orders') || '[]');
+      const doubts = JSON.parse(localStorage.getItem('bharti_student_doubts') || '[]');
+
+      // Calculate Revenue
+      const totalRev = orders.reduce((sum, o) => sum + (Number(o.fee) || 0), 0);
+
+      document.getElementById('adminStatStudents').textContent = students.length;
+      document.getElementById('adminStatRevenue').textContent = '₹' + totalRev.toLocaleString();
+      document.getElementById('adminStatOrders').textContent = orders.length;
+      document.getElementById('adminStatDoubts').textContent = doubts.length;
+
+      // 1. Students Table
+      renderAdminStudentsTable(students);
+
+      // 2. Orders Table
+      const orderTbody = document.getElementById('adminOrdersTableBody');
+      if (orders.length === 0) {
+        orderTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:15px; color:var(--text-muted);">No payment transactions logged yet.</td></tr>';
+      } else {
+        orderTbody.innerHTML = orders.map(o => `
+          <tr>
+            <td><strong>${o.txnId}</strong></td>
+            <td>${o.studentName} (${o.regNumber || o.mobile})</td>
+            <td>${o.courseTitle}</td>
+            <td>₹${Number(o.fee).toLocaleString()}</td>
+            <td>${o.mode}</td>
+            <td>${o.validity || '365 Days'}</td>
+            <td><span style="color:#059669; font-weight:700;"><i class="fas fa-check-circle"></i> ${o.status}</span></td>
+          </tr>
+        `).join('');
+      }
+
+      // 3. Doubts Table
+      const doubtTbody = document.getElementById('adminDoubtsTableBody');
+      if (doubts.length === 0) {
+        doubtTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:15px; color:var(--text-muted);">No student doubts currently pending.</td></tr>';
+      } else {
+        doubtTbody.innerHTML = doubts.map((d, idx) => `
+          <tr>
+            <td>${d.timestamp}</td>
+            <td><strong>${d.studentName}</strong> (${d.mobile})</td>
+            <td><span class="exam-pill">${d.category}</span></td>
+            <td>${d.question}</td>
+            <td>${d.hasAttachment ? '<span class="exam-pill" style="background:#fef3c7; color:#b45309;"><i class="fas fa-paperclip"></i> Attached</span>' : 'None'}</td>
+            <td>
+              <button class="btn btn-outline" style="padding:2px 8px; font-size:0.72rem; color:#059669;" onclick="adminResolveDoubt(${idx})">
+                <i class="fas fa-check"></i> Mark Resolved
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // 4. Admin Courses Table
+      renderAdminCoursesTable();
+    }
+
+    function renderAdminStudentsTable(students) {
+      const studentTbody = document.getElementById('adminStudentsTableBody');
+      if (students.length === 0) {
+        studentTbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:15px; color:var(--text-muted);">No student records found.</td></tr>';
+        return;
+      }
+      studentTbody.innerHTML = students.map(s => {
+        const enrolledNames = (s.enrolledCourses || []).map(c => c.courseTitle).join(', ') || 'None';
+        return `
+          <tr>
+            <td><strong>${s.regNumber || 'N/A'}</strong></td>
+            <td>${s.name}</td>
+            <td>${s.mobile}</td>
+            <td>${s.email}</td>
+            <td>${s.age || '-'} / ${s.qualification || '-'}</td>
+            <td><span class="exam-pill" style="font-size:0.7rem;">${(s.exams || []).slice(0, 2).join(', ')}${(s.exams && s.exams.length > 2 ? ' +' + (s.exams.length - 2) : '')}</span></td>
+            <td style="font-size:0.78rem; max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${enrolledNames}">${enrolledNames}</td>
+            <td>
+              <button class="btn btn-outline" style="padding:3px 8px; font-size:0.72rem;" onclick="adminManualEnrollStudent('${s.regNumber}')">
+                <i class="fas fa-plus-circle"></i> Grant Course
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterAdminStudentsTable() {
+      const q = (document.getElementById('adminStudentSearchInput').value || '').toLowerCase();
+      const students = getRegisteredUsersList();
+      const filtered = students.filter(s => {
+        return (s.name || '').toLowerCase().includes(q) ||
+               (s.mobile || '').includes(q) ||
+               (s.email || '').toLowerCase().includes(q) ||
+               (s.regNumber || '').toLowerCase().includes(q);
+      });
+      renderAdminStudentsTable(filtered);
+    }
+
+    function renderAdminCoursesTable() {
+      const tbody = document.getElementById('adminCoursesTableBody');
+      let rows = '';
+      for (const [cat, courses] of Object.entries(REAL_COURSES_DATABASE)) {
+        courses.forEach(c => {
+          rows += `
+            <tr>
+              <td><span class="exam-pill">${cat}</span></td>
+              <td><strong>${c.title}</strong></td>
+              <td>₹${c.mathsFee.toLocaleString()}</td>
+              <td>₹${c.reasoningFee.toLocaleString()}</td>
+              <td><strong style="color:var(--secondary);">₹${c.comboFee.toLocaleString()}</strong></td>
+              <td><span style="color:#059669; font-weight:600;">365 Days</span></td>
+            </tr>
+          `;
+        });
+      }
+      tbody.innerHTML = rows;
+    }
+
+    function adminResolveDoubt(idx) {
+      const doubts = JSON.parse(localStorage.getItem('bharti_student_doubts') || '[]');
+      if (doubts[idx]) {
+        doubts.splice(idx, 1);
+        localStorage.setItem('bharti_student_doubts', JSON.stringify(doubts));
+        refreshAdminTables();
+        alert('Doubt marked resolved and archived!');
+      }
+    }
+
+    function adminManualEnrollStudent(regNo) {
+      const users = getRegisteredUsersList();
+      const user = users.find(u => u.regNumber === regNo);
+      if (!user) return alert('Student not found!');
+
+      const courseName = prompt(`Enter Course Name to allocate for ${user.name} (365 Days Access):`, 'SSC CGL (Tier 1 & Tier 2) Comprehensive Batch (Maths + Reasoning Combo)');
+      if (!courseName) return;
+
+      const pDate = new Date();
+      const expDate = new Date();
+      expDate.setDate(pDate.getDate() + 365);
+
+      if (!user.enrolledCourses) user.enrolledCourses = [];
+      user.enrolledCourses.push({
+        courseId: 'manual_' + Date.now(),
+        courseTitle: courseName,
+        fee: 0,
+        utr: 'OFFLINE_ADMIN_GRANT',
+        purchaseDate: pDate.toISOString(),
+        expiryDate: expDate.toISOString()
+      });
+
+      saveUserToDatabase(user);
+      if (currentStudentProfile && currentStudentProfile.regNumber === regNo) {
+        currentStudentProfile = user;
+        localStorage.setItem('bharti_student', JSON.stringify(user));
+        selectCourseBox(activeCourseCategory);
+      }
+      alert(`Course "${courseName}" granted successfully to ${user.name} for 365 Days (Till ${expDate.toLocaleDateString()})!`);
+    }
+
+    function exportStudentsToCsv() {
+      const students = getRegisteredUsersList();
+      if (students.length === 0) return alert('No registered student data to export.');
+
+      let csv = "Registration_Number,Full_Name,Mobile_Number,Email_Address,Age,Qualification,Target_Exams,Registration_Date,Enrolled_Courses\n";
+      students.forEach(s => {
+        const examsStr = (s.exams || []).join('; ');
+        const enrolledStr = (s.enrolledCourses || []).map(c => c.courseTitle).join('; ');
+        csv += `"${s.regNumber || ''}","${s.name}","${s.mobile}","${s.email}","${s.age || ''}","${s.qualification || ''}","${examsStr}","${s.verifiedAt || ''}","${enrolledStr}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", `Bharti_Classes_Current_Affairs_PYQ_Notes_2026.txt`);
+      link.setAttribute("download", `Bharti_Classes_Students_${new Date().toISOString().split('T')[0]}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      alert('Document downloaded successfully!');
     }
 
-    // --- INTERACTIVE CBT TEST ENGINE (27 MCQs, 9 CHAPTERS, TIMER & SCORING) ---
-    function startInteractiveCbtTest() {
-      cbtActiveIdx = 0;
-      cbtUserAnswers = {};
-      cbtMarkedStatus = {};
-      cbtSecondsRemaining = 30 * 60; // 30 Mins
+    function handleDoubtSubmit(e) {
+      e.preventDefault();
+      if (!isUserLoggedIn) {
+        alert('Please login or register to raise a doubt.');
+        return openAuthModal();
+      }
 
-      document.getElementById('cbtTestModal').style.display = 'flex';
-      renderCbtPalette();
-      renderCbtQuestion();
+      const cat = document.getElementById('doubtExamCategory').value;
+      const qText = document.getElementById('doubtQuestionText').value.trim();
+      const fileInput = document.getElementById('doubtAttachment');
+      const hasFile = fileInput.files && fileInput.files.length > 0;
 
-      if (cbtTimerInterval) clearInterval(cbtTimerInterval);
-      cbtTimerInterval = setInterval(updateCbtTimer, 1000);
+      const doubts = JSON.parse(localStorage.getItem('bharti_student_doubts') || '[]');
+      doubts.unshift({
+        id: 'doubt_' + Date.now(),
+        studentName: currentStudentProfile.name,
+        mobile: currentStudentProfile.mobile,
+        category: cat,
+        question: qText,
+        hasAttachment: hasFile,
+        timestamp: new Date().toLocaleString()
+      });
+      localStorage.setItem('bharti_student_doubts', JSON.stringify(doubts));
+      refreshAdminTables();
+
+      alert('Your question has been submitted directly to Vishwa Bharti Sir for review!');
+      e.target.reset();
     }
 
-    function updateCbtTimer() {
-      cbtSecondsRemaining--;
-      if (cbtSecondsRemaining <= 0) {
-        clearInterval(cbtTimerInterval);
-        alert('Time is up! Submitting your test automatically.');
-        evaluateAndShowCbtResults();
+    // DAILY TARGET & STUDY PLANNER LOGIC
+    function getTodayDateString() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function setScheduleMode(mode) {
+      activeScheduleMode = mode;
+      document.querySelectorAll('.schedule-tab-btn').forEach(b => b.classList.remove('active'));
+      if (mode === 'daily') document.getElementById('btnModeDaily').classList.add('active');
+      if (mode === 'weekly') document.getElementById('btnModeWeekly').classList.add('active');
+      if (mode === 'calendar') document.getElementById('btnModeCalendar').classList.add('active');
+
+      document.getElementById('weeklyDaysPicker').style.display = mode === 'weekly' ? 'block' : 'none';
+    }
+
+    function toggleWeekDay(dayIndex, el) {
+      if (selectedWeeklyDays.has(dayIndex)) {
+        if (selectedWeeklyDays.size > 1) {
+          selectedWeeklyDays.delete(dayIndex);
+          el.classList.remove('selected');
+        }
+      } else {
+        selectedWeeklyDays.add(dayIndex);
+        el.classList.add('selected');
+      }
+    }
+
+    function pickDefaultTarget(val) {
+      if (!val) return;
+      document.getElementById('txtNewTask').value = val;
+    }
+
+    function getAllStoredTasks() {
+      return JSON.parse(localStorage.getItem('bharti_study_tasks_v3') || '[]');
+    }
+
+    function saveAllTasks(tasks) {
+      localStorage.setItem('bharti_study_tasks_v3', JSON.stringify(tasks));
+    }
+
+    function addStudyTask() {
+      const text = document.getElementById('txtNewTask').value.trim();
+      if (!text) return alert('Please enter target or choose from habit routines.');
+
+      const dateVal = document.getElementById('plannerDateInput').value || getTodayDateString();
+      const allTasks = getAllStoredTasks();
+
+      const newTask = {
+        id: 'task_' + Date.now(),
+        text: text,
+        mode: activeScheduleMode,
+        targetDate: dateVal,
+        weeklyDays: Array.from(selectedWeeklyDays),
+        completions: {},
+        ratings: {}
+      };
+
+      allTasks.push(newTask);
+      saveAllTasks(allTasks);
+
+      document.getElementById('txtNewTask').value = '';
+      document.getElementById('defaultTargetDropdown').value = '';
+      loadDayTasks();
+      checkAndTriggerReminderNotification();
+      alert('Target added successfully to your plan!');
+    }
+
+    function isTaskScheduledForDate(task, dateStr) {
+      if (task.mode === 'daily') return true;
+      if (task.mode === 'calendar') return task.targetDate === dateStr;
+      if (task.mode === 'weekly') {
+        const d = new Date(dateStr + 'T00:00:00');
+        return (task.weeklyDays || []).includes(d.getDay());
+      }
+      return false;
+    }
+
+    function loadDayTasks() {
+      const dateVal = document.getElementById('plannerDateInput').value || getTodayDateString();
+      const allTasks = getAllStoredTasks();
+      const activeTasks = allTasks.filter(t => isTaskScheduledForDate(t, dateVal));
+
+      const container = document.getElementById('taskListContainer');
+      const heading = document.getElementById('plannerHeadingDate');
+      const badge = document.getElementById('plannerProgressBadge');
+
+      const isToday = dateVal === getTodayDateString();
+      heading.textContent = isToday ? `Targets for Today (${dateVal})` : `Targets for Date: ${dateVal}`;
+
+      if (activeTasks.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px; font-size:0.9rem;">No study targets scheduled for this date. Choose a routine or add one above!</p>';
+        badge.textContent = '0 / 0 Done';
+        updatePerformanceScoreboard(0, 0, 0);
         return;
       }
-      const mins = Math.floor(cbtSecondsRemaining / 60);
-      const secs = cbtSecondsRemaining % 60;
-      document.getElementById('cbtTimerDisplay').innerHTML = `<i class="fas fa-stopwatch"></i> ${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    }
 
-    function renderCbtPalette() {
-      const container = document.getElementById('cbtPaletteContainer');
+      let completedCount = 0;
+      let totalRatingSum = 0;
+      let ratedCount = 0;
+
       container.innerHTML = '';
-      CBT_TEST_QUESTIONS.forEach((q, idx) => {
-        const btn = document.createElement('div');
-        btn.className = 'cbt-q-num';
-        if (idx === cbtActiveIdx) btn.classList.add('current');
-        if (cbtUserAnswers[q.id]) btn.classList.add('answered');
-        else if (cbtMarkedStatus[q.id]) btn.classList.add('marked');
 
-        btn.textContent = idx + 1;
-        btn.onclick = () => {
-          cbtActiveIdx = idx;
-          renderCbtQuestion();
-          renderCbtPalette();
-        };
-        container.appendChild(btn);
-      });
-    }
+      activeTasks.forEach((task) => {
+        const isDone = !!(task.completions && task.completions[dateVal]);
+        const rating = (task.ratings && task.ratings[dateVal]) || 0;
 
-    function renderCbtQuestion() {
-      const q = CBT_TEST_QUESTIONS[cbtActiveIdx];
-      document.getElementById('cbtChapterBadge').textContent = `Chapter: ${q.chapter}`;
-      document.getElementById('cbtQuestionTracker').textContent = `Question ${cbtActiveIdx + 1} of ${CBT_TEST_QUESTIONS.length}`;
-      document.getElementById('cbtQuestionText').textContent = q.q;
-
-      const optsContainer = document.getElementById('cbtOptionsList');
-      optsContainer.innerHTML = '';
-
-      const letters = ["A", "B", "C", "D"];
-      q.options.forEach((optStr, oIdx) => {
-        const letter = letters[oIdx];
-        const isChecked = cbtUserAnswers[q.id] === letter;
-        const optEl = document.createElement('div');
-        optEl.className = 'cbt-option-item' + (isChecked ? ' selected' : '');
-        optEl.innerHTML = `
-          <input type="radio" name="cbtOpt" value="${letter}" ${isChecked ? 'checked' : ''}>
-          <span>${optStr}</span>
-        `;
-        optEl.onclick = () => {
-          cbtUserAnswers[q.id] = letter;
-          renderCbtQuestion();
-          renderCbtPalette();
-        };
-        optsContainer.appendChild(optEl);
-      });
-
-      document.getElementById('btnCbtPrev').disabled = (cbtActiveIdx === 0);
-      document.getElementById('btnCbtNext').innerHTML = (cbtActiveIdx === CBT_TEST_QUESTIONS.length - 1) ? 'Finish Review' : 'Next <i class="fas fa-arrow-right"></i>';
-    }
-
-    function navCbtQuestion(direction) {
-      const nextIdx = cbtActiveIdx + direction;
-      if (nextIdx >= 0 && nextIdx < CBT_TEST_QUESTIONS.length) {
-        cbtActiveIdx = nextIdx;
-        renderCbtQuestion();
-        renderCbtPalette();
-      } else if (nextIdx >= CBT_TEST_QUESTIONS.length) {
-        submitCbtTestConfirm();
-      }
-    }
-
-    function markForReviewCbt() {
-      const q = CBT_TEST_QUESTIONS[cbtActiveIdx];
-      cbtMarkedStatus[q.id] = !cbtMarkedStatus[q.id];
-      renderCbtPalette();
-    }
-
-    function submitCbtTestConfirm() {
-      const answeredCount = Object.keys(cbtUserAnswers).length;
-      if (confirm(`You have answered ${answeredCount} of 27 questions.\nAre you sure you want to finalize and submit this test?`)) {
-        clearInterval(cbtTimerInterval);
-        document.getElementById('cbtTestModal').style.display = 'none';
-        evaluateAndShowCbtResults();
-      }
-    }
-
-    function evaluateAndShowCbtResults() {
-      let correct = 0;
-      let incorrect = 0;
-      let unattempted = 0;
-      let reviewHtml = '';
-
-      CBT_TEST_QUESTIONS.forEach((q, idx) => {
-        const userChoice = cbtUserAnswers[q.id];
-        const isRight = (userChoice === q.ans);
-
-        if (!userChoice) {
-          unattempted++;
-          reviewHtml += `<div style="margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;"><strong>Q${idx + 1}. (${q.chapter})</strong>: Unattempted | Correct Answer: <strong style="color:#15803d;">${q.ans}</strong></div>`;
-        } else if (isRight) {
-          correct++;
-          reviewHtml += `<div style="margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;"><strong style="color:#15803d;">✔ Q${idx + 1}. (${q.chapter})</strong>: Correct! Selected: ${userChoice} | Marks: +2</div>`;
-        } else {
-          incorrect++;
-          reviewHtml += `<div style="margin-bottom:8px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;"><strong style="color:#b91c1c;">✘ Q${idx + 1}. (${q.chapter})</strong>: Wrong! Selected: ${userChoice}, Correct: <strong style="color:#15803d;">${q.ans}</strong> | Penalty: -0.5</div>`;
+        if (isDone) completedCount++;
+        if (rating > 0) {
+          totalRatingSum += rating;
+          ratedCount++;
         }
+
+        const taskEl = document.createElement('div');
+        taskEl.className = 'task-item' + (isDone ? ' completed' : '');
+
+        let starsHtml = '';
+        for (let s = 1; s <= 5; s++) {
+          starsHtml += `<i class="fas fa-star ${s <= rating ? 'active' : ''}" onclick="rateTaskSatisfaction('${task.id}', '${dateVal}', ${s})"></i>`;
+        }
+
+        const modeBadge = task.mode === 'daily' ? '<span class="exam-pill" style="background:#e0f2fe; color:#0369a1;">Daily Routine</span>' : (task.mode === 'weekly' ? '<span class="exam-pill" style="background:#fef3c7; color:#b45309;">Weekly</span>' : '<span class="exam-pill" style="background:#f1f5f9; color:#475569;">Calendar</span>');
+
+        taskEl.innerHTML = `
+          <div class="task-main-row">
+            <div class="task-left">
+              <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleTaskDone('${task.id}', '${dateVal}', this.checked)">
+              <div>
+                <span class="task-text">${task.text}</span>
+                <div style="margin-top:3px;">${modeBadge}</div>
+              </div>
+            </div>
+            <button style="background:none; border:none; color:#ef4444; cursor:pointer; padding:6px 10px;" onclick="deleteTaskById('${task.id}')" title="Delete Task"><i class="fas fa-trash-alt"></i></button>
+          </div>
+          <div class="task-rating-row">
+            <span>Self-Satisfaction:</span>
+            <div class="star-rating">${starsHtml}</div>
+            <span style="margin-left:auto; font-weight:600; color:${rating >= 4 ? '#16a34a' : (rating >= 3 ? '#d97706' : '#94a3b8')};">${rating > 0 ? rating + ' / 5' : 'Rate after completion'}</span>
+          </div>
+        `;
+        container.appendChild(taskEl);
       });
 
-      // Scoring: +2 for Correct, -0.5 for Wrong
-      const totalScore = Math.max(0, (correct * 2) - (incorrect * 0.5));
-      const accuracy = (correct + incorrect) > 0 ? Math.round((correct / (correct + incorrect)) * 100) : 0;
-
-      document.getElementById('resTotalScore').textContent = `${totalScore} / 54`;
-      document.getElementById('resAccuracy').textContent = `${accuracy}%`;
-      document.getElementById('resCorrectWrong').textContent = `${correct} Correct / ${incorrect} Wrong`;
-      document.getElementById('resAnswerReviewContainer').innerHTML = reviewHtml;
-
-      document.getElementById('cbtResultModal').style.display = 'flex';
+      badge.textContent = `${completedCount} / ${activeTasks.length} Done`;
+      const avgRating = ratedCount > 0 ? (totalRatingSum / ratedCount).toFixed(1) : 0;
+      updatePerformanceScoreboard(completedCount, activeTasks.length, avgRating);
     }
 
-    function closeCbtResultModal() {
-      document.getElementById('cbtResultModal').style.display = 'none';
+    function toggleTaskDone(taskId, dateStr, isChecked) {
+      const allTasks = getAllStoredTasks();
+      const target = allTasks.find(t => t.id === taskId);
+      if (target) {
+        if (!target.completions) target.completions = {};
+        target.completions[dateStr] = isChecked;
+        if (isChecked && (!target.ratings || !target.ratings[dateStr])) {
+          if (!target.ratings) target.ratings = {};
+          target.ratings[dateStr] = 4;
+        }
+        saveAllTasks(allTasks);
+        loadDayTasks();
+      }
     }
 
-    // INITIALIZATION ON LOAD
+    function rateTaskSatisfaction(taskId, dateStr, stars) {
+      const allTasks = getAllStoredTasks();
+      const target = allTasks.find(t => t.id === taskId);
+      if (target) {
+        if (!target.ratings) target.ratings = {};
+        target.ratings[dateStr] = stars;
+        saveAllTasks(allTasks);
+        loadDayTasks();
+      }
+    }
+
+    function deleteTaskById(taskId) {
+      if (!confirm('Do you want to delete this study target?')) return;
+      let allTasks = getAllStoredTasks();
+      allTasks = allTasks.filter(t => t.id !== taskId);
+      saveAllTasks(allTasks);
+      loadDayTasks();
+      checkAndTriggerReminderNotification();
+    }
+
+    function updatePerformanceScoreboard(completed, total, avgRating) {
+      const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+      document.getElementById('lblCompletionRate').textContent = rate + '%';
+      document.getElementById('lblAvgSatisfaction').textContent = `⭐ ${avgRating} / 5.0`;
+
+      const badgeEl = document.getElementById('lblPerfBadge');
+      badgeEl.className = 'perf-badge ';
+
+      if (total === 0) {
+        badgeEl.textContent = 'No Plan Set';
+        badgeEl.classList.add('badge-non');
+      } else if (rate >= 90) {
+        badgeEl.textContent = activeLang === 'hi' ? 'पूर्ण उपलब्धि (Fully Achiever)' : 'Fully Achiever';
+        badgeEl.classList.add('badge-fully');
+      } else if (rate >= 65) {
+        badgeEl.textContent = activeLang === 'hi' ? 'मध्यम उपलब्धि (Moderate Achiever)' : 'Moderate Achiever';
+        badgeEl.classList.add('badge-moderate');
+      } else if (rate >= 35) {
+        badgeEl.textContent = activeLang === 'hi' ? 'आंशिक उपलब्धि (Partial Achiever)' : 'Partial Achiever';
+        badgeEl.classList.add('badge-partial');
+      } else {
+        badgeEl.textContent = activeLang === 'hi' ? 'गैर उपलब्धि (Non Achiever)' : 'Non Achiever';
+        badgeEl.classList.add('badge-non');
+      }
+    }
+
+    function checkAndTriggerReminderNotification() {
+      const todayStr = getTodayDateString();
+      const allTasks = getAllStoredTasks();
+      const todayPending = allTasks.filter(t => isTaskScheduledForDate(t, todayStr) && !(t.completions && t.completions[todayStr]));
+
+      const banner = document.getElementById('dailyReminderBanner');
+      const textEl = document.getElementById('dailyReminderText');
+
+      if (todayPending.length > 0) {
+        const sampleTask = todayPending[0].text;
+        const taskMsg = todayPending.length > 1 ? `"${sampleTask}" + ${todayPending.length - 1} more targets` : `"${sampleTask}"`;
+
+        const alertEn = `Reminder: You have made target for ${taskMsg} for today!`;
+        const alertHi = `स्मरण पत्र: आपने आज के लिए ${taskMsg} का लक्ष्य निर्धारित किया है!`;
+
+        textEl.textContent = activeLang === 'hi' ? alertHi : alertEn;
+        banner.style.display = 'flex';
+
+        if ("Notification" in window) {
+          if (Notification.permission === "granted") {
+            new Notification("Bharti Classes Target Reminder", {
+              body: activeLang === 'hi' ? alertHi : alertEn,
+              icon: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/calendar-check.svg"
+            });
+          } else if (Notification.permission !== "denied") {
+            Notification.requestPermission();
+          }
+        }
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+
+    function handleInAppSearch() {
+      const q = document.getElementById('omniQueryInput').value.trim().toLowerCase();
+      const cards = document.querySelectorAll('.course-card');
+
+      if (!q) {
+        cards.forEach(card => card.style.display = 'flex');
+        return;
+      }
+
+      if (!document.getElementById('view-courses').classList.contains('active')) {
+        switchView('courses');
+      }
+
+      cards.forEach(card => {
+        const tags = (card.getAttribute('data-tags') || '').toLowerCase();
+        const content = card.innerText.toLowerCase();
+        card.style.display = (tags.includes(q) || content.includes(q)) ? 'flex' : 'none';
+      });
+    }
+
+    function handleInAppSearchSubmit() {
+      const q = document.getElementById('omniQueryInput').value.trim();
+      if (!q) return;
+
+      const examKeywords = ['ssc','cgl','chsl','mts','railway','rrb','ntpc','bank','ibps','sbi','bpsc','bssc','bihar ssc','police','si','daroga','constable','jpsc','jssc','uppsc','upssc','upsc','defence','cds'];
+      if (examKeywords.some(k => q.toLowerCase().includes(k))) {
+        handleInAppSearch();
+      } else {
+        switchView('assistant');
+        document.getElementById('botInput').value = q;
+        dispatchBotMessage();
+      }
+    }
+
+    function switchView(viewKey, navElement) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+      const targetView = document.getElementById('view-' + viewKey);
+      if (targetView) targetView.classList.add('active');
+      if (navElement) navElement.classList.add('active');
+
+      const titles = {
+        'courses': 'Course Store & Admissions',
+        'planner': 'What To Do Today - Study Targets & Planner',
+        'scholarship': 'Bharti Talent Scholarship Test',
+        'pyq': 'Previous Year Question Vault',
+        'practice': 'Adaptive Practice Sets',
+        'doubt': 'Doubt Submission Desk',
+        'assistant': 'May I Help You? - AI Assistant',
+        'mentor': 'Instructor Profile & History',
+        'admin-overview': "Director's Dashboard & Analytics",
+        'admin-students': 'Student Directory & Access Grants',
+        'admin-orders': 'Admissions & Payment Logs (365 Days)',
+        'admin-courses': 'Course & Pricing Management',
+        'admin-doubts': 'Student Doubt Resolution Desk'
+      };
+      document.getElementById('pageHeadingTitle').textContent = titles[viewKey] || 'Bharti Classes';
+
+      if (viewKey === 'planner') loadDayTasks();
+      if (viewKey === 'courses') selectCourseBox(activeCourseCategory);
+      if (viewKey.startsWith('admin-')) refreshAdminTables();
+      if (window.innerWidth <= 860) document.getElementById('appSidebar').classList.remove('open');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('appSidebar').classList.toggle('open');
+    }
+
+    function runScholarshipExam() {
+      if (!isUserLoggedIn) {
+        alert('Please register or log in before attempting the Scholarship Exam.');
+        return openAuthModal();
+      }
+      const score = prompt('Enter your simulated score out of 100:', '85');
+      if (score !== null) {
+        const num = parseInt(score, 10);
+        if (num >= 80) alert('Congratulations! You scored ' + num + '%. All courses are 100% FREE OF COST for you under the Bharti Talent Initiative.');
+        else alert('You scored ' + num + '%. Qualifying mark is 80%.');
+      }
+    }
+
+    function loadDrills(tier) {
+      const box = document.getElementById('drillBox');
+      box.innerHTML = '<div style="font-weight:bold; margin-bottom:8px; text-transform:uppercase; color:var(--secondary);">' + tier + ' Level Drill Active</div>' +
+        '<ol style="padding-left:20px; line-height:1.8;">' +
+        '<li>Advance Maths Drill: If x + 1/x = 3, find the value of x^4 + 1/x^4.</li>' +
+        '<li>Reasoning: Statement & Assumptions / Syllogisms drill question set loaded.</li>' +
+        '<li>Speed Test: 23 additional questions loaded for ' + tier + ' difficulty.</li>' +
+        '</ol>';
+    }
+
+    function dispatchBotMessage() {
+      const input = document.getElementById('botInput');
+      const val = input.value.trim();
+      if (!val) return;
+      const box = document.getElementById('chatDialogue');
+      box.innerHTML += '<p style="margin-top:8px;"><strong>You:</strong> ' + val + '</p>';
+      input.value = '';
+
+      setTimeout(() => {
+        let reply = "For admission inquiries, batch timings, and Advance Maths guidance, speak directly with Vishwa Bharti Sir on <strong>8271750420</strong>.";
+        const lower = val.toLowerCase();
+        if (lower.includes('bssc') || lower.includes('bihar ssc')) reply = "For Bihar SSC (Inter & Graduate Level), our batch covers complete General Mathematics and Analytical Reasoning.";
+        else if (lower.includes('police') || lower.includes('si') || lower.includes('daroga')) reply = "Bihar SI (Daroga) and Police Constable batches focus on high-scoring Arithmetic and Mental Ability test series.";
+        else if (lower.includes('ssc') || lower.includes('cgl')) reply = "SSC CGL / CHSL batches cover complete Advance Maths (Algebra, Trigonometry, Geometry, Coordinate) and Reasoning.";
+        box.innerHTML += '<p style="margin-top:8px; color:var(--primary);"><strong>Bharti Desk:</strong> ' + reply + '</p>';
+        box.scrollTop = box.scrollHeight;
+      }, 400);
+    }
+
+    function toggleBilingual() {
+      if (activeLang === 'en') {
+        activeLang = 'hi';
+        document.getElementById('btnLangToggle').textContent = 'English';
+        document.getElementById('lblLogout').textContent = 'लॉगआउट';
+
+        document.getElementById('txtLoginTitle').textContent = 'विद्यार्थी लॉगिन (Student Login)';
+        document.getElementById('txtLoginSubtitle').textContent = 'पंजीकृत मोबाइल नंबर, ईमेल, या रजिस्ट्रेशन नंबर एवं पासवर्ड दर्ज करें';
+        document.getElementById('lblLoginUserId').textContent = 'यूजर आईडी (पंजीकृत मोबाइल / ईमेल / रजिस्ट्रेशन नंबर) *';
+        document.getElementById('lblLoginPassword').textContent = 'पासवर्ड *';
+        document.getElementById('btnTxtLogin').textContent = 'डैशबोर्ड में लॉगिन करें';
+        document.getElementById('txtNotRegistered').textContent = 'क्या आप नए विद्यार्थी हैं?';
+        document.getElementById('lnkGoRegister').textContent = 'यहाँ नया पंजीकरण करें';
+        document.getElementById('txtAlreadyRegistered').textContent = 'क्या आप पहले से पंजीकृत हैं?';
+        document.getElementById('lnkGoLogin').textContent = 'यहाँ लॉगिन करें';
+        document.getElementById('lnkForgotId').innerHTML = '<i class="fas fa-id-badge"></i> रजिस्ट्रेशन नंबर / यूजर आईडी भूल गए?';
+        document.getElementById('lnkForgotPass').innerHTML = '<i class="fas fa-key"></i> पासवर्ड भूल गए?';
+      } else {
+        activeLang = 'en';
+        document.getElementById('btnLangToggle').textContent = 'हिन्दी';
+        document.getElementById('lblLogout').textContent = 'Logout';
+
+        document.getElementById('txtLoginTitle').textContent = 'Student Login';
+        document.getElementById('txtLoginSubtitle').textContent = 'Enter your registered Mobile Number, Email, or Registration Number with Password';
+        document.getElementById('lblLoginUserId').textContent = 'User ID (Registered Mobile / Email / Reg No) *';
+        document.getElementById('lblLoginPassword').textContent = 'Password *';
+        document.getElementById('btnTxtLogin').textContent = 'Log In to Dashboard';
+        document.getElementById('txtNotRegistered').textContent = 'New to Bharti Classes?';
+        document.getElementById('lnkGoRegister').textContent = 'Register New Student Here';
+        document.getElementById('txtAlreadyRegistered').textContent = 'Already registered?';
+        document.getElementById('lnkGoLogin').textContent = 'Login Here';
+        document.getElementById('lnkForgotId').innerHTML = '<i class="fas fa-id-badge"></i> Forgot Username / Reg No?';
+        document.getElementById('lnkForgotPass').innerHTML = '<i class="fas fa-key"></i> Forgot Password?';
+      }
+      renderSidebarMenu();
+      checkAndTriggerReminderNotification();
+      loadDayTasks();
+    }
+
+    // SESSION INITIALIZATION ON APP LOAD
     window.addEventListener('DOMContentLoaded', () => {
       updateDailyQuote();
       document.getElementById('plannerDateInput').value = getTodayDateString();
 
+      // Check if Director Admin was logged in
       const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
       if (adminSession === 'true') {
         loginAsAdmin();
         return;
       }
 
+      // Check if Student was logged in
       const savedStudent = localStorage.getItem('bharti_student');
       if (savedStudent) {
         try {
