@@ -593,6 +593,7 @@
     </div>
   </div>
 
+  <!-- Student Login Modal -->
   <div class="modal-backdrop" id="authBackdrop">
     <div class="modal-box" style="text-align: center;">
       <h3 style="margin-bottom: 8px;">Student Login</h3>
@@ -608,6 +609,7 @@
     </div>
   </div>
 
+  <!-- Payment Modal -->
   <div class="modal-backdrop" id="paymentBackdrop">
     <div class="modal-box">
       <h3 id="payCourseTitle">Course Checkout</h3>
@@ -628,14 +630,11 @@
     </div>
   </div>
 
-  <!-- Invisible reCAPTCHA container for SMS delivery -->
-  <div id="recaptcha-container"></div>
-
   <!-- Firebase Compatibility Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-  <!-- Complete Unified Application & Auth Logic -->
+  <!-- Complete Application & Auth Logic -->
   <script>
     let isUserLoggedIn = false;
     let activeLang = 'en';
@@ -652,46 +651,33 @@
 
     firebase.initializeApp(firebaseConfig);
 
-    // Initialize invisible bot verification
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-      'size': 'invisible'
-    });
-
-    let confirmationResultPayload = null;
-
-    // Real Mobile SMS OTP Sender
-// Real Mobile SMS OTP Sender
- function sendOtp() {
-   ...
- }
-
- // Real OTP Verification
- function verifyOtp() {
-   ...
- }
-      const codeInput = document.getElementById('txtOtp');
-      if (!codeInput) return alert('OTP input field not found.');
-      const enteredCode = codeInput.value.trim();
-
-      if (enteredCode.length !== 6) {
-        alert('Please enter the 6-digit OTP received via SMS.');
-        return;
-      }
-
-      if (!confirmationResultPayload) {
-        alert('Please request an OTP first.');
-        return;
-      }
-
-      confirmationResultPayload.confirm(enteredCode)
+    // 1-Tap Google Sign-In
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
         .then((result) => {
           isUserLoggedIn = true;
-          document.getElementById('lblUserStatus').textContent = result.user.phoneNumber;
-          alert('Login verified successfully!');
+          const user = result.user;
+          document.getElementById('lblUserStatus').textContent = user.displayName || user.email;
           closeAuthModal();
-        }).catch((error) => {
-          alert('Incorrect OTP: ' + error.message);
+          alert('Welcome, ' + (user.displayName || 'Student') + '! Logged in successfully.');
+        })
+        .catch((error) => {
+          alert('Google Sign-In Error: ' + error.message);
         });
+    }
+
+    // Modal Handlers
+    function openAuthModal() {
+      if (isUserLoggedIn) {
+        alert('You are already logged in.');
+        return;
+      }
+      document.getElementById('authBackdrop').style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authBackdrop').style.display = 'none';
     }
 
     // View Switching Controller
@@ -740,21 +726,10 @@
       }
     }
 
-    // Modal Handlers
-    function openAuthModal() {
-      if (isUserLoggedIn) return alert('You are already logged in with your verified mobile number.');
-      document.getElementById('authBackdrop').style.display = 'flex';
-    }
-    function closeAuthModal() {
-      document.getElementById('authBackdrop').style.display = 'none';
-      document.getElementById('stepPhone').style.display = 'block';
-      document.getElementById('stepOtp').style.display = 'none';
-    }
-
     // Checkout Flow
     function triggerCheckout(courseName, fee) {
       if (!isUserLoggedIn) {
-        alert('Please login with OTP verification to purchase courses.');
+        alert('Please login with your Google account to purchase courses.');
         openAuthModal();
         return;
       }
@@ -762,6 +737,7 @@
       document.getElementById('payAmountVal').textContent = '₹' + fee;
       document.getElementById('paymentBackdrop').style.display = 'flex';
     }
+
     function simulateSuccess(method) {
       document.getElementById('paymentBackdrop').style.display = 'none';
       alert('Payment successful via ' + method + '! Course access added to your profile.');
@@ -770,7 +746,7 @@
     // Scholarship Screening Test
     function runScholarshipExam() {
       if (!isUserLoggedIn) {
-        alert('Please login with OTP before attempting the Scholarship Exam.');
+        alert('Please login with your Google account before attempting the Scholarship Exam.');
         return openAuthModal();
       }
       const score = prompt('Simulated Test Score (Enter your score out of 100):', '85');
@@ -788,7 +764,7 @@
     function handleDoubtSubmit(e) {
       e.preventDefault();
       if (!isUserLoggedIn) {
-        alert('You must be verified via OTP to raise a question.');
+        alert('You must be logged in to raise a question.');
         return openAuthModal();
       }
       alert('Your doubt and media files have been submitted to Vishwa Bharti Sir for review!');
