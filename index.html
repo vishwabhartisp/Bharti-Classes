@@ -116,7 +116,7 @@
     .pill-call { background: #2563eb; color: #fff; }
     .pill-wa { background: #22c55e; color: #fff; }
 
-    /* --- MAIN APP WORKSPACE --- */
+    /* --- MAIN WORKSPACE --- */
     .app-workspace {
       flex: 1;
       display: flex;
@@ -271,7 +271,7 @@
       text-align: right;
     }
 
-    /* Target Reminder Banner Alert */
+    /* Target Reminder Banner */
     .reminder-banner {
       display: none;
       background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -379,7 +379,7 @@
       gap: 10px;
     }
 
-    /* --- PLANNER & PERFORMANCE DASHBOARD STYLES --- */
+    /* Planner & Scoreboard */
     .perf-scoreboard {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -422,7 +422,6 @@
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s;
     }
     .schedule-tab-btn.active {
       background: var(--primary);
@@ -510,13 +509,12 @@
     .star-rating i {
       font-size: 0.95rem;
       color: #cbd5e1;
-      transition: color 0.15s;
     }
     .star-rating i.active {
       color: #f59e0b;
     }
 
-    /* Modals & Registration */
+    /* Modals */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -656,6 +654,19 @@
       user-select: all;
     }
 
+    .auth-toggle-footer {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+    .auth-toggle-footer a {
+      color: var(--secondary);
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
     @media (max-width: 860px) {
       aside { position: absolute; height: 100vh; left: -280px; }
       aside.open { left: 0; }
@@ -750,7 +761,7 @@
         <div class="user-pill" onclick="openAuthModal()">
           <i class="fas fa-user-circle"></i> <span id="lblUserStatus">Login / Register</span>
         </div>
-        <button class="btn-logout" id="btnLogout" onclick="logoutUser()" title="Sign out of your account">
+        <button class="btn-logout" id="btnLogout" onclick="logoutUser()" title="Sign out">
           <i class="fas fa-sign-out-alt"></i> <span id="lblLogout">Logout</span>
         </button>
       </div>
@@ -758,7 +769,7 @@
 
     <div class="canvas-viewport">
 
-      <!-- Today's Target Reminder Banner Alert -->
+      <!-- Today's Target Reminder Banner -->
       <div class="reminder-banner" id="dailyReminderBanner">
         <div style="display: flex; align-items: center; gap: 10px;">
           <i class="fas fa-bell fa-lg" style="color: #b45309;"></i>
@@ -767,7 +778,7 @@
         <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.75rem; border-color:#d97706; color:#92400e;" onclick="switchView('planner')">View Targets</button>
       </div>
 
-      <!-- Daily 4:00 AM Motivational Thought Rotator -->
+      <!-- Daily 4:00 AM Motivational Thought Banner -->
       <div class="quote-banner">
         <div class="quote-tag"><i class="fas fa-sun"></i> दैनिक प्रेरणा विचार | Daily 4:00 AM Thought</div>
         <div class="quote-hi" id="quoteTextHi">“उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।”</div>
@@ -879,10 +890,8 @@
         </div>
       </div>
 
-      <!-- VIEW 2: DAILY TARGET & MY PLAN (WHAT TO DO TODAY) -->
+      <!-- VIEW 2: DAILY TARGET & PLANNER -->
       <div id="view-planner" class="view-panel">
-        
-        <!-- Scoreboard & Performance Status Metric -->
         <div class="perf-scoreboard">
           <div class="perf-card">
             <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Performance Category</span>
@@ -910,14 +919,12 @@
             </div>
           </div>
 
-          <!-- Schedule Mode Selector -->
           <div class="schedule-type-tabs">
             <button class="schedule-tab-btn active" id="btnModeDaily" onclick="setScheduleMode('daily')"><i class="fas fa-infinity"></i> Daily (Everyday Routine)</button>
             <button class="schedule-tab-btn" id="btnModeWeekly" onclick="setScheduleMode('weekly')"><i class="fas fa-calendar-week"></i> Weekly (Select Days)</button>
             <button class="schedule-tab-btn" id="btnModeCalendar" onclick="setScheduleMode('calendar')"><i class="fas fa-calendar-alt"></i> As Per Calendar (Choose Date)</button>
           </div>
 
-          <!-- Weekly Days Picker (Shown only if Weekly is selected) -->
           <div id="weeklyDaysPicker" style="display:none; margin-bottom:12px;">
             <label style="font-size:0.78rem; font-weight:700; color:var(--primary);">Select recurring days of week:</label>
             <div class="weekday-selector">
@@ -931,7 +938,6 @@
             </div>
           </div>
 
-          <!-- Quick-Pick Default Targets Dropdown -->
           <div style="margin-bottom:10px;">
             <label style="font-size:0.78rem; font-weight:700; color:var(--primary);">Choose from Standard Academic Routines (or type your own):</label>
             <select id="defaultTargetDropdown" onchange="pickDefaultTarget(this.value)" style="width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:6px; font-size:0.86rem; background:#fff; margin-top:4px;">
@@ -974,7 +980,6 @@
             </select>
           </div>
 
-          <!-- Add Custom Target Bar -->
           <div style="display:flex; gap:8px; margin-bottom:18px;">
             <input type="text" id="txtNewTask" placeholder="Enter target or habit statement..." style="flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:6px; font-size:0.9rem; outline:none;" onkeydown="if(event.key==='Enter') addStudyTask()" />
             <button class="btn btn-primary" onclick="addStudyTask()"><i class="fas fa-plus"></i> Set Target</button>
@@ -1126,104 +1131,154 @@
     </div>
   </div>
 
-  <!-- AUTHENTICATION MODAL -->
+  <!-- AUTHENTICATION MODAL (REGISTER OR LOGIN HERE) -->
   <div class="modal-backdrop" id="authBackdrop">
     <div class="modal-box">
-      <h3 style="margin-bottom: 4px; text-align: center;">Welcome to Bharti Classes</h3>
-      <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
-        Select your login method or register with your competitive profile
-      </p>
 
-      <div class="auth-nav-tabs">
-        <button class="auth-tab-btn active" id="tabBtnMobile" onclick="switchAuthTab('mobile')"><i class="fas fa-mobile-alt"></i> Mobile Profile</button>
-        <button class="auth-tab-btn" id="tabBtnEmail" onclick="switchAuthTab('email')"><i class="fas fa-envelope"></i> Any Email</button>
-        <button class="auth-tab-btn" id="tabBtnGoogle" onclick="switchAuthTab('google')"><i class="fab fa-google"></i> Google</button>
-      </div>
+      <!-- SECTION A: ALREADY REGISTERED? LOG IN HERE -->
+      <div id="loginViewContainer">
+        <h3 style="margin-bottom: 4px; text-align: center;" id="txtLoginTitle">Student Login</h3>
+        <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 16px; text-align: center;" id="txtLoginSubtitle">
+          Enter your registered Mobile Number, Email, or Registration Number with Password
+        </p>
 
-      <!-- Tab 1: Mobile & 2-Tier Exam Registration Form -->
-      <div id="authPanelMobile">
-        <form onsubmit="initiateMobileOtpFlow(event)">
+        <form onsubmit="handleCredentialLogin(event)">
           <div class="form-group">
-            <label>Mobile Number *</label>
-            <input type="tel" id="regMobile" placeholder="e.g. 8271750420" maxlength="10" required />
+            <label id="lblLoginUserId">User ID (Registered Mobile / Email / Reg No) *</label>
+            <input type="text" id="loginUserId" placeholder="e.g. 8271750420, name@zoho.com, or 20260906420/1" required />
           </div>
           <div class="form-group">
-            <label>Student Full Name *</label>
-            <input type="text" id="regName" placeholder="Enter your full name" required />
-          </div>
-          <div style="display: flex; gap: 10px;">
-            <div class="form-group" style="flex: 1;">
-              <label>Age *</label>
-              <input type="number" id="regAge" placeholder="e.g. 21" min="14" max="65" required />
-            </div>
-            <div class="form-group" style="flex: 1.4;">
-              <label>Class / Qualification *</label>
-              <select id="regClass" required>
-                <option value="">Select Qualification</option>
-                <option value="10th Matric">10th (Matric)</option>
-                <option value="12th Intermediate">12th (Intermediate)</option>
-                <option value="Undergraduate (Pursuing)">Undergraduate (In College)</option>
-                <option value="Graduate (Completed)">Graduate Degree</option>
-                <option value="Post Graduate">Post Graduate</option>
-              </select>
-            </div>
+            <label id="lblLoginPassword">Password *</label>
+            <input type="password" id="loginPassword" placeholder="Enter your account password" required />
           </div>
 
-          <!-- 2-TIER EXAM SELECTION -->
-          <div class="form-group">
-            <label style="font-weight:700; color:var(--primary);">Step 1: Select Main Category of Exam(s) *</label>
-            <div class="main-cat-grid">
-              <label class="main-cat-item"><input type="checkbox" value="UPSC" onchange="toggleExamCategory('UPSC', this.checked)"> 1. UPSC</label>
-              <label class="main-cat-item"><input type="checkbox" value="State PCS" onchange="toggleExamCategory('State PCS', this.checked)"> 2. State PCS</label>
-              <label class="main-cat-item"><input type="checkbox" value="SSC" onchange="toggleExamCategory('SSC', this.checked)"> 3. SSC</label>
-              <label class="main-cat-item"><input type="checkbox" value="State SSC" onchange="toggleExamCategory('State SSC', this.checked)"> 4. State SSC</label>
-              <label class="main-cat-item"><input type="checkbox" value="Police Exams" onchange="toggleExamCategory('Police Exams', this.checked)"> 5. Police Exams</label>
-              <label class="main-cat-item"><input type="checkbox" value="Bank Exams" onchange="toggleExamCategory('Bank Exams', this.checked)"> 6. Bank Exams</label>
-              <label class="main-cat-item"><input type="checkbox" value="Railway" onchange="toggleExamCategory('Railway', this.checked)"> 7. Railway</label>
-            </div>
-          </div>
-
-          <div id="dynamicSubCategoriesArea"></div>
-
-          <button type="submit" class="btn btn-secondary btn-block" style="padding: 11px; margin-top: 10px;">
-            <i class="fas fa-paper-plane"></i> Verify Mobile via OTP & Register
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 11px; margin-top: 8px;">
+            <i class="fas fa-sign-in-alt"></i> <span id="btnTxtLogin">Log In to Dashboard</span>
           </button>
         </form>
-      </div>
 
-      <!-- Tab 2: Any Email Auth -->
-      <div id="authPanelEmail" style="display: none;">
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
-          Log in with any email service provider (Zoho, Yahoo, Rediffmail, Outlook, Gmail, or institutional ID).
-        </p>
-        <form onsubmit="initiateEmailAuthFlow(event)">
-          <div class="form-group">
-            <label>Email Address *</label>
-            <input type="email" id="emailInput" placeholder="username@zoho.com, @yahoo.com, @rediffmail.com..." required />
-          </div>
-          <div class="form-group">
-            <label>Student Full Name (for new register)</label>
-            <input type="text" id="emailUserName" placeholder="Enter full name" />
-          </div>
-          <div class="form-group">
-            <label>Password *</label>
-            <input type="password" id="emailPassword" placeholder="Enter minimum 6 characters" minlength="6" required />
-          </div>
-          <div style="display: flex; gap: 8px; margin-top: 14px;">
-            <button type="submit" class="btn btn-primary btn-block" style="flex: 1;" onclick="authActionType='login'">Log In</button>
-            <button type="submit" class="btn btn-secondary btn-block" style="flex: 1;" onclick="authActionType='register'">Verify via Email OTP</button>
-          </div>
-        </form>
-      </div>
+        <div style="position:relative; text-align:center; margin:16px 0;">
+          <hr style="border:none; border-top:1px solid var(--border);" />
+          <span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#fff; padding:0 8px; font-size:0.75rem; color:var(--text-muted);">OR</span>
+        </div>
 
-      <!-- Tab 3: Google 1-Tap Auth -->
-      <div id="authPanelGoogle" style="display: none; text-align: center; padding: 18px 0;">
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
-          Fast 1-tap sign-in with your default Google account.
-        </p>
-        <button class="btn btn-primary btn-block" style="padding: 12px; font-size: 0.96rem; background: #4285f4;" onclick="loginWithGoogle()">
-          <i class="fab fa-google"></i> Continue with Google
+        <button class="btn btn-outline btn-block" style="padding: 10px; font-size: 0.88rem;" onclick="loginWithGoogle()">
+          <i class="fab fa-google" style="color:#4285f4;"></i> Continue with Google 1-Tap
         </button>
+
+        <div class="auth-toggle-footer">
+          <span id="txtNotRegistered">New to Bharti Classes?</span>
+          <a onclick="showRegisterView()" id="lnkGoRegister">Register New Student Here</a>
+        </div>
+      </div>
+
+      <!-- SECTION B: NEW STUDENT REGISTRATION -->
+      <div id="registerViewContainer" style="display: none;">
+        <h3 style="margin-bottom: 4px; text-align: center;" id="txtRegTitle">Student Registration</h3>
+        <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
+          Create your profile to get your permanent official registration number
+        </p>
+
+        <div class="auth-nav-tabs">
+          <button class="auth-tab-btn active" id="tabBtnMobile" onclick="switchAuthTab('mobile')"><i class="fas fa-mobile-alt"></i> Mobile Profile</button>
+          <button class="auth-tab-btn" id="tabBtnEmail" onclick="switchAuthTab('email')"><i class="fas fa-envelope"></i> Any Email</button>
+          <button class="auth-tab-btn" id="tabBtnGoogle" onclick="switchAuthTab('google')"><i class="fab fa-google"></i> Google</button>
+        </div>
+
+        <!-- Tab 1: Mobile Profile Register -->
+        <div id="authPanelMobile">
+          <form onsubmit="initiateMobileOtpFlow(event)">
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <input type="tel" id="regMobile" placeholder="e.g. 8271750420" maxlength="10" required />
+            </div>
+            <div class="form-group">
+              <label>Student Full Name *</label>
+              <input type="text" id="regName" placeholder="Enter full name" required />
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <div class="form-group" style="flex: 1;">
+                <label>Age *</label>
+                <input type="number" id="regAge" placeholder="e.g. 21" min="14" max="65" required />
+              </div>
+              <div class="form-group" style="flex: 1.4;">
+                <label>Class / Qualification *</label>
+                <select id="regClass" required>
+                  <option value="">Select Qualification</option>
+                  <option value="10th Matric">10th (Matric)</option>
+                  <option value="12th Intermediate">12th (Intermediate)</option>
+                  <option value="Undergraduate (Pursuing)">Undergraduate (In College)</option>
+                  <option value="Graduate (Completed)">Graduate Degree</option>
+                  <option value="Post Graduate">Post Graduate</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Password for future logins -->
+            <div class="form-group">
+              <label>Set Login Password *</label>
+              <input type="password" id="regPassword" placeholder="Create password for future logins (min 6 characters)" minlength="6" required />
+            </div>
+
+            <div class="form-group">
+              <label style="font-weight:700; color:var(--primary);">Step 1: Select Main Category of Exam(s) *</label>
+              <div class="main-cat-grid">
+                <label class="main-cat-item"><input type="checkbox" value="UPSC" onchange="toggleExamCategory('UPSC', this.checked)"> 1. UPSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="State PCS" onchange="toggleExamCategory('State PCS', this.checked)"> 2. State PCS</label>
+                <label class="main-cat-item"><input type="checkbox" value="SSC" onchange="toggleExamCategory('SSC', this.checked)"> 3. SSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="State SSC" onchange="toggleExamCategory('State SSC', this.checked)"> 4. State SSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="Police Exams" onchange="toggleExamCategory('Police Exams', this.checked)"> 5. Police Exams</label>
+                <label class="main-cat-item"><input type="checkbox" value="Bank Exams" onchange="toggleExamCategory('Bank Exams', this.checked)"> 6. Bank Exams</label>
+                <label class="main-cat-item"><input type="checkbox" value="Railway" onchange="toggleExamCategory('Railway', this.checked)"> 7. Railway</label>
+              </div>
+            </div>
+
+            <div id="dynamicSubCategoriesArea"></div>
+
+            <button type="submit" class="btn btn-secondary btn-block" style="padding: 11px; margin-top: 10px;">
+              <i class="fas fa-paper-plane"></i> Verify via OTP & Register
+            </button>
+          </form>
+        </div>
+
+        <!-- Tab 2: Email Register -->
+        <div id="authPanelEmail" style="display: none;">
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
+            Register with any email provider (Zoho, Yahoo, Rediffmail, Outlook, Gmail, etc.)
+          </p>
+          <form onsubmit="initiateEmailAuthFlow(event)">
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="emailInput" placeholder="username@zoho.com, @yahoo.com, @rediffmail.com..." required />
+            </div>
+            <div class="form-group">
+              <label>Student Full Name *</label>
+              <input type="text" id="emailUserName" placeholder="Enter full name" required />
+            </div>
+            <div class="form-group">
+              <label>Set Login Password *</label>
+              <input type="password" id="emailPassword" placeholder="Create password (min 6 characters)" minlength="6" required />
+            </div>
+            <button type="submit" class="btn btn-secondary btn-block" style="padding: 11px; margin-top: 10px;">
+              <i class="fas fa-envelope"></i> Send Verification OTP to Email
+            </button>
+          </form>
+        </div>
+
+        <!-- Tab 3: Google 1-Tap -->
+        <div id="authPanelGoogle" style="display: none; text-align: center; padding: 18px 0;">
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+            Fast 1-tap sign-in with your Google account.
+          </p>
+          <button class="btn btn-primary btn-block" style="padding: 12px; font-size: 0.96rem; background: #4285f4;" onclick="loginWithGoogle()">
+            <i class="fab fa-google"></i> Continue with Google
+          </button>
+        </div>
+
+        <div class="auth-toggle-footer">
+          <span id="txtAlreadyRegistered">Already registered?</span>
+          <a onclick="showLoginView()" id="lnkGoLogin">Login Here</a>
+        </div>
       </div>
 
       <button class="btn btn-outline btn-block" style="margin-top: 14px;" onclick="closeAuthModal()">Close</button>
@@ -1319,10 +1374,9 @@
   <script>
     let isUserLoggedIn = false;
     let activeLang = 'en';
-    let authActionType = 'login';
     let currentStudentProfile = null;
 
-    let activeScheduleMode = 'daily'; // 'daily', 'weekly', 'calendar'
+    let activeScheduleMode = 'daily';
     let selectedWeeklyDays = new Set([0, 1, 2, 3, 4, 5, 6]);
 
     let activeOtpChannel = 'mobile';
@@ -1412,7 +1466,6 @@
 
     try { firebase.initializeApp(firebaseConfig); } catch(e) {}
 
-    // Auto Registration Number Generator
     function generateAutoRegistrationNumber(mobile) {
       const now = new Date();
       const yyyy = now.getFullYear().toString();
@@ -1431,7 +1484,6 @@
       return `${yyyy}${mm}${dd}${last3}/${currentCounter}`;
     }
 
-    // Daily 4 AM Motivational Quote Auto-Rotator
     const motivationalQuotes = [
       { hi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाए।", en: "Arise, awake, and stop not till the goal is reached.", author: "स्वामी विवेकानन्द (Swami Vivekananda)" },
       { hi: "सपने वो नहीं जो हम सोते हुए देखते हैं, सपने वो हैं जो हमें सोने नहीं देते।", en: "Dreams are not what you see in sleep, dreams are those that do not let you sleep.", author: "डॉ. ए.पी.जे. अब्दुल कलाम (Dr. A.P.J. Abdul Kalam)" },
@@ -1455,7 +1507,6 @@
       document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
     }
 
-    // Dynamic 2-Tier Category Generator
     const selectedMainCategories = new Set();
     function toggleExamCategory(categoryName, isChecked) {
       if (isChecked) selectedMainCategories.add(categoryName);
@@ -1495,6 +1546,17 @@
       });
     }
 
+    // Modal View Switchers: Login vs Register
+    function showLoginView() {
+      document.getElementById('loginViewContainer').style.display = 'block';
+      document.getElementById('registerViewContainer').style.display = 'none';
+    }
+
+    function showRegisterView() {
+      document.getElementById('loginViewContainer').style.display = 'none';
+      document.getElementById('registerViewContainer').style.display = 'block';
+    }
+
     function switchAuthTab(tabKey) {
       document.querySelectorAll('.auth-tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById('authPanelMobile').style.display = 'none';
@@ -1518,6 +1580,7 @@
         alert('You are already logged in as ' + (currentStudentProfile ? currentStudentProfile.name : 'Student'));
         return;
       }
+      showLoginView();
       document.getElementById('authBackdrop').style.display = 'flex';
     }
 
@@ -1525,7 +1588,6 @@
       document.getElementById('authBackdrop').style.display = 'none';
     }
 
-    // LOGOUT FUNCTIONALITY
     function logoutUser() {
       if (!confirm('Are you sure you want to log out of Bharti Classes?')) return;
       try { firebase.auth().signOut(); } catch(e) {}
@@ -1542,7 +1604,63 @@
       switchView('courses');
     }
 
-    // OTP FLOWS
+    // USER DATABASE HELPER (Stored in LocalStorage)
+    function getRegisteredUsersList() {
+      return JSON.parse(localStorage.getItem('bharti_registered_users_db') || '[]');
+    }
+
+    function saveUserToDatabase(userObj) {
+      const users = getRegisteredUsersList();
+      const existingIdx = users.findIndex(u => u.regNumber === userObj.regNumber || (u.mobile && u.mobile === userObj.mobile) || (u.email && u.email.toLowerCase() === userObj.email.toLowerCase()));
+      if (existingIdx >= 0) {
+        users[existingIdx] = userObj;
+      } else {
+        users.push(userObj);
+      }
+      localStorage.setItem('bharti_registered_users_db', JSON.stringify(users));
+    }
+
+    // DIRECT USER ID + PASSWORD LOGIN HANDLER
+    function handleCredentialLogin(e) {
+      e.preventDefault();
+      const inputId = document.getElementById('loginUserId').value.trim();
+      const inputPass = document.getElementById('loginPassword').value.trim();
+
+      if (!inputId || !inputPass) {
+        return alert('Please enter both User ID and Password.');
+      }
+
+      const users = getRegisteredUsersList();
+      const cleanId = inputId.toLowerCase();
+      const cleanDigits = inputId.replace(/\D/g, '').slice(-10);
+
+      // Find user matching registered mobile, email, or registration number
+      const matchedUser = users.find(u => {
+        const uMob = (u.mobile || '').replace(/\D/g, '').slice(-10);
+        const uEmail = (u.email || '').toLowerCase();
+        const uReg = (u.regNumber || '').toLowerCase();
+
+        const idMatches = (uReg === cleanId) || (uEmail === cleanId) || (uMob && cleanDigits && uMob === cleanDigits);
+        return idMatches && u.password === inputPass;
+      });
+
+      if (matchedUser) {
+        currentStudentProfile = matchedUser;
+        localStorage.setItem('bharti_student', JSON.stringify(matchedUser));
+        completeLoginUi();
+        closeAuthModal();
+        alert(`Welcome back, ${matchedUser.name}!\nLogged in with Registration ID: ${matchedUser.regNumber || 'Verified User'}`);
+        if (matchedUser.exams && matchedUser.exams.length > 0) {
+          checkAndApplyExamFilter(matchedUser.exams);
+        } else {
+          showAllExams();
+        }
+      } else {
+        alert('Invalid User ID or Password! Please verify your registered Mobile, Email, or Registration Number and enter the correct password.');
+      }
+    }
+
+    // OTP FLOWS FOR NEW USER REGISTRATION
     function generateSecureOtp() {
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
@@ -1553,9 +1671,11 @@
       const name = document.getElementById('regName').value.trim();
       const age = document.getElementById('regAge').value.trim();
       const qual = document.getElementById('regClass').value;
+      const pass = document.getElementById('regPassword').value.trim();
 
       if (mob.length !== 10) return alert('Please enter a valid 10-digit mobile number.');
       if (!name) return alert('Please enter your full name.');
+      if (!pass || pass.length < 6) return alert('Password must be at least 6 characters long.');
       if (selectedMainCategories.size === 0) return alert('Please select at least one Main Category of exam in Step 1.');
 
       const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExam"]:checked'));
@@ -1566,6 +1686,7 @@
         name: name,
         age: age,
         qualification: qual,
+        password: pass,
         categories: Array.from(selectedMainCategories),
         exams: checkedBoxes.map(cb => cb.value)
       };
@@ -1589,35 +1710,27 @@
       const pass = document.getElementById('emailPassword').value.trim();
       const userName = document.getElementById('emailUserName').value.trim() || email.split('@')[0];
 
-      if (!email || !pass) return alert('Please enter both email and password.');
+      if (!email || !pass || pass.length < 6) return alert('Please enter valid email and minimum 6-character password.');
 
-      if (authActionType === 'login') {
-        const regNo = localStorage.getItem('bharti_user_reg_' + email) || generateAutoRegistrationNumber('000');
-        currentStudentProfile = { name: userName, email: email, regNumber: regNo, exams: ['SSC', 'Railway', 'Bank'] };
-        localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
-        completeLoginUi();
-        closeAuthModal();
-        alert(`Logged in successfully with ${email}.\nRegistration No: ${regNo}`);
-      } else {
-        pendingProfileData = {
-          email: email,
-          name: userName,
-          categories: ['General'],
-          exams: ['SSC CGL', 'Railway NTPC', 'Bank PO']
-        };
+      pendingProfileData = {
+        email: email,
+        name: userName,
+        password: pass,
+        categories: ['General'],
+        exams: ['SSC CGL', 'Railway NTPC', 'Bank PO']
+      };
 
-        activeOtpChannel = 'email';
-        activeOtpTarget = email;
-        serverGeneratedOtp = generateSecureOtp();
+      activeOtpChannel = 'email';
+      activeOtpTarget = email;
+      serverGeneratedOtp = generateSecureOtp();
 
-        document.getElementById('authBackdrop').style.display = 'none';
-        document.getElementById('otpModalTitle').innerHTML = '<i class="fas fa-envelope-open-text"></i> Email OTP Verification';
-        document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit real verification OTP code has been dispatched to <strong>${activeOtpTarget}</strong>.`;
-        document.getElementById('txtEnteredOtp').value = '';
-        document.getElementById('otpVerifyBackdrop').style.display = 'flex';
+      document.getElementById('authBackdrop').style.display = 'none';
+      document.getElementById('otpModalTitle').innerHTML = '<i class="fas fa-envelope-open-text"></i> Email OTP Verification';
+      document.getElementById('otpModalSubtitle').innerHTML = `A 6-digit real verification OTP code has been dispatched to <strong>${activeOtpTarget}</strong>.`;
+      document.getElementById('txtEnteredOtp').value = '';
+      document.getElementById('otpVerifyBackdrop').style.display = 'flex';
 
-        alert(`[Mail Server Dispatch] Real Email OTP verification code for ${email} is: ${serverGeneratedOtp}`);
-      }
+      alert(`[Mail Server Dispatch] Real Email OTP verification code for ${email} is: ${serverGeneratedOtp}`);
     }
 
     function resendOtpCode() {
@@ -1644,10 +1757,9 @@
         verifiedAt: new Date().toISOString()
       };
 
+      // Save user profile permanently to local database
+      saveUserToDatabase(currentStudentProfile);
       localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
-      if (pendingProfileData.email) {
-        localStorage.setItem('bharti_user_reg_' + pendingProfileData.email, registrationNumber);
-      }
 
       completeLoginUi();
       document.getElementById('otpVerifyBackdrop').style.display = 'none';
@@ -1674,13 +1786,15 @@
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
           const user = result.user;
-          const regNo = localStorage.getItem('bharti_user_reg_' + user.email) || generateAutoRegistrationNumber('000');
+          const regNo = generateAutoRegistrationNumber('000');
           currentStudentProfile = {
             name: user.displayName || user.email.split('@')[0],
             email: user.email,
+            password: 'google_oauth_user',
             regNumber: regNo,
             exams: ['SSC CGL', 'Railway RRB', 'Banking']
           };
+          saveUserToDatabase(currentStudentProfile);
           localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
           completeLoginUi();
           closeAuthModal();
@@ -1761,7 +1875,7 @@
       showAllExams();
     }
 
-    // --- DAILY TARGET, NOTIFICATIONS & PERFORMANCE SCOREBOARD ---
+    // DAILY TARGET, NOTIFICATIONS & SCOREBOARD
     function getTodayDateString() {
       return new Date().toISOString().split('T')[0];
     }
@@ -1814,8 +1928,8 @@
         mode: activeScheduleMode,
         targetDate: dateVal,
         weeklyDays: Array.from(selectedWeeklyDays),
-        completions: {}, // { "2026-09-06": true }
-        ratings: {}      // { "2026-09-06": 5 }
+        completions: {},
+        ratings: {}
       };
 
       allTasks.push(newTask);
@@ -1833,8 +1947,7 @@
       if (task.mode === 'calendar') return task.targetDate === dateStr;
       if (task.mode === 'weekly') {
         const d = new Date(dateStr + 'T00:00:00');
-        const dayOfWeek = d.getDay();
-        return (task.weeklyDays || []).includes(dayOfWeek);
+        return (task.weeklyDays || []).includes(d.getDay());
       }
       return false;
     }
@@ -1917,7 +2030,7 @@
         target.completions[dateStr] = isChecked;
         if (isChecked && (!target.ratings || !target.ratings[dateStr])) {
           if (!target.ratings) target.ratings = {};
-          target.ratings[dateStr] = 4; // Default satisfactory rating on check
+          target.ratings[dateStr] = 4;
         }
         saveAllTasks(allTasks);
         loadDayTasks();
@@ -1970,7 +2083,6 @@
       }
     }
 
-    // REMINDER NOTIFICATIONS (Browser Web API + In-App Bilingual Banner)
     function checkAndTriggerReminderNotification() {
       const todayStr = getTodayDateString();
       const allTasks = getAllStoredTasks();
@@ -2004,7 +2116,6 @@
       }
     }
 
-    // Dynamic Search Filter
     function handleInAppSearch() {
       const q = document.getElementById('omniQueryInput').value.trim().toLowerCase();
       const cards = document.querySelectorAll('.course-card');
@@ -2039,7 +2150,6 @@
       }
     }
 
-    // View Navigation
     function switchView(viewKey, navElement) {
       document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -2150,6 +2260,17 @@
         document.getElementById('navAssistant').textContent = 'सहायता डेस्क (AI)';
         document.getElementById('navMentor').textContent = 'भारती सर का परिचय';
         document.getElementById('lblLogout').textContent = 'लॉगआउट';
+
+        // Auth Modal translations
+        document.getElementById('txtLoginTitle').textContent = 'विद्यार्थी लॉगिन (Student Login)';
+        document.getElementById('txtLoginSubtitle').textContent = 'पंजीकृत मोबाइल नंबर, ईमेल, या रजिस्ट्रेशन नंबर एवं पासवर्ड दर्ज करें';
+        document.getElementById('lblLoginUserId').textContent = 'यूजर आईडी (पंजीकृत मोबाइल / ईमेल / रजिस्ट्रेशन नंबर) *';
+        document.getElementById('lblLoginPassword').textContent = 'पासवर्ड *';
+        document.getElementById('btnTxtLogin').textContent = 'डैशबोर्ड में लॉगिन करें';
+        document.getElementById('txtNotRegistered').textContent = 'क्या आप नए विद्यार्थी हैं?';
+        document.getElementById('lnkGoRegister').textContent = 'यहाँ नया पंजीकरण करें';
+        document.getElementById('txtAlreadyRegistered').textContent = 'क्या आप पहले से पंजीकृत हैं?';
+        document.getElementById('lnkGoLogin').textContent = 'यहाँ लॉगिन करें';
       } else {
         activeLang = 'en';
         document.getElementById('btnLangToggle').textContent = 'हिन्दी';
@@ -2162,6 +2283,17 @@
         document.getElementById('navAssistant').textContent = 'May I Help You? (AI)';
         document.getElementById('navMentor').textContent = 'About Vishwa Sir';
         document.getElementById('lblLogout').textContent = 'Logout';
+
+        // Auth Modal translations
+        document.getElementById('txtLoginTitle').textContent = 'Student Login';
+        document.getElementById('txtLoginSubtitle').textContent = 'Enter your registered Mobile Number, Email, or Registration Number with Password';
+        document.getElementById('lblLoginUserId').textContent = 'User ID (Registered Mobile / Email / Reg No) *';
+        document.getElementById('lblLoginPassword').textContent = 'Password *';
+        document.getElementById('btnTxtLogin').textContent = 'Log In to Dashboard';
+        document.getElementById('txtNotRegistered').textContent = 'New to Bharti Classes?';
+        document.getElementById('lnkGoRegister').textContent = 'Register New Student Here';
+        document.getElementById('txtAlreadyRegistered').textContent = 'Already registered?';
+        document.getElementById('lnkGoLogin').textContent = 'Login Here';
       }
       checkAndTriggerReminderNotification();
       loadDayTasks();
