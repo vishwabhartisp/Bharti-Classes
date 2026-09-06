@@ -2259,21 +2259,65 @@
       if (checkedBoxes.length === 0) return alert('Please select at least one target exam from the sub-category boxes in Step 2.');
       if (!firebaseDb) return alert('Firebase Firestore is not available. Please check the Firebase setup.');
 
+      // Generate the official registration number as:
+      // YYYYMMDD + last 3 digits of mobile + '/' + sequential candidate serial number.
+      // The serial number is maintained in Firestore so it is shared across devices/browsers.
       const now = new Date();
       const datePart = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
-      const uidSuffix = (firebaseUser.uid || '').replace(/[^a-zA-Z0-9]/g, '').slice(-8).toUpperCase() || String(Date.now()).slice(-8);
-      const registrationNumber = `${datePart}${String(mob).slice(-3)}/${uidSuffix}`;
+      const mobileLast3 = String(mob).slice(-3);
+      let registrationNumber = '';
 
       pendingProfileData = {
         name, mobile: mob, email: firebaseUser.email || email, age, qualification: qual, password: pass,
         categories: Array.from(selectedCategories), exams: checkedBoxes.map(cb => cb.value), enrolledCourses: [],
-        regNumber: registrationNumber, firebaseUid: firebaseUser.uid,
+        regNumber: '', firebaseUid: firebaseUser.uid,
         googleVerified: true, phoneVerified: false, mobileVerified: false,
         authProvider: 'google.com', verifiedAt: new Date().toISOString()
       };
 
       try {
-        await saveVerifiedProfileToFirestore(pendingProfileData, firebaseUser.uid);
+        const counterRef = firebaseDb.collection('counters').doc('students');
+        const userRef = firebaseDb.collection('users').doc(firebaseUser.uid);
+        let serialNo = 0;
+
+        // Counter + student profile are written in ONE transaction, so a failed
+        // registration does not consume a serial number.
+        await firebaseDb.runTransaction(async (transaction) => {
+          const counterSnap = await transaction.get(counterRef);
+          const currentCount = counterSnap.exists && Number.isFinite(Number(counterSnap.data().count))
+            ? Number(counterSnap.data().count)
+            : 0;
+
+          serialNo = currentCount + 1;
+          registrationNumber = `${datePart}${mobileLast3}/${serialNo}`;
+          pendingProfileData.regNumber = registrationNumber;
+
+          const safeProfile = {
+            uid: firebaseUser.uid,
+            name: pendingProfileData.name || '',
+            mobile: pendingProfileData.mobile || '',
+            email: pendingProfileData.email || '',
+            age: pendingProfileData.age || '',
+            qualification: pendingProfileData.qualification || '',
+            categories: pendingProfileData.categories || [],
+            exams: pendingProfileData.exams || [],
+            regNumber: registrationNumber,
+            googleVerified: true,
+            authProvider: 'google.com',
+            phoneVerified: false,
+            mobileVerified: false,
+            verifiedAt: pendingProfileData.verifiedAt || new Date().toISOString(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+
+          transaction.set(counterRef, {
+            count: serialNo,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+
+          transaction.set(userRef, safeProfile, { merge: true });
+        });
+
         currentStudentProfile = { ...pendingProfileData };
         currentUserRole = 'student';
         saveUserToDatabase(currentStudentProfile);
