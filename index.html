@@ -1602,7 +1602,7 @@
       <h4 style="font-size:0.92rem; margin-bottom:8px; color:var(--primary);">Syllabus & Lecture Delivery:</h4>
       <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px;">
         
-        <!-- Feature 1: In-App YouTube Lecture Player -->
+        <!-- In-App YouTube Lecture Player -->
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
             <strong style="font-size:0.88rem; display:block;">Advance Maths Masterclass Playlist</strong>
@@ -1613,7 +1613,7 @@
           </button>
         </div>
 
-        <!-- Feature 2: In-App PDF Viewer / Downloader -->
+        <!-- In-App PDF Viewer & Downloader -->
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
             <strong style="font-size:0.88rem; display:block;">Weekly Current Affairs & Maths Formula PDF</strong>
@@ -1624,7 +1624,7 @@
           </button>
         </div>
 
-        <!-- Feature 3: Real Interactive CBT Mock Test (27 PYQs from Attached Word File) -->
+        <!-- Real Interactive CBT Mock Test (27 PYQs) -->
         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; border:1px solid var(--border); padding:10px; border-radius:6px;">
           <div>
             <strong style="font-size:0.88rem; display:block;">CBT Mock Test Series (27 PYQs) & Solutions</strong>
@@ -1676,11 +1676,11 @@
 
         <h4 style="color:var(--secondary); margin:10px 0 6px;">1. Weekly Current Affairs & Policy Highlights</h4>
         <ul style="padding-left:20px; margin-bottom:14px;">
-          <li><strong>Public Examination Reform 2.0 (PER 2.0):</strong> High-stakes recruitment security framework with biometric authentication and end-to-end chain of custody[cite: 2].</li>
-          <li><strong>E-Shram Portal:</strong> Over 12-digit Universal Account Number (UAN) digital identity provided to unorganized workforce[cite: 2].</li>
-          <li><strong>FGM-148 Javelin ATGM:</strong> Imaging Infrared Seeker fire-and-forget technology with top-attack capability for Indian Armed Forces[cite: 2].</li>
-          <li><strong>Semicon 2.0:</strong> ₹1.27 Lakh Crore allocated for wafer fabrication, chip design, R&D and training 100,000 semiconductor engineers[cite: 2].</li>
-          <li><strong>INS Nipun:</strong> Indigenous Diving Support Vessel (DSV) for deep-sea diving, salvage and submarine rescue operations[cite: 2].</li>
+          <li><strong>Public Examination Reform 2.0 (PER 2.0):</strong> High-stakes recruitment security framework with biometric authentication and end-to-end chain of custody.</li>
+          <li><strong>E-Shram Portal:</strong> Over 12-digit Universal Account Number (UAN) digital identity provided to unorganized workforce.</li>
+          <li><strong>FGM-148 Javelin ATGM:</strong> Imaging Infrared Seeker fire-and-forget technology with top-attack capability for Indian Armed Forces.</li>
+          <li><strong>Semicon 2.0:</strong> ₹1.27 Lakh Crore allocated for wafer fabrication, chip design, R&D and training 100,000 semiconductor engineers.</li>
+          <li><strong>INS Nipun:</strong> Indigenous Diving Support Vessel (DSV) for deep-sea diving, salvage and submarine rescue operations.</li>
         </ul>
 
         <h4 style="color:var(--secondary); margin:10px 0 6px;">2. Bharti Sir's Step-Skipping Advance Maths Formulas</h4>
@@ -1714,10 +1714,8 @@
         </div>
 
         <div class="cbt-body">
-          <!-- Question Pane -->
           <div class="cbt-question-pane" id="cbtQuestionPaneArea"></div>
 
-          <!-- Palette Pane -->
           <div class="cbt-palette-pane">
             <h4 style="font-size:0.85rem; color:var(--primary); margin-bottom:8px;">Question Palette:</h4>
             <div style="display:flex; flex-wrap:wrap; gap:6px; font-size:0.7rem; margin-bottom:10px;">
@@ -1862,7 +1860,7 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <script>
-    // --- AUTHENTIC 27 SSC CGL MATHS PYQ TEST DATA ---
+    // --- 27 SSC CGL MATHS PYQ TEST DATA ---
     const CBT_TEST_QUESTIONS = [
       { id: 1, chapter: "ALGEBRA", q: "The sum of the cubes of two natural numbers is 9728, while their sum is 32. What is the positive difference between their cubes?", options: ["6272", "6144", "6276", "6320"], ans: 0, pyq: "SSC CGL Tier-I, 27 July 2023, Shift 3" },
       { id: 2, chapter: "ALGEBRA", q: "If x² − 8x − 1 = 0, find the value of x² + 1/x².", options: ["62", "64", "66", "68"], ans: 2, pyq: "SSC CGL Tier-I, 26 July 2023, Shift 1" },
@@ -1899,7 +1897,6 @@
     let cbtTimerSeconds = 35 * 60;
     let cbtTimerInterval = null;
 
-    // --- CBT ENGINE CONTROLLERS ---
     function launchCbtMockTest() {
       cbtActiveQuestionIdx = 0;
       cbtUserAnswers = {};
@@ -1928,7 +1925,6 @@
     function renderCbtQuestion() {
       const q = CBT_TEST_QUESTIONS[cbtActiveQuestionIdx];
       const area = document.getElementById('cbtQuestionPaneArea');
-
       const selectedOpt = cbtUserAnswers[q.id];
 
       area.innerHTML = `
@@ -2034,7 +2030,7 @@
       document.getElementById('cbtResultModal').style.display = 'none';
     }
 
-    // --- IN-APP VIDEO LECTURE PLAYER CONTROLLER (ZERO REDIRECTION) ---
+    // IN-APP VIDEO PLAYER CONTROLLERS
     function openVideoPlayerModal(embedUrl) {
       const iframe = document.getElementById('appEmbeddedPlayer');
       iframe.src = embedUrl;
@@ -2047,7 +2043,7 @@
       document.getElementById('videoTheaterModal').style.display = 'none';
     }
 
-    // --- IN-APP PDF VIEWER & DOWNLOAD CONTROLLER ---
+    // IN-APP PDF VIEWER & DOWNLOAD CONTROLLERS
     function openPdfViewerModal() {
       document.getElementById('pdfViewerModal').style.display = 'flex';
     }
@@ -2062,7 +2058,7 @@
       printWindow.document.write(`
         <html>
           <head>
-            <title>Bharti Classes - SSC CGL Study Notes</title>
+            <title>Bharti Classes - Study Material</title>
             <style>
               body { font-family: sans-serif; padding: 25px; line-height: 1.6; color: #111; }
               h2, h4 { color: #0d233a; }
@@ -2075,6 +2071,33 @@
       printWindow.focus();
       printWindow.print();
     }
+
+    // APP SESSION STARTUP
+    window.addEventListener('DOMContentLoaded', () => {
+      updateDailyQuote();
+      document.getElementById('plannerDateInput').value = getTodayDateString();
+
+      const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
+      if (adminSession === 'true') {
+        loginAsAdmin();
+        return;
+      }
+
+      const savedStudent = localStorage.getItem('bharti_student');
+      if (savedStudent) {
+        try {
+          currentStudentProfile = JSON.parse(savedStudent);
+          currentUserRole = 'student';
+          completeLoginUi();
+        } catch(e){}
+      } else {
+        currentUserRole = 'guest';
+        renderSidebarMenu();
+      }
+
+      selectCourseBox('SSC');
+      checkAndTriggerReminderNotification();
+    });
   </script>
 </body>
 </html>
