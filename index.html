@@ -652,6 +652,28 @@
     }
     table.admin-table tr:hover { background: #f8fafc; }
 
+
+    /* PHASE 1 - DIRECTOR CONTENT MANAGEMENT */
+    .content-manager-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px;}
+    .content-tab{padding:8px 12px;border:1px solid var(--border);background:#fff;border-radius:7px;cursor:pointer;font-weight:700;font-size:.82rem;}
+    .content-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+    .content-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+    .content-form-grid .full{grid-column:1/-1;}
+    .content-form-grid input,.content-form-grid select,.content-form-grid textarea{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:6px;font:inherit;}
+    .content-form-grid textarea{min-height:90px;resize:vertical;}
+    .content-status{padding:10px 12px;border-radius:7px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-size:.82rem;margin-bottom:12px;}
+    .content-status.ok{background:#ecfdf5;border-color:#a7f3d0;color:#166534;}
+    .content-status.warn{background:#fff7ed;border-color:#fed7aa;color:#9a3412;}
+    .content-list{display:grid;gap:10px;}
+    .content-list-item{border:1px solid var(--border);border-radius:8px;padding:12px;background:#fff;}
+    .content-list-item .meta{font-size:.76rem;color:var(--text-muted);margin-top:4px;line-height:1.5;}
+    .content-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+    .check-row{display:flex;align-items:center;gap:7px;font-size:.84rem;}
+    .question-builder{border:1px solid var(--border);border-radius:8px;padding:12px;background:#f8fafc;margin-top:10px;}
+    .question-row{border:1px solid var(--border);border-radius:7px;padding:10px;background:#fff;margin-top:8px;}
+    .student-content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+    @media(max-width:700px){.content-form-grid{grid-template-columns:1fr}.content-form-grid .full{grid-column:auto}}
+
     /* UPI PAYMENT MODAL & DIRECT APP BUTTONS */
     .upi-qr-box {
       background: #f8fafc;
@@ -1281,6 +1303,143 @@
     </div>
   </div>
 
+      <!-- PHASE 1: DIRECTOR CONTENT MANAGEMENT VIEWS -->
+      <div id="view-admin-content-courses" class="view-panel">
+        <div class="card">
+          <div class="content-status" id="contentAdminStatusCourses"><strong>Content Manager:</strong> Connect the Director Google account before saving content to Firebase.</div>
+          <div class="content-manager-toolbar"><button class="btn btn-primary" onclick="connectDirectorGoogle()"><i class="fab fa-google"></i> Connect Director Google</button><button class="btn btn-outline" onclick="loadContentManagerData()"><i class="fas fa-sync"></i> Refresh</button></div>
+          <h3 style="color:var(--primary);"><i class="fas fa-book-open"></i> Course Content Manager</h3>
+          <p style="font-size:.82rem;color:var(--text-muted);margin:5px 0 14px;">Create the academic courses that will receive recorded classes, PDFs and mock tests. This does not replace your existing fee manager.</p>
+          <form onsubmit="saveContentCourse(event)">
+            <input type="hidden" id="cmCourseId">
+            <div class="content-form-grid">
+              <div><label>Course Name *</label><input id="cmCourseTitle" required placeholder="e.g. SSC CGL Mathematics Complete Batch"></div>
+              <div><label>Course Code</label><input id="cmCourseCode" placeholder="e.g. SSC-CGL-MATHS"></div>
+              <div><label>Exam Category *</label><input id="cmCourseCategory" required placeholder="e.g. SSC"></div>
+              <div><label>Access Duration (days)</label><input id="cmCourseDuration" type="number" min="1" value="365"></div>
+              <div><label>Course Price (₹)</label><input id="cmCoursePrice" type="number" min="0" value="0"></div>
+              <div class="check-row" style="padding-top:25px;"><input type="checkbox" id="cmCourseActive" checked> <label for="cmCourseActive">Active / visible</label></div>
+              <div class="full"><label>Short Description</label><textarea id="cmCourseSubtitle" placeholder="What students will learn..."></textarea></div>
+              <div class="full"><button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save Course</button> <button class="btn btn-outline" type="button" onclick="resetCourseForm()">Clear</button></div>
+            </div>
+          </form>
+          <hr style="margin:18px 0;border:0;border-top:1px solid var(--border);">
+          <div id="cmCourseList" class="content-list"></div>
+        </div>
+      </div>
+
+      <div id="view-admin-content-videos" class="view-panel">
+        <div class="card">
+          <div class="content-status" id="contentAdminStatusVideos"><strong>Video Manager:</strong> Add a YouTube link for each recorded class. Video files are not uploaded to GitHub.</div>
+          <div class="content-manager-toolbar"><button class="btn btn-primary" onclick="connectDirectorGoogle()"><i class="fab fa-google"></i> Connect Director Google</button><button class="btn btn-outline" onclick="loadContentManagerData()"><i class="fas fa-sync"></i> Refresh</button></div>
+          <h3 style="color:var(--primary);"><i class="fas fa-video"></i> Recorded Video / Class Manager</h3>
+          <form onsubmit="saveContentVideo(event)">
+            <input type="hidden" id="cmVideoId">
+            <div class="content-form-grid">
+              <div><label>Course *</label><select id="cmVideoCourse" required></select></div>
+              <div><label>Subject</label><input id="cmVideoSubject" placeholder="Mathematics / Reasoning"></div>
+              <div><label>Lecture No.</label><input id="cmVideoLectureNo" placeholder="01"></div>
+              <div><label>Lecture Title *</label><input id="cmVideoTitle" required placeholder="Percentage – Part 1"></div>
+              <div class="full"><label>YouTube Video Link *</label><input id="cmVideoUrl" required placeholder="https://www.youtube.com/watch?v=..."></div>
+              <div class="full"><label>Description</label><textarea id="cmVideoDescription"></textarea></div>
+              <div class="check-row"><input type="checkbox" id="cmVideoPublished" checked> <label for="cmVideoPublished">Published to students</label></div>
+              <div class="full"><button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save Lecture</button> <button class="btn btn-outline" type="button" onclick="resetVideoForm()">Clear</button></div>
+            </div>
+          </form>
+          <hr style="margin:18px 0;border:0;border-top:1px solid var(--border);"><div id="cmVideoList" class="content-list"></div>
+        </div>
+      </div>
+
+      <div id="view-admin-content-materials" class="view-panel">
+        <div class="card">
+          <div class="content-status" id="contentAdminStatusMaterials"><strong>PDF Manager:</strong> Upload the PDF to your GitHub <code>course-materials</code> folder first, then paste its public URL here. Google Drive links can also be used if publicly accessible.</div>
+          <div class="content-manager-toolbar"><button class="btn btn-primary" onclick="connectDirectorGoogle()"><i class="fab fa-google"></i> Connect Director Google</button><button class="btn btn-outline" onclick="loadContentManagerData()"><i class="fas fa-sync"></i> Refresh</button></div>
+          <h3 style="color:var(--primary);"><i class="fas fa-file-pdf"></i> PDF / Study Material Manager</h3>
+          <form onsubmit="saveContentMaterial(event)">
+            <input type="hidden" id="cmMaterialId">
+            <div class="content-form-grid">
+              <div><label>Course *</label><select id="cmMaterialCourse" required></select></div>
+              <div><label>Subject</label><input id="cmMaterialSubject" placeholder="Mathematics"></div>
+              <div><label>Material Title *</label><input id="cmMaterialTitle" required placeholder="Percentage Notes PDF"></div>
+              <div class="full"><label>Public PDF URL *</label><input id="cmMaterialUrl" required placeholder="https://vishwabhartisp.github.io/Bharti-Classes/course-materials/filename.pdf"></div>
+              <div class="full"><label>Description</label><textarea id="cmMaterialDescription"></textarea></div>
+              <div class="check-row"><input type="checkbox" id="cmMaterialPublished" checked> <label for="cmMaterialPublished">Published to students</label></div>
+              <div class="full"><button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save Material</button> <button class="btn btn-outline" type="button" onclick="resetMaterialForm()">Clear</button></div>
+            </div>
+          </form>
+          <hr style="margin:18px 0;border:0;border-top:1px solid var(--border);"><div id="cmMaterialList" class="content-list"></div>
+        </div>
+      </div>
+
+      <div id="view-admin-content-tests" class="view-panel">
+        <div class="card">
+          <div class="content-status" id="contentAdminStatusTests"><strong>Mock Test Manager:</strong> Create tests and maintain a reusable Question Bank. Students can attempt published tests from Study Library.</div>
+          <div class="content-manager-toolbar"><button class="btn btn-primary" onclick="connectDirectorGoogle()"><i class="fab fa-google"></i> Connect Director Google</button><button class="btn btn-outline" onclick="loadContentManagerData()"><i class="fas fa-sync"></i> Refresh</button></div>
+          <div class="content-manager-toolbar"><button class="content-tab active" id="cmTabQuestionBank" onclick="showTestManagerTab('questionbank')">Question Bank</button><button class="content-tab" id="cmTabTests" onclick="showTestManagerTab('tests')">Mock Tests</button></div>
+          <div id="cmQuestionBankPane">
+            <form onsubmit="saveQuestionBankItem(event)"><input type="hidden" id="cmQuestionId">
+              <div class="content-form-grid">
+                <div><label>Subject / Topic</label><input id="cmQuestionTopic" placeholder="Percentage"></div>
+                <div><label>Difficulty</label><select id="cmQuestionDifficulty"><option>Easy</option><option selected>Moderate</option><option>Hard</option></select></div>
+                <div class="full"><label>Question *</label><textarea id="cmQuestionText" required></textarea></div>
+                <div><label>Option A *</label><input id="cmQuestionA" required></div><div><label>Option B *</label><input id="cmQuestionB" required></div>
+                <div><label>Option C *</label><input id="cmQuestionC" required></div><div><label>Option D *</label><input id="cmQuestionD" required></div>
+                <div><label>Correct Option *</label><select id="cmQuestionAnswer"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>
+                <div class="full"><label>Explanation / Solution</label><textarea id="cmQuestionExplanation"></textarea></div>
+                <div class="full"><button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save Question</button> <button class="btn btn-outline" type="button" onclick="resetQuestionForm()">Clear</button></div>
+              </div>
+            </form><hr style="margin:18px 0;border:0;border-top:1px solid var(--border);"><div id="cmQuestionList" class="content-list"></div>
+          </div>
+          <div id="cmTestsPane" style="display:none;">
+            <form onsubmit="saveContentTest(event)"><input type="hidden" id="cmTestId">
+              <div class="content-form-grid">
+                <div><label>Test Name *</label><input id="cmTestTitle" required placeholder="SSC CGL Maths Mock Test 01"></div>
+                <div><label>Course *</label><select id="cmTestCourse" required></select></div>
+                <div><label>Subject</label><input id="cmTestSubject" placeholder="Mathematics"></div>
+                <div><label>Duration (minutes)</label><input id="cmTestDuration" type="number" min="1" value="30"></div>
+                <div><label>Marks for Correct</label><input id="cmTestCorrectMarks" type="number" step="0.25" value="2"></div>
+                <div><label>Negative Marks</label><input id="cmTestNegativeMarks" type="number" step="0.25" value="0.5"></div>
+                <div class="full"><label>Description</label><textarea id="cmTestDescription"></textarea></div>
+                <div class="full"><strong>Select Questions from Question Bank</strong><div id="cmTestQuestionPicker" class="question-builder"></div></div>
+                <div class="check-row"><input type="checkbox" id="cmTestPublished" checked> <label for="cmTestPublished">Published to students</label></div>
+                <div class="full"><button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save Mock Test</button> <button class="btn btn-outline" type="button" onclick="resetTestForm()">Clear</button></div>
+              </div>
+            </form><hr style="margin:18px 0;border:0;border-top:1px solid var(--border);"><div id="cmTestList" class="content-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-admin-content-affairs" class="view-panel">
+        <div class="card">
+          <div class="content-status" id="contentAdminStatusAffairs"><strong>Daily Current Affairs:</strong> Add one question/item at a time with date, category, answer and explanation.</div>
+          <div class="content-manager-toolbar"><button class="btn btn-primary" onclick="connectDirectorGoogle()"><i class="fab fa-google"></i> Connect Director Google</button><button class="btn btn-outline" onclick="loadContentManagerData()"><i class="fas fa-sync"></i> Refresh</button></div>
+          <h3 style="color:var(--primary);"><i class="fas fa-newspaper"></i> Daily Current Affairs Manager</h3>
+          <form onsubmit="saveCurrentAffair(event)"><input type="hidden" id="cmAffairId">
+            <div class="content-form-grid">
+              <div><label>Date *</label><input id="cmAffairDate" type="date" required></div>
+              <div><label>Category</label><select id="cmAffairCategory"><option>National</option><option>International</option><option>Economy & Banking</option><option>Government Schemes</option><option>Appointments</option><option>Awards</option><option>Science & Technology</option><option>Defence</option><option>Sports</option><option>Important Days</option><option>Books & Authors</option><option>Static GK</option><option>Other</option></select></div>
+              <div class="full"><label>Question / Current Affair *</label><textarea id="cmAffairQuestion" required></textarea></div>
+              <div class="full"><label>Answer *</label><textarea id="cmAffairAnswer" required></textarea></div>
+              <div class="full"><label>Explanation</label><textarea id="cmAffairExplanation"></textarea></div>
+              <div class="full"><label>Source URL (optional)</label><input id="cmAffairSource" placeholder="https://..."></div>
+              <div class="check-row"><input type="checkbox" id="cmAffairPublished" checked> <label for="cmAffairPublished">Published to students</label></div>
+              <div class="full"><button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Save Current Affair</button> <button class="btn btn-outline" type="button" onclick="resetAffairForm()">Clear</button></div>
+            </div>
+          </form><hr style="margin:18px 0;border:0;border-top:1px solid var(--border);"><div id="cmAffairList" class="content-list"></div>
+        </div>
+      </div>
+
+      <!-- PHASE 1: STUDENT STUDY LIBRARY -->
+      <div id="view-study-library" class="view-panel">
+        <div class="card"><h2 style="color:var(--primary);"><i class="fas fa-book-reader"></i> Study Library</h2><p style="color:var(--text-muted);font-size:.84rem;">Published classes, study materials, mock tests and daily current affairs managed by Bharti Classes.</p></div>
+        <div class="card"><h3 style="color:var(--primary);">Recorded Classes</h3><div id="studentVideoLibrary" class="student-content-grid"><p style="color:var(--text-muted);">Loading...</p></div></div>
+        <div class="card"><h3 style="color:var(--primary);">PDF / Study Material</h3><div id="studentMaterialLibrary" class="student-content-grid"><p style="color:var(--text-muted);">Loading...</p></div></div>
+        <div class="card"><h3 style="color:var(--primary);">Mock Tests</h3><div id="studentTestLibrary" class="student-content-grid"><p style="color:var(--text-muted);">Loading...</p></div></div>
+        <div class="card"><h3 style="color:var(--primary);">Daily Current Affairs</h3><div id="studentAffairLibrary" class="content-list"><p style="color:var(--text-muted);">Loading...</p></div></div>
+      </div>
+
+  <div class="modal-backdrop" id="dynamicTestModal"><div class="modal-box" style="width:min(900px,96vw);max-height:92vh;overflow:auto;"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;"><h3 id="dynamicTestTitle" style="color:var(--primary);">Mock Test</h3><button class="btn btn-outline" onclick="document.getElementById('dynamicTestModal').style.display='none'">Close</button></div><div id="dynamicTestContainer" style="margin-top:14px;"></div><button class="btn btn-primary btn-block" onclick="submitDynamicFirestoreTest()">Submit Test</button><div id="dynamicTestResult" style="display:none;"></div></div></div>
+
   <!-- ADMIN PASSCODE VERIFICATION MODAL -->
   <div class="modal-backdrop" id="adminAuthModal">
     <div class="modal-box" style="width: 420px; text-align: center;">
@@ -1799,31 +1958,16 @@
       if (currentUserRole === 'admin') {
         container.innerHTML = `
           <li class="menu-header">Director Management</li>
-          <li>
-            <a class="nav-item active" onclick="switchView('admin-overview', this)">
-              <i class="fas fa-chart-line"></i> <span>Dashboard & Analytics</span>
-            </a>
-          </li>
-          <li>
-            <a class="nav-item" onclick="switchView('admin-students', this)">
-              <i class="fas fa-user-graduate"></i> <span>Student Directory</span>
-            </a>
-          </li>
-          <li>
-            <a class="nav-item" onclick="switchView('admin-orders', this)">
-              <i class="fas fa-receipt"></i> <span>Admissions & Fee Logs</span>
-            </a>
-          </li>
-          <li>
-            <a class="nav-item" onclick="switchView('admin-courses', this)">
-              <i class="fas fa-tags"></i> <span>Course & Fee Manager</span>
-            </a>
-          </li>
-          <li>
-            <a class="nav-item" onclick="switchView('admin-doubts', this)">
-              <i class="fas fa-headset"></i> <span>Doubt Resolution Desk</span>
-            </a>
-          </li>
+          <li><a class="nav-item active" onclick="switchView('admin-overview', this)"><i class="fas fa-chart-line"></i> <span>Dashboard & Analytics</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-students', this)"><i class="fas fa-user-graduate"></i> <span>Student Directory</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-orders', this)"><i class="fas fa-receipt"></i> <span>Admissions & Fee Logs</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-courses', this)"><i class="fas fa-tags"></i> <span>Course & Fee Manager</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-content-courses', this)"><i class="fas fa-book-open"></i> <span>Course Content Manager</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-content-videos', this)"><i class="fas fa-video"></i> <span>Video / Class Manager</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-content-materials', this)"><i class="fas fa-file-pdf"></i> <span>PDF / Study Material</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-content-tests', this)"><i class="fas fa-clipboard-question"></i> <span>Mock Tests & Question Bank</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-content-affairs', this)"><i class="fas fa-newspaper"></i> <span>Daily Current Affairs</span></a></li>
+          <li><a class="nav-item" onclick="switchView('admin-doubts', this)"><i class="fas fa-headset"></i> <span>Doubt Resolution Desk</span></a></li>
 
           <li class="menu-header">Academic Controls</li>
           <li>
@@ -1863,6 +2007,11 @@
           <li>
             <a class="nav-item" onclick="switchView('practice', this)">
               <i class="fas fa-dumbbell"></i> <span id="navPractice">Practice Drills (Sets)</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" onclick="switchView('study-library', this)">
+              <i class="fas fa-book-reader"></i> <span>Study Library</span>
             </a>
           </li>
 
@@ -3486,13 +3635,21 @@
         'admin-students': 'Student Directory & Access Grants',
         'admin-orders': 'Admissions & Payment Logs (365 Days)',
         'admin-courses': 'Course & Pricing Management',
-        'admin-doubts': 'Student Doubt Resolution Desk'
+        'admin-doubts': 'Student Doubt Resolution Desk',
+        'admin-content-courses': 'Course Content Manager',
+        'admin-content-videos': 'Recorded Video / Class Manager',
+        'admin-content-materials': 'PDF / Study Material Manager',
+        'admin-content-tests': 'Mock Tests & Question Bank',
+        'admin-content-affairs': 'Daily Current Affairs Manager',
+        'study-library': 'Student Study Library'
       };
       document.getElementById('pageHeadingTitle').textContent = titles[viewKey] || 'Bharti Classes';
 
       if (viewKey === 'planner') loadDayTasks();
       if (viewKey === 'courses') selectCourseBox(activeCourseCategory);
       if (viewKey.startsWith('admin-')) refreshAdminTables();
+      if (viewKey.startsWith('admin-content-')) loadContentManagerData();
+      if (viewKey === 'study-library') loadStudentStudyLibrary();
       if (window.innerWidth <= 860) document.getElementById('appSidebar').classList.remove('open');
     }
 
@@ -3603,9 +3760,121 @@
       });
     }
 
+
+
+    // ================================================================
+    // PHASE 1 CONTENT MANAGEMENT - FIRESTORE
+    // ================================================================
+    const DIRECTOR_GOOGLE_EMAIL = 'vishwabhartisp@gmail.com';
+    let phase1Courses = [], phase1Videos = [], phase1Materials = [], phase1Questions = [], phase1Tests = [], phase1Affairs = [];
+
+    function contentCollectionsReady() { return !!firebaseDb; }
+    function directorFirebaseUser() {
+      const u = (window.firebase && firebase.auth) ? firebase.auth().currentUser : null;
+      return u && (u.email || '').toLowerCase() === DIRECTOR_GOOGLE_EMAIL.toLowerCase() ? u : null;
+    }
+    function setContentStatus(message, ok=false) {
+      document.querySelectorAll('[id^="contentAdminStatus"]').forEach(el => { el.className = 'content-status ' + (ok ? 'ok' : ''); el.innerHTML = message; });
+    }
+    async function connectDirectorGoogle() {
+      if (!window.firebase || !firebase.auth) return alert('Firebase Authentication is not available.');
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      try {
+        const result = await firebase.auth().signInWithPopup(provider);
+        const email = (result.user.email || '').toLowerCase();
+        if (email !== DIRECTOR_GOOGLE_EMAIL.toLowerCase()) {
+          await firebase.auth().signOut();
+          return alert('This Google account is not authorized as the Director account for content management.');
+        }
+        setContentStatus('<strong>Director verified.</strong> You can now create and edit Phase 1 content.', true);
+        await loadContentManagerData();
+      } catch (e) {
+        if (e && e.code === 'auth/popup-closed-by-user') return;
+        alert('Director Google verification failed: ' + (e.message || 'Please try again.'));
+      }
+    }
+    function requireDirector() {
+      if (!directorFirebaseUser()) {
+        setContentStatus('<strong>Action blocked:</strong> Click <b>Connect Director Google</b> first and sign in with the authorized Director Google account.');
+        alert('Please connect the Director Google account before saving or deleting content.');
+        return false;
+      }
+      return true;
+    }
+    function escContent(v) {
+      return String(v == null ? '' : v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    }
+    function normalizeYouTubeUrl(url) { return String(url || '').trim(); }
+    function contentDate(v) { return v && typeof v.toDate === 'function' ? v.toDate().toLocaleString() : (v || ''); }
+
+    async function loadContentManagerData() {
+      if (!contentCollectionsReady()) return;
+      try {
+        const [c,v,m,q,t,a] = await Promise.all([
+          firebaseDb.collection('contentCourses').get(), firebaseDb.collection('contentVideos').get(), firebaseDb.collection('contentMaterials').get(),
+          firebaseDb.collection('contentQuestions').get(), firebaseDb.collection('contentTests').get(), firebaseDb.collection('currentAffairs').get()
+        ]);
+        phase1Courses = c.docs.map(d => ({id:d.id,...d.data()}));
+        phase1Videos = v.docs.map(d => ({id:d.id,...d.data()}));
+        phase1Materials = m.docs.map(d => ({id:d.id,...d.data()}));
+        phase1Questions = q.docs.map(d => ({id:d.id,...d.data()}));
+        phase1Tests = t.docs.map(d => ({id:d.id,...d.data()}));
+        phase1Affairs = a.docs.map(d => ({id:d.id,...d.data()}));
+        renderContentManager();
+        populateContentCourseSelects();
+        renderQuestionPicker();
+        if (document.getElementById('view-study-library')?.classList.contains('active')) renderStudentLibraryFromLoadedData();
+      } catch (e) {
+        console.error('Phase 1 content load failed', e);
+        setContentStatus('<strong>Content load error:</strong> ' + escContent(e.message || 'Permission denied.'));
+      }
+    }
+    function renderContentManager() {
+      const c=document.getElementById('cmCourseList'); if(c) c.innerHTML=phase1Courses.length?phase1Courses.sort((a,b)=>(a.title||'').localeCompare(b.title||'')).map(x=>`<div class="content-list-item"><strong>${escContent(x.title)}</strong><div class="meta">${escContent(x.category||'')} · ${escContent(x.code||'')} · ₹${Number(x.price||0).toLocaleString()} · ${x.active?'Active':'Hidden'}</div><div>${escContent(x.subtitle||'')}</div><div class="content-actions"><button class="btn btn-outline" onclick="editContentCourse('${x.id}')">Edit</button><button class="btn btn-outline" onclick="deleteContentDoc('contentCourses','${x.id}','course')">Delete</button></div></div>`).join(''):'<p style="color:var(--text-muted);">No content courses created yet.</p>';
+      const v=document.getElementById('cmVideoList'); if(v) v.innerHTML=phase1Videos.length?phase1Videos.map(x=>`<div class="content-list-item"><strong>${escContent(x.lectureNo?('Lecture '+x.lectureNo+' – '):'')}${escContent(x.title)}</strong><div class="meta">${escContent(x.courseTitle||'')} · ${escContent(x.subject||'')} · ${x.published?'Published':'Draft'}</div><div class="content-actions"><button class="btn btn-outline" onclick="editContentVideo('${x.id}')">Edit</button><button class="btn btn-outline" onclick="deleteContentDoc('contentVideos','${x.id}','video')">Delete</button></div></div>`).join(''):'<p style="color:var(--text-muted);">No recorded classes added yet.</p>';
+      const m=document.getElementById('cmMaterialList'); if(m) m.innerHTML=phase1Materials.length?phase1Materials.map(x=>`<div class="content-list-item"><strong>${escContent(x.title)}</strong><div class="meta">${escContent(x.courseTitle||'')} · ${escContent(x.subject||'')} · ${x.published?'Published':'Draft'}</div><div class="content-actions"><button class="btn btn-outline" onclick="editContentMaterial('${x.id}')">Edit</button><button class="btn btn-outline" onclick="deleteContentDoc('contentMaterials','${x.id}','material')">Delete</button></div></div>`).join(''):'<p style="color:var(--text-muted);">No study materials added yet.</p>';
+      const q=document.getElementById('cmQuestionList'); if(q) q.innerHTML=phase1Questions.length?phase1Questions.map((x,i)=>`<div class="content-list-item"><strong>Q${i+1}. ${escContent(x.question)}</strong><div class="meta">${escContent(x.topic||'')} · ${escContent(x.difficulty||'Moderate')} · Correct: ${['A','B','C','D'][Number(x.answer)||0]}</div><div class="content-actions"><button class="btn btn-outline" onclick="editQuestionBankItem('${x.id}')">Edit</button><button class="btn btn-outline" onclick="deleteContentDoc('contentQuestions','${x.id}','question')">Delete</button></div></div>`).join(''):'<p style="color:var(--text-muted);">No questions in the Question Bank yet.</p>';
+      const t=document.getElementById('cmTestList'); if(t) t.innerHTML=phase1Tests.length?phase1Tests.map(x=>`<div class="content-list-item"><strong>${escContent(x.title)}</strong><div class="meta">${escContent(x.courseTitle||'')} · ${escContent(x.subject||'')} · ${x.questions?.length||0} questions · ${x.duration||30} min · ${x.published?'Published':'Draft'}</div><div class="content-actions"><button class="btn btn-outline" onclick="editContentTest('${x.id}')">Edit</button><button class="btn btn-outline" onclick="deleteContentDoc('contentTests','${x.id}','test')">Delete</button></div></div>`).join(''):'<p style="color:var(--text-muted);">No mock tests created yet.</p>';
+      const a=document.getElementById('cmAffairList'); if(a) a.innerHTML=phase1Affairs.length?phase1Affairs.sort((x,y)=>String(y.date||'').localeCompare(String(x.date||''))).map(x=>`<div class="content-list-item"><strong>${escContent(x.date)} · ${escContent(x.category||'')}</strong><div style="margin-top:6px;font-weight:700;">${escContent(x.question)}</div><div class="meta">${x.published?'Published':'Draft'} · Answer: ${escContent(x.answer)}</div><div class="content-actions"><button class="btn btn-outline" onclick="editCurrentAffair('${x.id}')">Edit</button><button class="btn btn-outline" onclick="deleteContentDoc('currentAffairs','${x.id}','current affair')">Delete</button></div></div>`).join(''):'<p style="color:var(--text-muted);">No current affairs entries yet.</p>';
+    }
+    function populateContentCourseSelects(){
+      ['cmVideoCourse','cmMaterialCourse','cmTestCourse'].forEach(id=>{const el=document.getElementById(id); if(!el)return; const old=el.value; el.innerHTML='<option value="">Select course</option>'+phase1Courses.map(c=>`<option value="${escContent(c.id)}">${escContent(c.title)}</option>`).join(''); if(old)el.value=old;});
+    }
+    function courseTitleById(id){const c=phase1Courses.find(x=>x.id===id);return c?c.title:'';}
+    async function saveContentCourse(e){e.preventDefault();if(!requireDirector())return;const id=document.getElementById('cmCourseId').value;const data={title:document.getElementById('cmCourseTitle').value.trim(),code:document.getElementById('cmCourseCode').value.trim(),category:document.getElementById('cmCourseCategory').value.trim(),durationDays:Number(document.getElementById('cmCourseDuration').value||365),price:Number(document.getElementById('cmCoursePrice').value||0),active:document.getElementById('cmCourseActive').checked,subtitle:document.getElementById('cmCourseSubtitle').value.trim(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()};try{const ref=id?firebaseDb.collection('contentCourses').doc(id):firebaseDb.collection('contentCourses').doc();if(!id)data.createdAt=firebase.firestore.FieldValue.serverTimestamp();await ref.set(data,{merge:true});resetCourseForm();await loadContentManagerData();alert('Course saved successfully.');}catch(err){alert('Could not save course: '+err.message);}}
+    async function saveContentVideo(e){e.preventDefault();if(!requireDirector())return;const id=document.getElementById('cmVideoId').value, courseId=document.getElementById('cmVideoCourse').value;const data={courseId,courseTitle:courseTitleById(courseId),subject:document.getElementById('cmVideoSubject').value.trim(),lectureNo:document.getElementById('cmVideoLectureNo').value.trim(),title:document.getElementById('cmVideoTitle').value.trim(),youtubeUrl:normalizeYouTubeUrl(document.getElementById('cmVideoUrl').value),description:document.getElementById('cmVideoDescription').value.trim(),published:document.getElementById('cmVideoPublished').checked,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};try{const ref=id?firebaseDb.collection('contentVideos').doc(id):firebaseDb.collection('contentVideos').doc();if(!id)data.createdAt=firebase.firestore.FieldValue.serverTimestamp();await ref.set(data,{merge:true});resetVideoForm();await loadContentManagerData();alert('Recorded class saved successfully.');}catch(err){alert('Could not save video: '+err.message);}}
+    async function saveContentMaterial(e){e.preventDefault();if(!requireDirector())return;const id=document.getElementById('cmMaterialId').value,courseId=document.getElementById('cmMaterialCourse').value;const data={courseId,courseTitle:courseTitleById(courseId),subject:document.getElementById('cmMaterialSubject').value.trim(),title:document.getElementById('cmMaterialTitle').value.trim(),pdfUrl:document.getElementById('cmMaterialUrl').value.trim(),description:document.getElementById('cmMaterialDescription').value.trim(),published:document.getElementById('cmMaterialPublished').checked,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};try{const ref=id?firebaseDb.collection('contentMaterials').doc(id):firebaseDb.collection('contentMaterials').doc();if(!id)data.createdAt=firebase.firestore.FieldValue.serverTimestamp();await ref.set(data,{merge:true});resetMaterialForm();await loadContentManagerData();alert('Study material saved successfully.');}catch(err){alert('Could not save material: '+err.message);}}
+    async function saveQuestionBankItem(e){e.preventDefault();if(!requireDirector())return;const id=document.getElementById('cmQuestionId').value;const data={topic:document.getElementById('cmQuestionTopic').value.trim(),difficulty:document.getElementById('cmQuestionDifficulty').value,question:document.getElementById('cmQuestionText').value.trim(),options:[document.getElementById('cmQuestionA').value.trim(),document.getElementById('cmQuestionB').value.trim(),document.getElementById('cmQuestionC').value.trim(),document.getElementById('cmQuestionD').value.trim()],answer:Number(document.getElementById('cmQuestionAnswer').value),explanation:document.getElementById('cmQuestionExplanation').value.trim(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()};try{const ref=id?firebaseDb.collection('contentQuestions').doc(id):firebaseDb.collection('contentQuestions').doc();if(!id)data.createdAt=firebase.firestore.FieldValue.serverTimestamp();await ref.set(data,{merge:true});resetQuestionForm();await loadContentManagerData();alert('Question saved to Question Bank.');}catch(err){alert('Could not save question: '+err.message);}}
+    async function saveContentTest(e){e.preventDefault();if(!requireDirector())return;const id=document.getElementById('cmTestId').value,courseId=document.getElementById('cmTestCourse').value;const selected=Array.from(document.querySelectorAll('#cmTestQuestionPicker input[type=checkbox]:checked')).map(x=>phase1Questions.find(q=>q.id===x.value)).filter(Boolean);if(!selected.length)return alert('Please select at least one Question Bank question.');const data={title:document.getElementById('cmTestTitle').value.trim(),courseId,courseTitle:courseTitleById(courseId),subject:document.getElementById('cmTestSubject').value.trim(),duration:Number(document.getElementById('cmTestDuration').value||30),correctMarks:Number(document.getElementById('cmTestCorrectMarks').value||2),negativeMarks:Number(document.getElementById('cmTestNegativeMarks').value||0.5),description:document.getElementById('cmTestDescription').value.trim(),questions:selected.map(q=>({question:q.question,options:q.options,answer:q.answer,explanation:q.explanation,topic:q.topic,difficulty:q.difficulty})),published:document.getElementById('cmTestPublished').checked,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};try{const ref=id?firebaseDb.collection('contentTests').doc(id):firebaseDb.collection('contentTests').doc();if(!id)data.createdAt=firebase.firestore.FieldValue.serverTimestamp();await ref.set(data,{merge:true});resetTestForm();await loadContentManagerData();alert('Mock test saved successfully.');}catch(err){alert('Could not save test: '+err.message);}}
+    async function saveCurrentAffair(e){e.preventDefault();if(!requireDirector())return;const id=document.getElementById('cmAffairId').value;const data={date:document.getElementById('cmAffairDate').value,category:document.getElementById('cmAffairCategory').value,question:document.getElementById('cmAffairQuestion').value.trim(),answer:document.getElementById('cmAffairAnswer').value.trim(),explanation:document.getElementById('cmAffairExplanation').value.trim(),sourceUrl:document.getElementById('cmAffairSource').value.trim(),published:document.getElementById('cmAffairPublished').checked,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};try{const ref=id?firebaseDb.collection('currentAffairs').doc(id):firebaseDb.collection('currentAffairs').doc();if(!id)data.createdAt=firebase.firestore.FieldValue.serverTimestamp();await ref.set(data,{merge:true});resetAffairForm();await loadContentManagerData();alert('Current affair saved successfully.');}catch(err){alert('Could not save current affair: '+err.message);}}
+    async function deleteContentDoc(collection,id,label){if(!requireDirector()||!confirm('Delete this '+label+' permanently?'))return;try{await firebaseDb.collection(collection).doc(id).delete();await loadContentManagerData();alert(label+' deleted.');}catch(e){alert('Delete failed: '+e.message);}}
+    function resetCourseForm(){['cmCourseId','cmCourseTitle','cmCourseCode','cmCourseCategory','cmCourseSubtitle'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('cmCourseDuration').value=365;document.getElementById('cmCoursePrice').value=0;document.getElementById('cmCourseActive').checked=true;}
+    function editContentCourse(id){const x=phase1Courses.find(a=>a.id===id);if(!x)return;document.getElementById('cmCourseId').value=id;document.getElementById('cmCourseTitle').value=x.title||'';document.getElementById('cmCourseCode').value=x.code||'';document.getElementById('cmCourseCategory').value=x.category||'';document.getElementById('cmCourseDuration').value=x.durationDays||365;document.getElementById('cmCoursePrice').value=x.price||0;document.getElementById('cmCourseActive').checked=x.active!==false;document.getElementById('cmCourseSubtitle').value=x.subtitle||'';window.scrollTo(0,0);}
+    function resetVideoForm(){['cmVideoId','cmVideoSubject','cmVideoLectureNo','cmVideoTitle','cmVideoUrl','cmVideoDescription'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('cmVideoPublished').checked=true;}
+    function editContentVideo(id){const x=phase1Videos.find(a=>a.id===id);if(!x)return;document.getElementById('cmVideoId').value=id;document.getElementById('cmVideoCourse').value=x.courseId||'';document.getElementById('cmVideoSubject').value=x.subject||'';document.getElementById('cmVideoLectureNo').value=x.lectureNo||'';document.getElementById('cmVideoTitle').value=x.title||'';document.getElementById('cmVideoUrl').value=x.youtubeUrl||'';document.getElementById('cmVideoDescription').value=x.description||'';document.getElementById('cmVideoPublished').checked=x.published!==false;window.scrollTo(0,0);}
+    function resetMaterialForm(){['cmMaterialId','cmMaterialSubject','cmMaterialTitle','cmMaterialUrl','cmMaterialDescription'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('cmMaterialPublished').checked=true;}
+    function editContentMaterial(id){const x=phase1Materials.find(a=>a.id===id);if(!x)return;document.getElementById('cmMaterialId').value=id;document.getElementById('cmMaterialCourse').value=x.courseId||'';document.getElementById('cmMaterialSubject').value=x.subject||'';document.getElementById('cmMaterialTitle').value=x.title||'';document.getElementById('cmMaterialUrl').value=x.pdfUrl||'';document.getElementById('cmMaterialDescription').value=x.description||'';document.getElementById('cmMaterialPublished').checked=x.published!==false;window.scrollTo(0,0);}
+    function resetQuestionForm(){['cmQuestionId','cmQuestionTopic','cmQuestionText','cmQuestionA','cmQuestionB','cmQuestionC','cmQuestionD','cmQuestionExplanation'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('cmQuestionDifficulty').value='Moderate';document.getElementById('cmQuestionAnswer').value='0';}
+    function editQuestionBankItem(id){const x=phase1Questions.find(a=>a.id===id);if(!x)return;document.getElementById('cmQuestionId').value=id;document.getElementById('cmQuestionTopic').value=x.topic||'';document.getElementById('cmQuestionDifficulty').value=x.difficulty||'Moderate';document.getElementById('cmQuestionText').value=x.question||'';['A','B','C','D'].forEach((l,i)=>document.getElementById('cmQuestion'+l).value=(x.options||[])[i]||'');document.getElementById('cmQuestionAnswer').value=Number(x.answer)||0;document.getElementById('cmQuestionExplanation').value=x.explanation||'';window.scrollTo(0,0);}
+    function showTestManagerTab(tab){document.getElementById('cmQuestionBankPane').style.display=tab==='questionbank'?'block':'none';document.getElementById('cmTestsPane').style.display=tab==='tests'?'block':'none';document.getElementById('cmTabQuestionBank').classList.toggle('active',tab==='questionbank');document.getElementById('cmTabTests').classList.toggle('active',tab==='tests');if(tab==='tests')renderQuestionPicker();}
+    function renderQuestionPicker(){const el=document.getElementById('cmTestQuestionPicker');if(!el)return;el.innerHTML=phase1Questions.length?phase1Questions.map((q,i)=>`<label class="question-row check-row"><input type="checkbox" value="${q.id}"> <span><strong>Q${i+1}.</strong> ${escContent(q.question)} <small style="color:var(--text-muted);">(${escContent(q.topic||'')})</small></span></label>`).join(''):'<p style="color:var(--text-muted);">Add questions in Question Bank first.</p>';}
+    function resetTestForm(){['cmTestId','cmTestTitle','cmTestSubject','cmTestDescription'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('cmTestDuration').value=30;document.getElementById('cmTestCorrectMarks').value=2;document.getElementById('cmTestNegativeMarks').value=.5;document.getElementById('cmTestPublished').checked=true;document.querySelectorAll('#cmTestQuestionPicker input[type=checkbox]').forEach(x=>x.checked=false);}
+    function editContentTest(id){const x=phase1Tests.find(a=>a.id===id);if(!x)return;showTestManagerTab('tests');document.getElementById('cmTestId').value=id;document.getElementById('cmTestTitle').value=x.title||'';document.getElementById('cmTestCourse').value=x.courseId||'';document.getElementById('cmTestSubject').value=x.subject||'';document.getElementById('cmTestDuration').value=x.duration||30;document.getElementById('cmTestCorrectMarks').value=x.correctMarks??2;document.getElementById('cmTestNegativeMarks').value=x.negativeMarks??.5;document.getElementById('cmTestDescription').value=x.description||'';document.getElementById('cmTestPublished').checked=x.published!==false;const qs=x.questions||[];document.querySelectorAll('#cmTestQuestionPicker input[type=checkbox]').forEach(cb=>{const bank=phase1Questions.find(q=>q.id===cb.value);cb.checked=!!(bank&&qs.some(q=>q.question===bank.question));});window.scrollTo(0,0);}
+    function resetAffairForm(){['cmAffairId','cmAffairQuestion','cmAffairAnswer','cmAffairExplanation','cmAffairSource'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('cmAffairDate').value=new Date().toISOString().slice(0,10);document.getElementById('cmAffairCategory').value='National';document.getElementById('cmAffairPublished').checked=true;}
+    function editCurrentAffair(id){const x=phase1Affairs.find(a=>a.id===id);if(!x)return;document.getElementById('cmAffairId').value=id;document.getElementById('cmAffairDate').value=x.date||'';document.getElementById('cmAffairCategory').value=x.category||'Other';document.getElementById('cmAffairQuestion').value=x.question||'';document.getElementById('cmAffairAnswer').value=x.answer||'';document.getElementById('cmAffairExplanation').value=x.explanation||'';document.getElementById('cmAffairSource').value=x.sourceUrl||'';document.getElementById('cmAffairPublished').checked=x.published!==false;window.scrollTo(0,0);}
+
+    function youtubeEmbedUrl(url){try{const u=new URL(url);let id='';if(u.hostname.includes('youtu.be'))id=u.pathname.slice(1);else if(u.searchParams.get('v'))id=u.searchParams.get('v');else if(u.pathname.includes('/embed/'))id=u.pathname.split('/embed/')[1];return id?'https://www.youtube.com/embed/'+id:'';}catch(e){return '';}}
+    async function loadStudentStudyLibrary(){if(!contentCollectionsReady())return;try{const [v,m,t,a]=await Promise.all([firebaseDb.collection('contentVideos').where('published','==',true).get(),firebaseDb.collection('contentMaterials').where('published','==',true).get(),firebaseDb.collection('contentTests').where('published','==',true).get(),firebaseDb.collection('currentAffairs').where('published','==',true).get()]);phase1Videos=v.docs.map(d=>({id:d.id,...d.data()}));phase1Materials=m.docs.map(d=>({id:d.id,...d.data()}));phase1Tests=t.docs.map(d=>({id:d.id,...d.data()}));phase1Affairs=a.docs.map(d=>({id:d.id,...d.data()}));renderStudentLibraryFromLoadedData();}catch(e){console.error(e);['studentVideoLibrary','studentMaterialLibrary','studentTestLibrary','studentAffairLibrary'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<p style="color:#b91c1c;">Content could not be loaded.</p>';});}}
+    function renderStudentLibraryFromLoadedData(){const v=document.getElementById('studentVideoLibrary');if(v)v.innerHTML=phase1Videos.length?phase1Videos.map(x=>{const emb=youtubeEmbedUrl(x.youtubeUrl);return `<div class="material-card"><strong>${escContent(x.title)}</strong><div class="meta">${escContent(x.courseTitle||'')} · ${escContent(x.subject||'')}</div>${emb?`<div class="video-wrap"><iframe src="${emb}" title="${escContent(x.title)}" allowfullscreen></iframe></div>`:''}</div>`}).join(''):'<p style="color:var(--text-muted);">No recorded classes published yet.</p>';const m=document.getElementById('studentMaterialLibrary');if(m)m.innerHTML=phase1Materials.length?phase1Materials.map(x=>`<div class="material-card"><strong>${escContent(x.title)}</strong><div class="meta">${escContent(x.courseTitle||'')} · ${escContent(x.subject||'')}</div><p style="font-size:.82rem;">${escContent(x.description||'')}</p><a class="btn btn-outline" href="${escContent(x.pdfUrl)}" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Open PDF</a></div>`).join(''):'<p style="color:var(--text-muted);">No study materials published yet.</p>';const t=document.getElementById('studentTestLibrary');if(t)t.innerHTML=phase1Tests.length?phase1Tests.map(x=>`<div class="material-card"><strong>${escContent(x.title)}</strong><div class="meta">${escContent(x.courseTitle||'')} · ${x.questions?.length||0} questions · ${x.duration||30} minutes</div><p style="font-size:.82rem;">${escContent(x.description||'')}</p><button class="btn btn-primary" onclick="startDynamicFirestoreTest('${x.id}')"><i class="fas fa-play"></i> Start Test</button></div>`).join(''):'<p style="color:var(--text-muted);">No mock tests published yet.</p>';const a=document.getElementById('studentAffairLibrary');if(a)a.innerHTML=phase1Affairs.length?phase1Affairs.slice().sort((x,y)=>String(y.date||'').localeCompare(String(x.date||''))).map(x=>`<div class="content-list-item"><strong>${escContent(x.date)} · ${escContent(x.category||'')}</strong><div style="margin-top:6px;font-weight:700;">${escContent(x.question)}</div><div style="margin-top:5px;"><strong>Answer:</strong> ${escContent(x.answer)}</div><div class="meta">${escContent(x.explanation||'')}</div>${x.sourceUrl?`<a href="${escContent(x.sourceUrl)}" target="_blank" rel="noopener" style="font-size:.78rem;">Source</a>`:''}</div>`).join(''):'<p style="color:var(--text-muted);">No current affairs published yet.</p>';}
+    function startDynamicFirestoreTest(id){const test=phase1Tests.find(x=>x.id===id);if(!test)return;window.activeDynamicTest=test;const modal=document.getElementById('dynamicTestModal');if(!modal)return;document.getElementById('dynamicTestTitle').textContent=test.title;document.getElementById('dynamicTestContainer').innerHTML=(test.questions||[]).map((q,i)=>`<div class="quiz-question"><div style="font-weight:700;line-height:1.5;">${i+1}. ${escContent(q.question)}</div>${(q.options||[]).map((op,j)=>`<label class="quiz-option"><input type="radio" name="dynQ${i}" value="${j}"> <strong>${String.fromCharCode(65+j)}.</strong> ${escContent(op)}</label>`).join('')}</div>`).join('');document.getElementById('dynamicTestResult').style.display='none';document.getElementById('dynamicTestModal').style.display='flex';}
+    function submitDynamicFirestoreTest(){const test=window.activeDynamicTest;if(!test)return;let correct=0,wrong=0,unanswered=0;const review=[];(test.questions||[]).forEach((q,i)=>{const el=document.querySelector(`input[name="dynQ${i}"]:checked`);const ans=el?Number(el.value):null;if(ans===null)unanswered++;else if(ans===Number(q.answer))correct++;else wrong++;review.push({q,ans});});const score=correct*Number(test.correctMarks??2)-wrong*Number(test.negativeMarks??.5);const result=document.getElementById('dynamicTestResult');result.style.display='block';result.innerHTML=`<div class="quiz-result"><strong>Test Submitted</strong><br>Correct: ${correct} | Wrong: ${wrong} | Unanswered: ${unanswered}<br><strong>Score: ${score}</strong></div><div class="quiz-review">${review.map((r,i)=>`<div class="quiz-review-item ${r.ans===null?'unanswered':(r.ans===Number(r.q.answer)?'correct':'incorrect')}"><strong>Q${i+1}. ${escContent(r.q.question)}</strong><div style="margin-top:6px;font-size:.84rem;">Correct answer: <strong>${String.fromCharCode(65+Number(r.q.answer))}. ${escContent(r.q.options[Number(r.q.answer)])}</strong></div><div style="margin-top:6px;font-size:.82rem;">${escContent(r.q.explanation||'No explanation provided.')}</div></div>`).join('')}</div>`;}
+
     window.addEventListener('DOMContentLoaded', () => {
       updateDailyQuote();
       document.getElementById('plannerDateInput').value = getTodayDateString();
+      const affairDate = document.getElementById('cmAffairDate');
+      if (affairDate) affairDate.value = new Date().toISOString().slice(0,10);
 
       const adminSession = sessionStorage.getItem('bharti_admin_logged_in');
       if (adminSession === 'true') {
