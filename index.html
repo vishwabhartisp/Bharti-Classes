@@ -1176,12 +1176,12 @@
       <div id="registerViewContainer" style="display: none;">
         <h3 style="margin-bottom: 4px; text-align: center;" id="txtRegTitle">Student Registration</h3>
         <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
-          Create your profile to get your permanent official registration number
+          Create your complete profile to get your official registration number
         </p>
 
         <div class="auth-nav-tabs">
           <button class="auth-tab-btn active" id="tabBtnMobile" onclick="switchAuthTab('mobile')"><i class="fas fa-mobile-alt"></i> Mobile Profile</button>
-          <button class="auth-tab-btn" id="tabBtnEmail" onclick="switchAuthTab('email')"><i class="fas fa-envelope"></i> Any Email</button>
+          <button class="auth-tab-btn" id="tabBtnEmail" onclick="switchAuthTab('email')"><i class="fas fa-envelope"></i> Any Email Profile</button>
           <button class="auth-tab-btn" id="tabBtnGoogle" onclick="switchAuthTab('google')"><i class="fab fa-google"></i> Google</button>
         </div>
 
@@ -1214,7 +1214,6 @@
               </div>
             </div>
 
-            <!-- Password for future logins -->
             <div class="form-group">
               <label>Set Login Password *</label>
               <input type="password" id="regPassword" placeholder="Create password for future logins (min 6 characters)" minlength="6" required />
@@ -1223,44 +1222,79 @@
             <div class="form-group">
               <label style="font-weight:700; color:var(--primary);">Step 1: Select Main Category of Exam(s) *</label>
               <div class="main-cat-grid">
-                <label class="main-cat-item"><input type="checkbox" value="UPSC" onchange="toggleExamCategory('UPSC', this.checked)"> 1. UPSC</label>
-                <label class="main-cat-item"><input type="checkbox" value="State PCS" onchange="toggleExamCategory('State PCS', this.checked)"> 2. State PCS</label>
-                <label class="main-cat-item"><input type="checkbox" value="SSC" onchange="toggleExamCategory('SSC', this.checked)"> 3. SSC</label>
-                <label class="main-cat-item"><input type="checkbox" value="State SSC" onchange="toggleExamCategory('State SSC', this.checked)"> 4. State SSC</label>
-                <label class="main-cat-item"><input type="checkbox" value="Police Exams" onchange="toggleExamCategory('Police Exams', this.checked)"> 5. Police Exams</label>
-                <label class="main-cat-item"><input type="checkbox" value="Bank Exams" onchange="toggleExamCategory('Bank Exams', this.checked)"> 6. Bank Exams</label>
-                <label class="main-cat-item"><input type="checkbox" value="Railway" onchange="toggleExamCategory('Railway', this.checked)"> 7. Railway</label>
+                <label class="main-cat-item"><input type="checkbox" value="UPSC" onchange="toggleExamCategory('UPSC', this.checked, 'mobile')"> 1. UPSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="State PCS" onchange="toggleExamCategory('State PCS', this.checked, 'mobile')"> 2. State PCS</label>
+                <label class="main-cat-item"><input type="checkbox" value="SSC" onchange="toggleExamCategory('SSC', this.checked, 'mobile')"> 3. SSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="State SSC" onchange="toggleExamCategory('State SSC', this.checked, 'mobile')"> 4. State SSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="Police Exams" onchange="toggleExamCategory('Police Exams', this.checked, 'mobile')"> 5. Police Exams</label>
+                <label class="main-cat-item"><input type="checkbox" value="Bank Exams" onchange="toggleExamCategory('Bank Exams', this.checked, 'mobile')"> 6. Bank Exams</label>
+                <label class="main-cat-item"><input type="checkbox" value="Railway" onchange="toggleExamCategory('Railway', this.checked, 'mobile')"> 7. Railway</label>
               </div>
             </div>
 
             <div id="dynamicSubCategoriesArea"></div>
 
             <button type="submit" class="btn btn-secondary btn-block" style="padding: 11px; margin-top: 10px;">
-              <i class="fas fa-paper-plane"></i> Verify via OTP & Register
+              <i class="fas fa-paper-plane"></i> Verify via Mobile OTP & Register
             </button>
           </form>
         </div>
 
-        <!-- Tab 2: Email Register -->
+        <!-- Tab 2: Any Email Register (Zoho, Yahoo, Rediffmail, Outlook, Gmail, etc. with Full Matching Details) -->
         <div id="authPanelEmail" style="display: none;">
-          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">
-            Register with any email provider (Zoho, Yahoo, Rediffmail, Outlook, Gmail, etc.)
-          </p>
-          <form onsubmit="initiateEmailAuthFlow(event)">
+          <form onsubmit="initiateEmailOtpFlow(event)">
             <div class="form-group">
-              <label>Email Address *</label>
-              <input type="email" id="emailInput" placeholder="username@zoho.com, @yahoo.com, @rediffmail.com..." required />
+              <label>Email Address (Zoho, Yahoo, Rediffmail, Gmail, etc.) *</label>
+              <input type="email" id="emailRegEmail" placeholder="username@zoho.com, @yahoo.com, @rediffmail.com..." required />
+            </div>
+            <div class="form-group">
+              <label>Mobile Number (for notifications & registration number generation) *</label>
+              <input type="tel" id="emailRegMobile" placeholder="e.g. 8271750420" maxlength="10" required />
             </div>
             <div class="form-group">
               <label>Student Full Name *</label>
-              <input type="text" id="emailUserName" placeholder="Enter full name" required />
+              <input type="text" id="emailRegName" placeholder="Enter full name" required />
             </div>
+            <div style="display: flex; gap: 10px;">
+              <div class="form-group" style="flex: 1;">
+                <label>Age *</label>
+                <input type="number" id="emailRegAge" placeholder="e.g. 21" min="14" max="65" required />
+              </div>
+              <div class="form-group" style="flex: 1.4;">
+                <label>Class / Qualification *</label>
+                <select id="emailRegClass" required>
+                  <option value="">Select Qualification</option>
+                  <option value="10th Matric">10th (Matric)</option>
+                  <option value="12th Intermediate">12th (Intermediate)</option>
+                  <option value="Undergraduate (Pursuing)">Undergraduate (In College)</option>
+                  <option value="Graduate (Completed)">Graduate Degree</option>
+                  <option value="Post Graduate">Post Graduate</option>
+                </select>
+              </div>
+            </div>
+
             <div class="form-group">
               <label>Set Login Password *</label>
-              <input type="password" id="emailPassword" placeholder="Create password (min 6 characters)" minlength="6" required />
+              <input type="password" id="emailRegPassword" placeholder="Create password for future logins (min 6 characters)" minlength="6" required />
             </div>
+
+            <div class="form-group">
+              <label style="font-weight:700; color:var(--primary);">Step 1: Select Main Category of Exam(s) *</label>
+              <div class="main-cat-grid">
+                <label class="main-cat-item"><input type="checkbox" value="UPSC" onchange="toggleExamCategory('UPSC', this.checked, 'email')"> 1. UPSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="State PCS" onchange="toggleExamCategory('State PCS', this.checked, 'email')"> 2. State PCS</label>
+                <label class="main-cat-item"><input type="checkbox" value="SSC" onchange="toggleExamCategory('SSC', this.checked, 'email')"> 3. SSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="State SSC" onchange="toggleExamCategory('State SSC', this.checked, 'email')"> 4. State SSC</label>
+                <label class="main-cat-item"><input type="checkbox" value="Police Exams" onchange="toggleExamCategory('Police Exams', this.checked, 'email')"> 5. Police Exams</label>
+                <label class="main-cat-item"><input type="checkbox" value="Bank Exams" onchange="toggleExamCategory('Bank Exams', this.checked, 'email')"> 6. Bank Exams</label>
+                <label class="main-cat-item"><input type="checkbox" value="Railway" onchange="toggleExamCategory('Railway', this.checked, 'email')"> 7. Railway</label>
+              </div>
+            </div>
+
+            <div id="emailDynamicSubCategoriesArea"></div>
+
             <button type="submit" class="btn btn-secondary btn-block" style="padding: 11px; margin-top: 10px;">
-              <i class="fas fa-envelope"></i> Send Verification OTP to Email
+              <i class="fas fa-envelope"></i> Verify via Email OTP & Register
             </button>
           </form>
         </div>
@@ -1507,17 +1541,25 @@
       document.getElementById('quoteAuthor').textContent = '— ' + quote.author;
     }
 
-    const selectedMainCategories = new Set();
-    function toggleExamCategory(categoryName, isChecked) {
-      if (isChecked) selectedMainCategories.add(categoryName);
-      else selectedMainCategories.delete(categoryName);
-      renderSubCategories();
+    // Dynamic 2-Tier Category Generator for Mobile & Email Forms
+    const selectedCategoriesMobile = new Set();
+    const selectedCategoriesEmail = new Set();
+
+    function toggleExamCategory(categoryName, isChecked, formType = 'mobile') {
+      const setRef = formType === 'mobile' ? selectedCategoriesMobile : selectedCategoriesEmail;
+      if (isChecked) setRef.add(categoryName);
+      else setRef.delete(categoryName);
+      renderSubCategories(formType);
     }
 
-    function renderSubCategories() {
-      const container = document.getElementById('dynamicSubCategoriesArea');
+    function renderSubCategories(formType = 'mobile') {
+      const setRef = formType === 'mobile' ? selectedCategoriesMobile : selectedCategoriesEmail;
+      const containerId = formType === 'mobile' ? 'dynamicSubCategoriesArea' : 'emailDynamicSubCategoriesArea';
+      const inputName = formType === 'mobile' ? 'subExamMobile' : 'subExamEmail';
+
+      const container = document.getElementById(containerId);
       container.innerHTML = '';
-      if (selectedMainCategories.size === 0) return;
+      if (setRef.size === 0) return;
 
       const header = document.createElement('label');
       header.style.fontWeight = '700';
@@ -1527,13 +1569,13 @@
       header.textContent = 'Step 2: Select Specific Target Examination(s) under selected categories:';
       container.appendChild(header);
 
-      selectedMainCategories.forEach(cat => {
+      setRef.forEach(cat => {
         const subList = SUB_EXAMS_DATABASE[cat] || [];
         const box = document.createElement('div');
         box.className = 'sub-cat-box';
         let subItemsHtml = subList.map((exam) => `
           <label class="sub-exam-option">
-            <input type="checkbox" name="subExam" value="${exam}" data-category="${cat}">
+            <input type="checkbox" name="${inputName}" value="${exam}" data-category="${cat}">
             <span>${exam}</span>
           </label>
         `).join('');
@@ -1546,7 +1588,6 @@
       });
     }
 
-    // Modal View Switchers: Login vs Register
     function showLoginView() {
       document.getElementById('loginViewContainer').style.display = 'block';
       document.getElementById('registerViewContainer').style.display = 'none';
@@ -1604,7 +1645,7 @@
       switchView('courses');
     }
 
-    // USER DATABASE HELPER (Stored in LocalStorage)
+    // USER REPOSITORY (Stored in LocalStorage)
     function getRegisteredUsersList() {
       return JSON.parse(localStorage.getItem('bharti_registered_users_db') || '[]');
     }
@@ -1620,21 +1661,18 @@
       localStorage.setItem('bharti_registered_users_db', JSON.stringify(users));
     }
 
-    // DIRECT USER ID + PASSWORD LOGIN HANDLER
+    // CREDENTIAL LOGIN (User ID = Registered Mobile, Email, or Reg Number + Password)
     function handleCredentialLogin(e) {
       e.preventDefault();
       const inputId = document.getElementById('loginUserId').value.trim();
       const inputPass = document.getElementById('loginPassword').value.trim();
 
-      if (!inputId || !inputPass) {
-        return alert('Please enter both User ID and Password.');
-      }
+      if (!inputId || !inputPass) return alert('Please enter both User ID and Password.');
 
       const users = getRegisteredUsersList();
       const cleanId = inputId.toLowerCase();
       const cleanDigits = inputId.replace(/\D/g, '').slice(-10);
 
-      // Find user matching registered mobile, email, or registration number
       const matchedUser = users.find(u => {
         const uMob = (u.mobile || '').replace(/\D/g, '').slice(-10);
         const uEmail = (u.email || '').toLowerCase();
@@ -1656,15 +1694,15 @@
           showAllExams();
         }
       } else {
-        alert('Invalid User ID or Password! Please verify your registered Mobile, Email, or Registration Number and enter the correct password.');
+        alert('Invalid User ID or Password! Please verify your registered Mobile, Email, or Registration Number and password.');
       }
     }
 
-    // OTP FLOWS FOR NEW USER REGISTRATION
     function generateSecureOtp() {
       return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
+    // 1. MOBILE REGISTRATION INITIATOR
     function initiateMobileOtpFlow(e) {
       e.preventDefault();
       const mob = document.getElementById('regMobile').value.trim();
@@ -1676,9 +1714,9 @@
       if (mob.length !== 10) return alert('Please enter a valid 10-digit mobile number.');
       if (!name) return alert('Please enter your full name.');
       if (!pass || pass.length < 6) return alert('Password must be at least 6 characters long.');
-      if (selectedMainCategories.size === 0) return alert('Please select at least one Main Category of exam in Step 1.');
+      if (selectedCategoriesMobile.size === 0) return alert('Please select at least one Main Category of exam in Step 1.');
 
-      const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExam"]:checked'));
+      const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExamMobile"]:checked'));
       if (checkedBoxes.length === 0) return alert('Please select at least one target exam from the sub-category boxes in Step 2.');
 
       pendingProfileData = {
@@ -1687,7 +1725,7 @@
         age: age,
         qualification: qual,
         password: pass,
-        categories: Array.from(selectedMainCategories),
+        categories: Array.from(selectedCategoriesMobile),
         exams: checkedBoxes.map(cb => cb.value)
       };
 
@@ -1704,20 +1742,34 @@
       alert(`[SMS Gateway Dispatch] Real OTP verification code for mobile number ${mob} is: ${serverGeneratedOtp}`);
     }
 
-    function initiateEmailAuthFlow(e) {
+    // 2. EMAIL REGISTRATION INITIATOR (With Complete Matching Details)
+    function initiateEmailOtpFlow(e) {
       e.preventDefault();
-      const email = document.getElementById('emailInput').value.trim();
-      const pass = document.getElementById('emailPassword').value.trim();
-      const userName = document.getElementById('emailUserName').value.trim() || email.split('@')[0];
+      const email = document.getElementById('emailRegEmail').value.trim();
+      const mob = document.getElementById('emailRegMobile').value.trim();
+      const name = document.getElementById('emailRegName').value.trim();
+      const age = document.getElementById('emailRegAge').value.trim();
+      const qual = document.getElementById('emailRegClass').value;
+      const pass = document.getElementById('emailRegPassword').value.trim();
 
-      if (!email || !pass || pass.length < 6) return alert('Please enter valid email and minimum 6-character password.');
+      if (!email) return alert('Please enter a valid email address.');
+      if (mob.length !== 10) return alert('Please enter a valid 10-digit mobile number.');
+      if (!name) return alert('Please enter your full name.');
+      if (!pass || pass.length < 6) return alert('Password must be at least 6 characters long.');
+      if (selectedCategoriesEmail.size === 0) return alert('Please select at least one Main Category of exam in Step 1.');
+
+      const checkedBoxes = Array.from(document.querySelectorAll('input[name="subExamEmail"]:checked'));
+      if (checkedBoxes.length === 0) return alert('Please select at least one target exam from the sub-category boxes in Step 2.');
 
       pendingProfileData = {
         email: email,
-        name: userName,
+        mobile: mob,
+        name: name,
+        age: age,
+        qualification: qual,
         password: pass,
-        categories: ['General'],
-        exams: ['SSC CGL', 'Railway NTPC', 'Bank PO']
+        categories: Array.from(selectedCategoriesEmail),
+        exams: checkedBoxes.map(cb => cb.value)
       };
 
       activeOtpChannel = 'email';
@@ -1757,7 +1809,6 @@
         verifiedAt: new Date().toISOString()
       };
 
-      // Save user profile permanently to local database
       saveUserToDatabase(currentStudentProfile);
       localStorage.setItem('bharti_student', JSON.stringify(currentStudentProfile));
 
@@ -2246,7 +2297,6 @@
       }, 400);
     }
 
-    // Bilingual Support
     function toggleBilingual() {
       if (activeLang === 'en') {
         activeLang = 'hi';
@@ -2261,7 +2311,6 @@
         document.getElementById('navMentor').textContent = 'भारती सर का परिचय';
         document.getElementById('lblLogout').textContent = 'लॉगआउट';
 
-        // Auth Modal translations
         document.getElementById('txtLoginTitle').textContent = 'विद्यार्थी लॉगिन (Student Login)';
         document.getElementById('txtLoginSubtitle').textContent = 'पंजीकृत मोबाइल नंबर, ईमेल, या रजिस्ट्रेशन नंबर एवं पासवर्ड दर्ज करें';
         document.getElementById('lblLoginUserId').textContent = 'यूजर आईडी (पंजीकृत मोबाइल / ईमेल / रजिस्ट्रेशन नंबर) *';
@@ -2284,7 +2333,6 @@
         document.getElementById('navMentor').textContent = 'About Vishwa Sir';
         document.getElementById('lblLogout').textContent = 'Logout';
 
-        // Auth Modal translations
         document.getElementById('txtLoginTitle').textContent = 'Student Login';
         document.getElementById('txtLoginSubtitle').textContent = 'Enter your registered Mobile Number, Email, or Registration Number with Password';
         document.getElementById('lblLoginUserId').textContent = 'User ID (Registered Mobile / Email / Reg No) *';
